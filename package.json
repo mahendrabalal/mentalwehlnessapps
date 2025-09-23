@@ -1,0 +1,32 @@
+{
+  "name": "mental-wellness-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mental Wellness App - Clinically-validated wellness platform with crisis intervention",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean",
+    "db:generate": "cd packages/database && npm run generate",
+    "db:push": "cd packages/database && npm run push",
+    "db:reset": "cd packages/database && npm run reset"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.12",
+    "@mental-wellness/eslint-config": "file:./packages/config/eslint-config",
+    "@mental-wellness/typescript-config": "file:./packages/config/typescript-config"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "packageManager": "npm@10.8.2"
+}

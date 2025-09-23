@@ -1,0 +1,235 @@
+# BMad Method Configuration for Mental Wellness App
+# Healthcare Domain Specialization
+
+project:
+  name: "Mental Wellness App"
+  domain: "healthcare"
+  subdomain: "mental_wellness"
+  version: "1.0.0"
+  bmad_version: "2.1.0"
+
+# Healthcare-specific configuration
+healthcare:
+  compliance_requirements:
+    - HIPAA
+    - SOC2_TYPE_II
+    - GDPR
+    - CCPA
+    - FDA_DIGITAL_THERAPEUTICS_FRAMEWORK
+
+  clinical_standards:
+    - PHQ9_VALIDATED_ASSESSMENT
+    - GAD7_VALIDATED_ASSESSMENT
+    - CRISIS_INTERVENTION_PROTOCOLS
+    - EVIDENCE_BASED_THERAPEUTICS
+
+  safety_requirements:
+    - AUTOMATED_CRISIS_DETECTION
+    - IMMEDIATE_INTERVENTION_CAPABILITY
+    - HEALTHCARE_PROVIDER_INTEGRATION
+    - EMERGENCY_SERVICE_COORDINATION
+
+# Development workflow configuration
+workflow:
+  phases:
+    1_discovery:
+      clinical_research: "evidence_based_requirements"
+      market_analysis: "mental_health_specific"
+      user_research: "therapeutic_personas"
+      compliance_planning: "healthcare_regulations"
+
+    2_design:
+      therapeutic_ux: "mental_health_optimized"
+      clinical_workflows: "provider_integration"
+      crisis_intervention: "emergency_protocols"
+      accessibility: "cognitive_accessibility"
+
+    3_development:
+      security_first: "hipaa_by_design"
+      clinical_validation: "algorithm_verification"
+      crisis_safety: "real_time_monitoring"
+      provider_tools: "clinical_dashboard"
+
+    4_validation:
+      clinical_testing: "therapeutic_efficacy"
+      security_audit: "healthcare_penetration_testing"
+      compliance_review: "regulatory_validation"
+      crisis_simulation: "emergency_response_testing"
+
+    5_deployment:
+      healthcare_infrastructure: "hipaa_compliant_hosting"
+      monitoring_setup: "clinical_kpi_tracking"
+      incident_response: "patient_safety_protocols"
+      provider_onboarding: "clinical_training"
+
+# Quality gates specific to healthcare
+quality_gates:
+  clinical_validation:
+    required: true
+    criteria:
+      - clinical_expert_review
+      - assessment_algorithm_validation
+      - crisis_intervention_testing
+      - provider_workflow_verification
+
+  security_compliance:
+    required: true
+    criteria:
+      - hipaa_compliance_audit
+      - data_encryption_verification
+      - access_control_testing
+      - audit_logging_validation
+
+  patient_safety:
+    required: true
+    criteria:
+      - crisis_detection_accuracy_testing
+      - emergency_response_time_validation
+      - provider_alert_system_testing
+      - safety_plan_effectiveness_review
+
+  regulatory_readiness:
+    required: true
+    criteria:
+      - compliance_documentation_complete
+      - privacy_impact_assessment
+      - clinical_evidence_compilation
+      - regulatory_submission_preparation
+
+# Healthcare-specific metrics and KPIs
+metrics:
+  clinical_outcomes:
+    patient_engagement: ">80% weekly active usage"
+    assessment_completion: ">90% completion rate"
+    mood_improvement: "Measurable PHQ-9/GAD-7 improvements"
+    crisis_detection_accuracy: ">95% true positive rate"
+
+  operational_excellence:
+    system_uptime: "99.9% core features, 99.99% crisis features"
+    response_time: "<2s normal, <30s crisis intervention"
+    provider_satisfaction: ">4.5/5 healthcare provider rating"
+    patient_safety_incidents: "Zero preventable incidents"
+
+  compliance_metrics:
+    security_vulnerabilities: "Zero high/critical vulnerabilities"
+    audit_compliance: "100% audit trail completeness"
+    privacy_request_fulfillment: "<30 days GDPR/CCPA response"
+    data_breach_incidents: "Zero data breaches"
+
+# Testing strategy for healthcare
+testing:
+  clinical_validation:
+    unit_tests: "95% coverage for clinical algorithms"
+    integration_tests: "All clinical workflows end-to-end"
+    clinical_scenarios: "Real patient journey simulations"
+    crisis_response: "Emergency intervention testing"
+
+  security_testing:
+    penetration_testing: "Quarterly healthcare security audits"
+    vulnerability_scanning: "Weekly automated scans"
+    access_control: "Role-based permission validation"
+    encryption_testing: "Data protection verification"
+
+  usability_testing:
+    accessibility: "WCAG 2.1 AA + cognitive accessibility"
+    clinical_workflow: "Healthcare provider usability"
+    patient_experience: "Mental health patient validation"
+    crisis_usability: "High-stress scenario testing"
+
+# Documentation requirements
+documentation:
+  clinical:
+    - clinical_requirements_specification
+    - assessment_validation_reports
+    - crisis_intervention_protocols
+    - evidence_based_treatment_guidelines
+
+  compliance:
+    - hipaa_compliance_documentation
+    - security_audit_reports
+    - privacy_impact_assessments
+    - regulatory_submission_materials
+
+  operational:
+    - healthcare_provider_manuals
+    - patient_safety_procedures
+    - incident_response_playbooks
+    - clinical_workflow_documentation
+
+# Deployment configuration for healthcare
+deployment:
+  infrastructure:
+    environment: "hipaa_compliant_cloud"
+    security: "end_to_end_encryption"
+    monitoring: "clinical_kpi_dashboards"
+    backup: "healthcare_data_retention_compliant"
+
+  rollout_strategy:
+    phase_1: "limited_pilot_with_clinical_partners"
+    phase_2: "expanded_beta_with_healthcare_systems"
+    phase_3: "full_production_with_regulatory_approval"
+
+  monitoring:
+    clinical_alerts:
+      - crisis_detection_failures
+      - assessment_scoring_anomalies
+      - provider_alert_delivery_failures
+
+    compliance_monitoring:
+      - data_access_audit_trails
+      - encryption_status_monitoring
+      - privacy_request_tracking
+
+# Team configuration for healthcare development
+team:
+  required_roles:
+    - clinical_director
+    - healthcare_compliance_officer
+    - patient_safety_specialist
+    - clinical_data_scientist
+    - healthcare_ux_designer
+    - security_architect
+    - regulatory_affairs_specialist
+
+  advisory_board:
+    - licensed_mental_health_professionals
+    - digital_health_regulatory_experts
+    - patient_advocacy_representatives
+    - healthcare_system_administrators
+
+# Integration specifications
+integrations:
+  healthcare_systems:
+    - electronic_health_records
+    - healthcare_provider_portals
+    - crisis_intervention_services
+    - telehealth_platforms
+
+  clinical_tools:
+    - validated_assessment_instruments
+    - evidence_based_intervention_libraries
+    - clinical_decision_support_systems
+    - patient_reported_outcome_measures
+
+  emergency_services:
+    - crisis_hotlines_integration
+    - emergency_services_coordination
+    - mobile_crisis_team_dispatch
+    - suicide_prevention_networks
+
+# Continuous improvement for healthcare
+continuous_improvement:
+  clinical_outcomes_monitoring:
+    frequency: "weekly"
+    metrics: "patient_engagement_and_clinical_improvements"
+    reviews: "monthly_clinical_advisory_board_review"
+
+  compliance_updates:
+    frequency: "quarterly"
+    scope: "regulatory_changes_and_industry_best_practices"
+    implementation: "risk_based_prioritization"
+
+  safety_monitoring:
+    frequency: "real_time"
+    alerts: "immediate_patient_safety_concerns"
+    response: "24_7_clinical_support_team"
