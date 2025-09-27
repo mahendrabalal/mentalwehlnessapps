@@ -40,6 +40,7 @@
     "@mental-wellness/typescript-config": "file:./packages/config/typescript-config",
     "@playwright/test": "^1.55.1",
     "@supabase/supabase-js": "^2.58.0",
+    "eslint-plugin-security": "^3.0.1",
     "turbo": "^2.5.7"
   },
   "engines": {
