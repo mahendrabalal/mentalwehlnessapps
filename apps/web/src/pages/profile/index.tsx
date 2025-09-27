@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { AuthGuard } from '@/components/AuthGuard'
+import { Navbar } from '@/components/Navbar'
 
 interface UserProfile {
   id: string
@@ -42,6 +43,9 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [showDeletionOptions, setShowDeletionOptions] = useState(false)
+  const [selectedDeletionType, setSelectedDeletionType] = useState<'deactivate' | 'immediate'>('deactivate')
+  const [deletionReason, setDeletionReason] = useState('')
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -142,30 +146,57 @@ export default function ProfilePage() {
     }
   }
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = () => {
+    setShowDeletionOptions(true)
+    setError('')
+    setSuccess('')
+  }
+
+  const confirmDeletion = async () => {
     if (!user) return
-
-    const confirmed = window.confirm(
-      'Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data.'
-    )
-
-    if (!confirmed) return
 
     try {
       setSaving(true)
+      setError('')
 
-      const { error } = await supabase.rpc('delete_user_account', {
-        user_id: user.id
+      const response = await fetch('/api/user/delete-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          deletionType: selectedDeletionType,
+          reason: deletionReason
+        })
       })
 
-      if (error) throw error
+      const result = await response.json()
 
-      await supabase.auth.signOut()
-      router.push('/')
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to delete account')
+      }
+
+      // Show success message before redirect
+      setSuccess(result.message)
+
+      // Sign out and redirect after a short delay
+      setTimeout(async () => {
+        await supabase.auth.signOut()
+        router.push('/')
+      }, 3000)
+
     } catch (err: any) {
       setError(err.message)
+    } finally {
       setSaving(false)
     }
+  }
+
+  const cancelDeletion = () => {
+    setShowDeletionOptions(false)
+    setSelectedDeletionType('deactivate')
+    setDeletionReason('')
   }
 
 
@@ -186,9 +217,10 @@ export default function ProfilePage() {
       redirectSubtitle="You need to be logged in to view your profile."
     >
       <Head>
-        <title>Profile Settings - Mental Wellness App</title>
+        <title>Profile Settings - MentalWellnessApps</title>
         <meta name="description" content="Manage your profile and privacy settings" />
       </Head>
+      <Navbar />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white shadow rounded-lg">
@@ -493,6 +525,126 @@ export default function ProfilePage() {
             </form>
           </div>
         </div>
+
+        {/* Healthcare-Compliant Account Deletion Modal */}
+        {showDeletionOptions && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Account Deletion Options
+                </h3>
+
+                <div className="space-y-4 mb-6">
+                  {/* Account Deactivation Option (Recommended) */}
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="deletionType"
+                      value="deactivate"
+                      checked={selectedDeletionType === 'deactivate'}
+                      onChange={(e) => setSelectedDeletionType(e.target.value as 'deactivate')}
+                      className="mt-1 text-therapy-600 focus:ring-therapy-500"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        Deactivate Account (Recommended)
+                        <span className="ml-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                          HIPAA Compliant
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        • Account becomes inaccessible immediately<br/>
+                        • Clinical data preserved for healthcare continuity<br/>
+                        • 30-day recovery period available<br/>
+                        • Subscriptions paused (not cancelled)
+                      </div>
+                    </div>
+                  </label>
+
+                  {/* Immediate Deletion Option */}
+                  <label className="flex items-start space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="deletionType"
+                      value="immediate"
+                      checked={selectedDeletionType === 'immediate'}
+                      onChange={(e) => setSelectedDeletionType(e.target.value as 'immediate')}
+                      className="mt-1 text-red-600 focus:ring-red-500"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        Complete Deletion
+                        <span className="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
+                          Permanent
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        • All data deleted immediately and permanently<br/>
+                        • No recovery possible<br/>
+                        • Subscriptions cancelled<br/>
+                        • Audit logs maintained for compliance
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Reason for Deletion */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Reason for deletion (optional)
+                  </label>
+                  <textarea
+                    value={deletionReason}
+                    onChange={(e) => setDeletionReason(e.target.value)}
+                    placeholder="Help us improve by sharing why you're leaving..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-therapy-500 focus:border-therapy-500"
+                    rows={3}
+                  />
+                </div>
+
+                {/* Warning Box */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                  <div className="flex">
+                    <div className="text-yellow-600 mr-2">⚠️</div>
+                    <div className="text-sm text-yellow-800">
+                      <strong>Important:</strong> This action affects your mental health data.
+                      If you're in crisis or need support, please contact:
+                      <div className="mt-2 font-medium">
+                        • Crisis Text Line: Text HOME to 741741<br/>
+                        • National Suicide Prevention Lifeline: 988
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-3">
+                  <button
+                    onClick={cancelDeletion}
+                    disabled={saving}
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDeletion}
+                    disabled={saving}
+                    className={`flex-1 px-4 py-2 rounded-lg text-white font-medium disabled:opacity-50 ${
+                      selectedDeletionType === 'immediate'
+                        ? 'bg-red-600 hover:bg-red-700'
+                        : 'bg-yellow-600 hover:bg-yellow-700'
+                    }`}
+                  >
+                    {saving ? 'Processing...' :
+                     selectedDeletionType === 'immediate' ? 'Delete Permanently' : 'Deactivate Account'
+                    }
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AuthGuard>
   )

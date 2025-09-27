@@ -3,11 +3,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -53,6 +55,22 @@ export default function Home() {
     }
   }
 
+  // Check if user wants to stay on landing page via URL parameter
+  const [showLandingPage, setShowLandingPage] = useState(false)
+
+  useEffect(() => {
+    // Check if ?landing=true is in URL to force showing landing page
+    const urlParams = new URLSearchParams(window.location.search)
+    const forceLanding = urlParams.get('landing') === 'true'
+
+    if (forceLanding) {
+      setShowLandingPage(true)
+    } else if (user && !loading) {
+      // Only redirect if user is authenticated AND not explicitly viewing landing
+      router.push('/dashboard')
+    }
+  }, [user, loading, router])
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -64,96 +82,655 @@ export default function Home() {
     )
   }
 
+  // Show modern landing page for non-authenticated users OR authenticated users who want to view it
   return (
     <>
       <Head>
-        <title>Mental Wellness App</title>
-        <meta name="description" content="AI-powered mental wellness and therapeutic support" />
+        <title>Intelligence that moves your mental wellness forward - MentalWellnessApps</title>
+        <meta name="description" content="AI-powered insights, clinical-grade assessments, and 24/7 support for your mental health journey. Start your free trial today." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-bold wellness-gradient bg-clip-text text-transparent mb-4">
-              Mental Wellness App
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              AI-powered therapeutic support with clinical validation and crisis intervention
-            </p>
-          </header>
 
-          <div className="max-w-4xl mx-auto">
-            {user ? (
-              <div className="card">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-2">Welcome back!</h2>
-                    <p className="text-gray-600">
-                      Logged in as: {user.email}
-                    </p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Link href="/profile" className="btn-secondary text-sm">
-                      Profile
+      {/* Dashboard Shortcut for Authenticated Users */}
+      {user && (
+        <div className="fixed top-4 right-4 z-50">
+          <div className="bg-therapy-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-3">
+            <span className="text-sm">Welcome back!</span>
+            <Link
+              href="/dashboard"
+              className="bg-white text-therapy-600 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+            >
+              Go to Dashboard
+            </Link>
+            <button
+              onClick={() => setShowLandingPage(false)}
+              className="text-white hover:text-gray-200 transition-colors"
+              aria-label="Close notification"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modern Landing Page */}
+      <div className="min-h-screen bg-white">
+        {/* Navigation */}
+        <nav className="relative z-50 bg-white border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <span className="text-xl font-bold text-gray-900">MentalWellnessApps</span>
+              </div>
+              <div className="hidden md:flex items-center space-x-8">
+                <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
+                <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+                <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+
+                {user ? (
+                  <>
+                    <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+                      Dashboard
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="btn-secondary text-sm"
+                      className="text-gray-600 hover:text-gray-900 transition-colors"
                     >
                       Sign Out
                     </button>
-                  </div>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 transition-colors">
+                      Sign In
+                    </Link>
+                    <Link href="/auth/signup" className="bg-therapy-600 hover:bg-therapy-700 text-white px-4 py-2 rounded-lg transition-colors">
+                      Start Free Trial
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                    Intelligence
+                    <br />
+                    <span className="bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+                      that moves
+                    </span>
+                    <br />
+                    your mental
+                    <br />
+                    wellness forward
+                  </h1>
+                  <p className="text-xl lg:text-2xl text-gray-600 max-w-xl">
+                    AI-powered insights, clinical-grade assessments, and 24/7 support for your mental health journey.
+                  </p>
                 </div>
-                <div className="mb-6">
-                  <Link href="/dashboard" className="btn-primary">
-                    View Dashboard
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={() => setShowUpgradeFlow(true)}
+                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
+                  >
+                    Start Your Free Trial
+                  </button>
+                  <Link
+                    href="#features"
+                    className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold transition-colors text-center"
+                  >
+                    See How It Works
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <h3 className="font-semibold text-lg mb-2">Daily Check-in</h3>
-                    <p className="text-gray-600 text-sm mb-4">Track your mood and wellness</p>
-                    <Link href="/mood/check-in" className="btn-primary w-full inline-block text-center">
-                      Start Check-in
-                    </Link>
+                <div className="flex items-center space-x-8 text-sm text-gray-500">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>7-day free trial</span>
                   </div>
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <h3 className="font-semibold text-lg mb-2">Assessment</h3>
-                    <p className="text-gray-600 text-sm mb-4">Take PHQ-9 or GAD-7 assessment</p>
-                    <Link href="/assessment/phq9" className="btn-primary w-full inline-block text-center">
-                      Take Assessment
-                    </Link>
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>HIPAA compliant</span>
                   </div>
-                  <div className="p-4 border border-gray-200 rounded-lg">
-                    <h3 className="font-semibold text-lg mb-2">Crisis Support</h3>
-                    <p className="text-gray-600 text-sm mb-4">Immediate help and resources</p>
-                    <Link href="/crisis/support" className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg w-full inline-block text-center">
-                      Get Help Now
-                    </Link>
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Cancel anytime</span>
                   </div>
                 </div>
               </div>
-            ) : (
-              <div className="card text-center">
-                <h2 className="text-2xl font-semibold mb-4">Get Started</h2>
-                <p className="text-gray-600 mb-6">
-                  Sign up or log in to begin your mental wellness journey
-                </p>
-                <div className="space-x-4">
-                  <Link href="/auth/signup" className="btn-primary inline-block">
-                    Sign Up
-                  </Link>
-                  <Link href="/auth/login" className="btn-secondary inline-block">
-                    Log In
-                  </Link>
+
+              <div className="relative">
+                {/* Hero Visual - App Interface Preview */}
+                <div className="relative z-10 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                  <div className="bg-therapy-600 px-6 py-4 flex items-center space-x-3">
+                    <div className="flex space-x-2">
+                      <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                      <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                      <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                    </div>
+                    <div className="text-white font-medium">MentalWellnessApps Dashboard</div>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">Good morning! 🌅</h3>
+                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Premium Active</span>
+                    </div>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-sm text-blue-900 font-medium mb-1">🎯 Today's Focus: Stress management and relaxation</p>
+                      <p className="text-sm text-blue-700">Based on your sleep score (6/10) and yesterday's stress level, here's your personalized plan...</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="text-2xl mb-2">📈</div>
+                        <div className="text-sm font-medium text-gray-900">Mood Trend</div>
+                        <div className="text-xs text-green-600">↑ Improving</div>
+                      </div>
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <div className="text-2xl mb-2">🔥</div>
+                        <div className="text-sm font-medium text-gray-900">Streak</div>
+                        <div className="text-xs text-gray-600">14 days</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-r from-therapy-400 to-blue-400 rounded-full opacity-20"></div>
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20"></div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </main>
+        </section>
+
+        {/* Social Proof */}
+        <section className="bg-white py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <p className="text-gray-500 text-lg">Trusted by thousands on their mental wellness journey</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="space-y-2">
+                <div className="text-4xl font-bold text-therapy-600">94%</div>
+                <div className="text-gray-600">Report improved mood awareness</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-4xl font-bold text-therapy-600">24/7</div>
+                <div className="text-gray-600">AI companion availability</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-4xl font-bold text-therapy-600">89%</div>
+                <div className="text-gray-600">Reduced crisis episodes</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Showcase */}
+        <section id="features" className="bg-gray-50 py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Intelligence that
+                <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+                  understands you
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our AI doesn't just track data—it learns your patterns, predicts your needs,
+                and provides personalized insights that actually improve your mental wellness.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* AI Companion */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="p-8">
+                  <div className="w-16 h-16 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">24/7 AI Therapy Companion</h3>
+                  <p className="text-gray-600 mb-6">Conversations that understand your unique mental health journey</p>
+
+                  {/* Mock conversation */}
+                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                    <div className="flex justify-end">
+                      <div className="bg-therapy-600 text-white px-3 py-2 rounded-lg text-sm max-w-xs">
+                        I'm feeling anxious about work tomorrow
+                      </div>
+                    </div>
+                    <div className="flex justify-start">
+                      <div className="bg-white border px-3 py-2 rounded-lg text-sm max-w-xs">
+                        I can see you're experiencing anxiety, and I know from your recent GAD-7 assessment that this has been challenging. Let's try the 5-4-3-2-1 grounding technique...
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                    <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Crisis intervention built-in</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Smart Analytics */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="p-8">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Smart Analytics</h3>
+                  <p className="text-gray-600 mb-6">Patterns that guide your progress and predict your needs</p>
+
+                  {/* Mock analytics */}
+                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">7-Day Mood Forecast</span>
+                      <span className="text-sm text-green-600 flex items-center">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        </svg>
+                        Improving
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      "You feel 40% better when you exercise before 2PM"
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      "Sleep quality correlates 78% with next-day mood"
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                    <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Clinical-grade predictions</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Daily Intelligence */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="p-8">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Daily Intelligence</h3>
+                  <p className="text-gray-600 mb-6">Insights that start your day with intention and awareness</p>
+
+                  {/* Mock daily briefing */}
+                  <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl">🌅</span>
+                      <span className="text-sm font-medium text-gray-700">Morning Briefing</span>
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      "Based on your sleep score (6/10) and yesterday's stress (7/10), focus on gentle activities today."
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      "Your mood typically improves 2-3 hours after morning exercise."
+                    </div>
+                  </div>
+
+                  <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                    <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Personalized daily guidance</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section id="pricing" className="bg-white py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Choose the plan that
+                <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+                  fits your journey
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Start with our free tier to explore basic features, then upgrade to premium
+                for AI-powered insights and personalized mental wellness intelligence.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Free Plan */}
+              <div className="border border-gray-200 rounded-2xl p-8">
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Free</h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-2">$0</div>
+                  <p className="text-gray-600">Perfect for getting started</p>
+                </div>
+
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Basic mood tracking</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">3 AI chat messages</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Crisis resources</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Basic content library</span>
+                  </li>
+                </ul>
+
+                <Link
+                  href="/auth/signup"
+                  className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-3 px-6 rounded-lg font-semibold transition-colors"
+                >
+                  Get Started Free
+                </Link>
+              </div>
+
+              {/* Premium Plan */}
+              <div className="border border-therapy-500 rounded-2xl p-8 relative bg-gradient-to-b from-therapy-50 to-white">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-therapy-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                    Most Popular
+                  </span>
+                </div>
+
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium</h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-2">
+                    $19.99
+                    <span className="text-lg font-normal text-gray-600">/month</span>
+                  </div>
+                  <p className="text-gray-600">Advanced AI-powered wellness intelligence</p>
+                  <div className="mt-2">
+                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                      7-day free trial
+                    </span>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700"><strong>Everything in Free</strong>, plus:</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Unlimited AI therapy companion</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Smart analytics & predictions</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Daily wellness briefings</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Premium content library</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Crisis prevention system</span>
+                  </li>
+                </ul>
+
+                <button
+                  onClick={() => setShowUpgradeFlow(true)}
+                  className="block w-full bg-therapy-600 hover:bg-therapy-700 text-white text-center py-3 px-6 rounded-lg font-semibold transition-colors"
+                >
+                  Start Free Trial
+                </button>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  No credit card required • Cancel anytime
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust & Safety Section */}
+        <section id="about" className="bg-gray-50 py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Your safety and
+                <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+                  privacy matter
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Built with healthcare-grade security and evidence-based therapeutic approaches.
+                Your mental wellness journey is supported by clinical standards and immediate crisis intervention.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">HIPAA Compliant</h3>
+                <p className="text-gray-600 text-sm">Healthcare-grade data protection and privacy standards</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Evidence-Based</h3>
+                <p className="text-gray-600 text-sm">Clinical assessments and therapeutic techniques validated by research</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Crisis Prevention</h3>
+                <p className="text-gray-600 text-sm">24/7 monitoring with immediate escalation to emergency resources</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Professional Support</h3>
+                <p className="text-gray-600 text-sm">Licensed mental health professionals oversee our therapeutic approaches</p>
+              </div>
+            </div>
+
+            {/* Crisis Resources */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Immediate Crisis Support</h3>
+                <p className="text-gray-600">If you're experiencing a mental health crisis, help is available immediately:</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center p-6 bg-red-50 rounded-lg border border-red-200">
+                  <div className="text-3xl mb-3">🚨</div>
+                  <h4 className="font-semibold text-red-900 mb-2">Emergency</h4>
+                  <p className="text-red-800 font-bold text-lg">Call 911</p>
+                  <p className="text-sm text-red-700 mt-2">For immediate danger or medical emergencies</p>
+                </div>
+
+                <div className="text-center p-6 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="text-3xl mb-3">📞</div>
+                  <h4 className="font-semibold text-blue-900 mb-2">Crisis Lifeline</h4>
+                  <p className="text-blue-800 font-bold text-lg">Call or Text 988</p>
+                  <p className="text-sm text-blue-700 mt-2">24/7 free and confidential support</p>
+                </div>
+
+                <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
+                  <div className="text-3xl mb-3">💬</div>
+                  <h4 className="font-semibold text-green-900 mb-2">Crisis Text Line</h4>
+                  <p className="text-green-800 font-bold text-lg">Text HOME to 741741</p>
+                  <p className="text-sm text-green-700 mt-2">24/7 crisis support via text</p>
+                </div>
+              </div>
+
+              <div className="mt-8 text-center">
+                <p className="text-sm text-gray-500">
+                  <strong>Medical Disclaimer:</strong> This app is not a substitute for professional medical advice.
+                  Always consult qualified mental health professionals for proper diagnosis and treatment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {/* Brand */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <span className="text-xl font-bold">MentalWellnessApps</span>
+                </div>
+                <p className="text-gray-400 text-sm">
+                  Intelligence that moves your mental wellness forward.
+                </p>
+                <div className="flex space-x-4">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z" clipRule="evenodd" />
+                    </svg>
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                    </svg>
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              {/* Product */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Product</h3>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
+                  <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                  <li><Link href="/free-trial" className="hover:text-white transition-colors">Free Trial</Link></li>
+                  <li><Link href="/premium/features" className="hover:text-white transition-colors">Premium</Link></li>
+                </ul>
+              </div>
+
+              {/* Support */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Support</h3>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/help" className="hover:text-white transition-colors">Help Center</Link></li>
+                  <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                  <li><Link href="/crisis-support" className="hover:text-white transition-colors">Crisis Support</Link></li>
+                  <li><Link href="/documentation" className="hover:text-white transition-colors">Documentation</Link></li>
+                </ul>
+              </div>
+
+              {/* Legal */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Legal</h3>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                  <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                  <li><Link href="/hipaa-notice" className="hover:text-white transition-colors">HIPAA Notice</Link></li>
+                  <li><Link href="/medical-disclaimer" className="hover:text-white transition-colors">Medical Disclaimer</Link></li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-800 mt-12 pt-8 text-center">
+              <p className="text-gray-400 text-sm">
+                © 2024 MentalWellnessApps. All rights reserved. Built with 🤍 for mental wellness.
+              </p>
+            </div>
+          </div>
+        </footer>
+
+        {/* Premium Upgrade Flow Modal */}
+        <PremiumUpgradeFlow
+          isOpen={showUpgradeFlow}
+          onClose={() => setShowUpgradeFlow(false)}
+          defaultPlan="monthly"
+        />
+      </div>
     </>
   )
 }

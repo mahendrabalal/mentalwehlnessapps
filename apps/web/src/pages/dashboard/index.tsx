@@ -3,6 +3,14 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
+import { useSubscription } from '@/hooks/useSubscription'
+import { AuthGuard } from '@/components/AuthGuard'
+import { LegalDisclaimer } from '@/components/LegalDisclaimer'
+import { AITherapyCompanion } from '@/components/AITherapyCompanion'
+import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
+import { DailyWellnessBriefing } from '@/components/DailyWellnessBriefing'
+import { Navbar } from '@/components/Navbar'
 import type { User } from '@supabase/supabase-js'
 
 interface MoodEntry {
@@ -37,37 +45,24 @@ interface DashboardStats {
   currentStreak: number
 }
 
-export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null)
+function DashboardContent() {
+  const { user, loading: authLoading } = useAuth()
+  const { subscription, loading: subscriptionLoading, isPremium } = useSubscription()
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([])
   const [assessments, setAssessments] = useState<Assessment[]>([])
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [timeRange, setTimeRange] = useState<'7days' | '30days' | '90days'>('30days')
+  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
-    checkUser()
-  }, [])
-
-  useEffect(() => {
-    if (user) {
+    if (user && !authLoading) {
       fetchDashboardData()
     }
-  }, [user, timeRange])
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
-      setLoading(!session?.user)
-    } catch (error) {
-      console.error('Error checking user:', error)
-      setLoading(false)
-    }
-  }
+  }, [user, timeRange, authLoading])
 
   const fetchDashboardData = async () => {
     if (!user) return
@@ -198,6 +193,10 @@ export default function Dashboard() {
     return 'stable'
   }
 
+  const handleUpgradeClick = () => {
+    setShowUpgradeFlow(true)
+  }
+
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
       case 'minimal': return 'bg-green-100 text-green-800'
@@ -209,21 +208,7 @@ export default function Dashboard() {
     }
   }
 
-  if (!user && !loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to view your dashboard.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  if (loading) {
+  if (authLoading || loading || subscriptionLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -239,9 +224,10 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard - Mental Wellness App</title>
+        <title>Dashboard - MentalWellnessApps</title>
         <meta name="description" content="Your mental wellness progress and insights" />
       </Head>
+      <Navbar />
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
@@ -254,6 +240,19 @@ export default function Dashboard() {
               <div className="text-sm text-red-700">{error}</div>
             </div>
           )}
+
+          {/* Daily Wellness Briefing */}
+          <DailyWellnessBriefing
+            userMoodScore={stats?.avgMoodRating}
+            recentAssessment={assessments[0] ? {
+              type: assessments[0].assessment_type,
+              score: assessments[0].total_score,
+              severity: assessments[0].severity_level
+            } : undefined}
+            moodEntries={moodEntries}
+            isPremium={isPremium}
+            onUpgradeClick={handleUpgradeClick}
+          />
 
           {/* Time Range Selector */}
           <div className="mb-6">
@@ -447,6 +446,111 @@ export default function Dashboard() {
             </div>
           )}
 
+          {/* Premium Features Preview / Status */}
+          <div className={`rounded-lg shadow-lg p-8 mb-8 text-white ${
+            isPremium
+              ? 'bg-gradient-to-r from-green-500 to-green-600'
+              : 'bg-gradient-to-r from-therapy-500 to-therapy-600'
+          }`}>
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-6">
+                {isPremium ? (
+                  <>
+                    <h2 className="text-2xl font-bold mb-2">
+                      {subscription.status === 'trialing' ? '🎉 Premium Trial Active' : '✨ Premium Member'}
+                    </h2>
+                    <p className="text-green-100">
+                      {subscription.status === 'trialing'
+                        ? `Your free trial is active${subscription.trialEndsAt ? ` until ${new Date(subscription.trialEndsAt).toLocaleDateString()}` : ''}`
+                        : 'You have access to all premium wellness features'
+                      }
+                    </p>
+                    {subscription.planType !== 'free' && (
+                      <p className="text-sm text-green-100 mt-1">
+                        {subscription.planType === 'premium_monthly' ? 'Monthly Plan' : 'Yearly Plan'}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-2xl font-bold mb-2">Unlock Premium Wellness Features</h2>
+                    <p className="text-therapy-100">Get personalized AI support and advanced insights for your mental wellness journey</p>
+                  </>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div className="text-center">
+                  <div className="text-3xl mb-2">🤖</div>
+                  <h3 className="font-semibold mb-2">24/7 AI Companion</h3>
+                  <p className="text-sm text-therapy-100">Personalized wellness support anytime you need it</p>
+                </div>
+
+                <div className="text-center">
+                  <div className="text-3xl mb-2">📊</div>
+                  <h3 className="font-semibold mb-2">Smart Analytics</h3>
+                  <p className="text-sm text-therapy-100">Advanced mood insights and trend predictions</p>
+                </div>
+
+                <div className="text-center">
+                  <div className="text-3xl mb-2">🎵</div>
+                  <h3 className="font-semibold mb-2">Premium Content</h3>
+                  <p className="text-sm text-therapy-100">Unlimited guided meditations and sleep stories</p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                {isPremium ? (
+                  <div className="bg-white rounded-lg p-4 inline-block">
+                    <div className="flex items-center space-x-4">
+                      <div>
+                        <p className="text-sm text-gray-600">Premium Status</p>
+                        <p className="text-lg font-semibold text-green-600">
+                          {subscription.status === 'trialing' ? 'Trial Active' : 'Active'}
+                        </p>
+                      </div>
+                      <div className="border-l border-gray-300 pl-4">
+                        <Link
+                          href="/profile"
+                          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-block"
+                        >
+                          Manage Subscription
+                        </Link>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {subscription.status === 'trialing' ? 'Trial period' : 'Active subscription'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-lg p-4 inline-block">
+                    <div className="flex items-center space-x-4">
+                      <div>
+                        <p className="text-sm text-gray-600">Starting at</p>
+                        <p className="text-2xl font-bold text-gray-900">$19.99<span className="text-sm font-normal">/month</span></p>
+                      </div>
+                      <div className="border-l border-gray-300 pl-4">
+                        <button
+                          onClick={() => handleUpgradeClick()}
+                          className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Start Free Trial
+                        </button>
+                        <p className="text-xs text-gray-500 mt-1">7 days free, then $19.99/month</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4 text-center">
+                <p className="text-xs text-therapy-100">
+                  <strong>Disclaimer:</strong> Premium AI features provide general wellness support and are not a substitute for professional therapy or medical advice.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link href="/mood/check-in" className="block p-6 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
@@ -474,7 +578,38 @@ export default function Dashboard() {
             </Link>
           </div>
         </div>
+
+        {/* Legal Disclaimer Footer */}
+        <LegalDisclaimer variant="footer" />
+
+        {/* AI Therapy Companion - Fixed Position */}
+        <AITherapyCompanion
+          userMoodScore={stats?.avgMoodRating}
+          recentAssessment={assessments[0] ? {
+            type: assessments[0].assessment_type,
+            score: assessments[0].total_score,
+            severity: assessments[0].severity_level
+          } : undefined}
+          moodEntries={moodEntries}
+          isPremium={isPremium}
+          onUpgradeClick={handleUpgradeClick}
+        />
+
+        {/* Premium Upgrade Flow Modal */}
+        <PremiumUpgradeFlow
+          isOpen={showUpgradeFlow}
+          onClose={() => setShowUpgradeFlow(false)}
+          defaultPlan="monthly"
+        />
       </div>
     </>
+  )
+}
+
+export default function Dashboard() {
+  return (
+    <AuthGuard>
+      <DashboardContent />
+    </AuthGuard>
   )
 }

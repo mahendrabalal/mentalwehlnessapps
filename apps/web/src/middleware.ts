@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { SecurityMiddleware } from './middleware/security'
 
 // Security headers for HIPAA compliance and healthcare data protection
 const securityHeaders = [
@@ -80,56 +81,117 @@ function rateLimit(ip: string, limit: number = 100, windowMs: number = 15 * 60 *
   return true
 }
 
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-  // Apply security headers
+  // Apply HIPAA compliance headers to all requests
+  let response = await SecurityMiddleware.enforceHipaaCompliance(request)
+
+  // Legacy security headers (keeping for compatibility)
   securityHeaders.forEach(({ key, value }) => {
-    response.headers.set(key, value)
+    if (!response.headers.get(key)) {
+      response.headers.set(key, value)
+    }
   })
 
-  // Get client IP for rate limiting
+  // Enhanced session validation for protected routes
+  if (isProtectedRoute(pathname)) {
+    // Skip middleware session validation for dashboard and other protected routes
+    // Let client-side AuthGuard handle authentication instead to avoid redirect loops
+    if (pathname.startsWith('/dashboard') || pathname.startsWith('/profile') || pathname.startsWith('/assessment')) {
+      // Just continue to the page, AuthGuard will handle authentication
+      return response
+    }
+
+    const { valid, context } = await SecurityMiddleware.validateSessionIntegrity(request)
+
+    if (!valid) {
+      // Check if this is a crisis bypass scenario
+      if (isCrisisRoute(pathname)) {
+        // Allow limited access to crisis resources without authentication
+        await SecurityMiddleware.logSecurityEvent('crisis_anonymous_access', {
+          ipAddress: request.ip || request.headers.get('x-forwarded-for') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown'
+        }, { route: pathname })
+
+        response.headers.set('X-Crisis-Support', 'true')
+        response.headers.set('X-Emergency-Access', 'true')
+        return response
+      }
+
+      // Redirect to login for protected routes
+      const loginUrl = new URL('/auth/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    if (context) {
+      // Enhanced rate limiting based on authentication tier
+      const rateLimitPassed = await SecurityMiddleware.rateLimitByTier(request, context)
+      if (!rateLimitPassed) {
+        return new NextResponse('Rate limit exceeded', { status: 429 })
+      }
+
+      // Log access to protected resources
+      await SecurityMiddleware.logSecurityEvent('protected_resource_access', context, {
+        route: pathname,
+        method: request.method
+      })
+
+      // Check for clinical data access requirements
+      if (isClinicalRoute(pathname)) {
+        if (context.authenticationTier !== 'clinical' &&
+            context.crisisLevel !== 'severe' &&
+            context.crisisLevel !== 'imminent') {
+          const upgradeUrl = new URL('/auth/upgrade-tier', request.url)
+          upgradeUrl.searchParams.set('required', 'clinical')
+          upgradeUrl.searchParams.set('redirect', pathname)
+          return NextResponse.redirect(upgradeUrl)
+        }
+
+        response.headers.set('X-Clinical-Data', 'true')
+        response.headers.set('X-HIPAA-Required', 'true')
+
+        await SecurityMiddleware.logSecurityEvent('clinical_data_access', context, {
+          route: pathname
+        })
+      }
+
+      // Handle crisis escalation
+      if (context.crisisLevel === 'severe' || context.crisisLevel === 'imminent') {
+        await SecurityMiddleware.handleCrisisEscalation(context, context.crisisLevel)
+        response.headers.set('X-Crisis-Level', context.crisisLevel)
+      }
+    }
+  }
+
+  // Legacy rate limiting for API routes
   const ip = request.ip ||
     request.headers.get('x-forwarded-for')?.split(',')[0] ||
     request.headers.get('x-real-ip') ||
     'unknown'
 
-  // Apply rate limiting to API routes and auth endpoints
-  if (request.nextUrl.pathname.startsWith('/api/') ||
-      request.nextUrl.pathname.startsWith('/auth/')) {
-
-    // Stricter limits for sensitive endpoints
-    const isAuthEndpoint = request.nextUrl.pathname.startsWith('/auth/')
-    const limit = isAuthEndpoint ? 5 : 100 // 5 auth attempts per 15 minutes
-
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    const limit = 100
     if (!rateLimit(ip, limit)) {
       return new NextResponse(
         JSON.stringify({
           error: 'Too many requests',
           message: 'Rate limit exceeded. Please try again later.',
-          retryAfter: 900 // 15 minutes in seconds
+          retryAfter: 900
         }),
         {
           status: 429,
           headers: {
             'Content-Type': 'application/json',
-            'Retry-After': '900',
-            ...Object.fromEntries(securityHeaders.map(h => [h.key, h.value]))
+            'Retry-After': '900'
           }
         }
       )
     }
   }
 
-  // HIPAA compliance: Log access to sensitive routes
-  if (request.nextUrl.pathname.startsWith('/assessment/') ||
-      request.nextUrl.pathname.startsWith('/profile/') ||
-      request.nextUrl.pathname.startsWith('/dashboard/') ||
-      request.nextUrl.pathname.startsWith('/safety/')) {
-
-    // In production, this should be sent to a secure logging service
-    console.log(`[AUDIT] ${new Date().toISOString()} - IP: ${ip} - Path: ${request.nextUrl.pathname} - User-Agent: ${request.headers.get('user-agent')}`)
-  }
+  // Enhanced audit logging moved to SecurityMiddleware
 
   // Block common attack patterns
   const userAgent = request.headers.get('user-agent') || ''
@@ -159,18 +221,54 @@ export function middleware(request: NextRequest) {
   return response
 }
 
+function isProtectedRoute(pathname: string): boolean {
+  const protectedPaths = [
+    '/dashboard',
+    '/profile',
+    '/assessments',
+    '/safety',
+    '/provider',
+    '/admin',
+    '/clinical'
+  ]
+
+  return protectedPaths.some(path => pathname.startsWith(path))
+}
+
+function isCrisisRoute(pathname: string): boolean {
+  const crisisPaths = [
+    '/crisis',
+    '/emergency',
+    '/safety/plan',
+    '/hotlines',
+    '/immediate-help'
+  ]
+
+  return crisisPaths.some(path => pathname.startsWith(path))
+}
+
+function isClinicalRoute(pathname: string): boolean {
+  const clinicalPaths = [
+    '/provider',
+    '/clinical',
+    '/assessments/admin',
+    '/patient-records',
+    '/treatment-plans'
+  ]
+
+  return clinicalPaths.some(path => pathname.startsWith(path))
+}
+
 export const config = {
   matcher: [
-    // API routes for rate limiting and security
-    '/api/:path*',
-    // Auth routes for enhanced security
-    '/auth/:path*',
-    // Protected app routes for audit logging
-    '/dashboard/:path*',
-    '/profile/:path*',
-    '/assessment/:path*',
-    '/safety/:path*',
-    // Main app routes (excluding dev files)
-    '/((?!_next/static|_next/image|_next/webpack-hmr|__nextjs_original-stack-frame|favicon.ico).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
   ],
 }

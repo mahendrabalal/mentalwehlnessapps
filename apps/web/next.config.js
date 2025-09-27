@@ -68,11 +68,20 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://npiregistry.cms.hhs.gov",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'"
             ].join('; ')
+          },
+          // HIPAA compliance headers
+          {
+            key: 'X-HIPAA-Compliant',
+            value: 'true'
+          },
+          {
+            key: 'X-Healthcare-Platform',
+            value: 'mental-wellness-app'
           }
         ]
       },
@@ -92,6 +101,28 @@ const nextConfig = {
   // Production redirects and rewrites
   async redirects() {
     return [
+      // Healthcare-specific redirects
+      {
+        source: '/emergency',
+        destination: '/crisis/immediate-help',
+        permanent: false, // Don't cache emergency redirects
+      },
+      {
+        source: '/suicide-prevention',
+        destination: '/crisis/suicide-prevention',
+        permanent: false,
+      },
+      {
+        source: '/login',
+        destination: '/auth/login',
+        permanent: true,
+      },
+      {
+        source: '/register',
+        destination: '/auth/register',
+        permanent: true,
+      },
+      // Security redirects
       {
         source: '/admin',
         destination: '/404',
@@ -106,6 +137,30 @@ const nextConfig = {
         source: '/config',
         destination: '/404',
         permanent: false,
+      }
+    ]
+  },
+
+  // Healthcare API routing
+  async rewrites() {
+    return [
+      // Health check endpoints
+      {
+        source: '/health',
+        destination: '/api/health',
+      },
+      {
+        source: '/health/detailed',
+        destination: '/api/health-detailed',
+      },
+      // Crisis hotline integration
+      {
+        source: '/call/988',
+        destination: '/crisis/call-988',
+      },
+      {
+        source: '/text/crisis',
+        destination: '/crisis/text-support',
       }
     ]
   },

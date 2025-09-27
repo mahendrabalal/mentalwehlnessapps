@@ -3,6 +3,10 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { AuthGuard } from '@/components/AuthGuard'
+import { CrisisInterventionSystem } from '@/components/CrisisInterventionSystem'
+import { useAuth } from '@/hooks/useAuth'
+import { Navbar } from '@/components/Navbar'
 import type { User } from '@supabase/supabase-js'
 
 interface SafetyPlan {
@@ -24,9 +28,9 @@ interface SafetyPlan {
 }
 
 export default function SafetyPlanPage() {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<any>(null)
-  const [userLoading, setUserLoading] = useState(true)
+  const { user, session, loading: authLoading, crisisLevel, reportCrisis } = useAuth()
+  const [showCrisisSystem, setShowCrisisSystem] = useState(false)
+  const [crisisDetected, setCrisisDetected] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -52,22 +56,42 @@ export default function SafetyPlanPage() {
   const totalSteps = 9
 
   useEffect(() => {
-    checkUser()
-  }, [])
+    if (user) {
+      setSafetyPlan(prev => ({ ...prev, user_id: user.id }))
+      fetchExistingSafetyPlan(user.id)
+    }
+  }, [user])
 
-  const checkUser = async () => {
+  useEffect(() => {
+    // Show crisis intervention if user has elevated crisis level
+    if (crisisLevel !== 'none') {
+      setShowCrisisSystem(true)
+      setCrisisDetected(true)
+    }
+  }, [crisisLevel])
+
+  const handleCrisisReported = async (level: any) => {
+    setCrisisDetected(true)
+    setShowCrisisSystem(true)
+
+    // Log safety plan access during crisis
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        setSafetyPlan(prev => ({ ...prev, user_id: session.user.id }))
-        fetchExistingSafetyPlan(session.user.id)
-      }
-    } catch (error) {
-      console.error('Error checking user:', error)
-    } finally {
-      setUserLoading(false)
+      await supabase
+        .from('security_audit_log')
+        .insert({
+          event_type: 'safety_plan_crisis_access',
+          severity: 'high',
+          user_id: user?.id,
+          event_details: {
+            crisis_level: level,
+            safety_plan_step: currentStep,
+            access_timestamp: new Date().toISOString()
+          },
+          hipaa_relevant: true,
+          timestamp: new Date().toISOString()
+        })
+    } catch (err) {
+      console.error('Error logging crisis access:', err)
     }
   }
 
@@ -154,30 +178,6 @@ export default function SafetyPlanPage() {
     }
   }
 
-  if (userLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to create a safety plan.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   if (loading) {
     return (
@@ -374,14 +374,88 @@ export default function SafetyPlanPage() {
     }
   ]
 
-  return (
+  const safetyPlanContent = (
     <>
       <Head>
-        <title>Safety Plan - Mental Wellness App</title>
+        <title>Safety Plan - MentalWellnessApps</title>
         <meta name="description" content="Create and manage your personal safety plan" />
       </Head>
+      <Navbar />
+
+      {/* Crisis Intervention System */}
+      {showCrisisSystem && (
+        <div className="mb-6">
+          <CrisisInterventionSystem
+            onCrisisReported={handleCrisisReported}
+            emergencyMode={crisisDetected}
+            showQuickAccess={true}
+          />
+        </div>
+      )}
+
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+          {/* Crisis Alert Banner */}
+          {crisisLevel !== 'none' && (
+            <div className={`mb-6 p-4 rounded-lg border-l-4 ${
+              crisisLevel === 'imminent' || crisisLevel === 'severe'
+                ? 'bg-red-50 border-red-400'
+                : crisisLevel === 'moderate'
+                ? 'bg-orange-50 border-orange-400'
+                : 'bg-yellow-50 border-yellow-400'
+            }`}>
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <svg className={`h-5 w-5 ${
+                    crisisLevel === 'imminent' || crisisLevel === 'severe'
+                      ? 'text-red-400'
+                      : crisisLevel === 'moderate'
+                      ? 'text-orange-400'
+                      : 'text-yellow-400'
+                  }`} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className={`text-sm font-medium ${
+                    crisisLevel === 'imminent' || crisisLevel === 'severe'
+                      ? 'text-red-800'
+                      : crisisLevel === 'moderate'
+                      ? 'text-orange-800'
+                      : 'text-yellow-800'
+                  }`}>
+                    Crisis Level Detected: {crisisLevel.charAt(0).toUpperCase() + crisisLevel.slice(1)}
+                  </h3>
+                  <div className={`mt-2 text-sm ${
+                    crisisLevel === 'imminent' || crisisLevel === 'severe'
+                      ? 'text-red-700'
+                      : crisisLevel === 'moderate'
+                      ? 'text-orange-700'
+                      : 'text-yellow-700'
+                  }`}>
+                    <p>You're creating a safety plan during a difficult time. That's a positive step.</p>
+                    {(crisisLevel === 'severe' || crisisLevel === 'imminent') && (
+                      <div className="mt-2 flex space-x-4">
+                        <button
+                          onClick={() => window.location.href = 'tel:988'}
+                          className="bg-red-600 text-white px-3 py-1 rounded text-sm font-medium hover:bg-red-700"
+                        >
+                          Call 988 Now
+                        </button>
+                        <button
+                          onClick={() => setShowCrisisSystem(true)}
+                          className="bg-red-700 text-white px-3 py-1 rounded text-sm font-medium hover:bg-red-800"
+                        >
+                          Crisis Resources
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
               <div className="flex justify-between items-center">
@@ -391,9 +465,20 @@ export default function SafetyPlanPage() {
                     Step {currentStep} of {totalSteps}: {steps[currentStep - 1].title}
                   </p>
                 </div>
-                <Link href="/crisis/support" className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm">
-                  Crisis Support
-                </Link>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={() => setShowCrisisSystem(!showCrisisSystem)}
+                    className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  >
+                    {showCrisisSystem ? 'Hide Crisis Support' : 'Crisis Support'}
+                  </button>
+                  <button
+                    onClick={() => reportCrisis('mild')}
+                    className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg text-sm"
+                  >
+                    Report Distress
+                  </button>
+                </div>
               </div>
 
               {/* Progress Bar */}
@@ -479,5 +564,16 @@ export default function SafetyPlanPage() {
         </div>
       </div>
     </>
+  )
+
+  return (
+    <AuthGuard
+      redirectMessage="Please log in"
+      redirectSubtitle="You need to be logged in to create a safety plan."
+      allowCrisisBypass={true}
+      enableCrisisDetection={true}
+    >
+      {safetyPlanContent}
+    </AuthGuard>
   )
 }

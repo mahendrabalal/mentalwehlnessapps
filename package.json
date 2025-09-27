@@ -2,7 +2,7 @@
   "name": "mental-wellness-app",
   "version": "1.0.0",
   "private": true,
-  "description": "Mental Wellness App - Clinically-validated wellness platform with crisis intervention",
+  "description": "HIPAA-Compliant Mental Health Platform with Crisis Intervention and Healthcare Authentication",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -15,18 +15,39 @@
     "test:e2e": "turbo run test:e2e",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "cd packages/database && npm run generate",
     "db:push": "cd packages/database && npm run push",
-    "db:reset": "cd packages/database && npm run reset"
+    "db:reset": "cd packages/database && npm run reset",
+    "deploy:database": "psql $DATABASE_URL -f scripts/deploy-database.sql",
+    "deploy:production": "npm run build && npm run deploy:vercel",
+    "deploy:vercel": "vercel --prod",
+    "health:check": "curl -f http://localhost:3000/api/health || exit 1",
+    "health:detailed": "curl -f http://localhost:3000/api/health-detailed || exit 1",
+    "setup:production": "npm run setup:env && npm run deploy:database && npm run build",
+    "setup:env": "cp .env.production.template .env.production",
+    "quality:gates": "node scripts/run-quality-gates.js",
+    "compliance:check": "node scripts/compliance-check.js",
+    "backup:database": "node scripts/backup-database.js",
+    "restore:database": "node scripts/restore-database.js",
+    "monitor:start": "node scripts/start-monitoring.js",
+    "monitor:alerts": "node scripts/check-alerts.js",
+    "crisis:test": "node scripts/test-crisis-systems.js",
+    "hipaa:audit": "node scripts/hipaa-audit.js"
   },
   "devDependencies": {
     "@mental-wellness/eslint-config": "file:./packages/config/eslint-config",
     "@mental-wellness/typescript-config": "file:./packages/config/typescript-config",
+    "@playwright/test": "^1.55.1",
+    "@supabase/supabase-js": "^2.58.0",
     "turbo": "^2.5.7"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "npm@10.8.2",
+  "dependencies": {
+    "@playwright/mcp": "^0.0.40"
+  }
 }
