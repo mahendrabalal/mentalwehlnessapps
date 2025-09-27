@@ -101,11 +101,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-files
-          path: |
-            ./apps/web/.next
-            ./apps/web/public
+          path: apps/web/.next
           retention-days: 1
           if-no-files-found: error
+
+      - name: Upload public assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-files
+          path: apps/web/public
+          retention-days: 1
+          if-no-files-found: warn
 
   deploy-staging:
     name: Deploy to Staging
@@ -122,7 +128,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: apps/web/
+          path: apps/web/.next
+
+      - name: Download public assets
+        uses: actions/download-artifact@v4
+        with:
+          name: public-files
+          path: apps/web/public
+        continue-on-error: true
 
       - name: Deploy to Vercel Staging
         uses: amondnet/vercel-action@v25
@@ -175,7 +188,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: apps/web/
+          path: apps/web/.next
+
+      - name: Download public assets
+        uses: actions/download-artifact@v4
+        with:
+          name: public-files
+          path: apps/web/public
+        continue-on-error: true
 
       - name: Create deployment marker
         run: |
