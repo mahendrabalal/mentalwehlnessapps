@@ -98,10 +98,16 @@ jobs:
           ls -la apps/web/.next/ || echo "apps/web/.next directory not found"
 
       - name: Upload build artifacts
+        working-directory: apps/web
+        run: |
+          ls -la .next/
+          tar -czf ../../build-artifacts.tar.gz .next/
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-files
-          path: apps/web/.next
+          path: build-artifacts.tar.gz
           retention-days: 1
           if-no-files-found: error
 
@@ -128,7 +134,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: apps/web/.next
+          path: ./
+
+      - name: Extract build artifacts
+        run: |
+          tar -xzf build-artifacts.tar.gz -C apps/web/
+          ls -la apps/web/.next/
 
       - name: Download public assets
         uses: actions/download-artifact@v4
@@ -188,7 +199,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: apps/web/.next
+          path: ./
+
+      - name: Extract build artifacts
+        run: |
+          tar -xzf build-artifacts.tar.gz -C apps/web/
+          ls -la apps/web/.next/
 
       - name: Download public assets
         uses: actions/download-artifact@v4
