@@ -102,8 +102,8 @@ jobs:
         with:
           name: build-files
           path: |
-            apps/web/.next/
-            apps/web/public/
+            ./apps/web/.next
+            ./apps/web/public
           retention-days: 1
           if-no-files-found: error
 
