@@ -95,8 +95,8 @@ jobs:
           path: |
             apps/web/.next/
             apps/web/public/
-            !apps/web/.next/cache
           retention-days: 1
+          if-no-files-found: error
 
   deploy-staging:
     name: Deploy to Staging
