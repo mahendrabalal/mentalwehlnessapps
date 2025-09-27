@@ -11,7 +11,7 @@ function getStripe(): Stripe {
     }
 
     stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2023-10-16',
+      apiVersion: '2025-08-27.basil',
       typescript: true,
       // Healthcare compliance: Ensure PCI DSS Level 1 compliance
       telemetry: false // Disable telemetry for healthcare privacy
@@ -130,7 +130,7 @@ export async function createSubscription({
       }
     }
 
-    const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent | null
+    const paymentIntent = (invoice as any).payment_intent as Stripe.PaymentIntent | null
 
     // For trial subscriptions or when no payment is needed immediately
     if (!paymentIntent || !paymentIntent.client_secret) {

@@ -27,7 +27,7 @@ export default async function handler(
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(buf, sig, endpointSecret)
+    event = stripe().webhooks.constructEvent(buf, sig, endpointSecret)
   } catch (err) {
     console.error('BMad Method: Webhook signature verification failed:', err)
     return res.status(400).json({ error: 'Webhook signature verification failed' })
@@ -93,12 +93,12 @@ async function handleSubscriptionCreated(
       stripe_customer_id: subscription.customer,
       plan_type: subscription.metadata?.planType || 'premium_monthly',
       status: subscription.status,
-      current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-      trial_start: subscription.trial_start ? new Date(subscription.trial_start * 1000).toISOString() : null,
-      trial_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
-      cancel_at_period_end: subscription.cancel_at_period_end,
-      created_at: new Date(subscription.created * 1000).toISOString(),
+      current_period_start: new Date((subscription as any).current_period_start * 1000).toISOString(),
+      current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
+      trial_start: (subscription as any).trial_start ? new Date((subscription as any).trial_start * 1000).toISOString() : null,
+      trial_end: (subscription as any).trial_end ? new Date((subscription as any).trial_end * 1000).toISOString() : null,
+      cancel_at_period_end: (subscription as any).cancel_at_period_end,
+      created_at: new Date((subscription as any).created * 1000).toISOString(),
       updated_at: new Date().toISOString()
     })
 
@@ -127,10 +127,10 @@ async function handleSubscriptionUpdated(
     .from('user_subscriptions')
     .update({
       status: subscription.status,
-      current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-      trial_end: subscription.trial_end ? new Date(subscription.trial_end * 1000).toISOString() : null,
-      cancel_at_period_end: subscription.cancel_at_period_end,
+      current_period_start: new Date((subscription as any).current_period_start * 1000).toISOString(),
+      current_period_end: new Date((subscription as any).current_period_end * 1000).toISOString(),
+      trial_end: (subscription as any).trial_end ? new Date((subscription as any).trial_end * 1000).toISOString() : null,
+      cancel_at_period_end: (subscription as any).cancel_at_period_end,
       updated_at: new Date().toISOString()
     })
     .eq('stripe_subscription_id', subscription.id)
@@ -183,13 +183,13 @@ async function handlePaymentSucceeded(
 ): Promise<void> {
   console.log('BMad Method: Processing payment succeeded:', invoice.id)
 
-  if (invoice.subscription) {
+  if ((invoice as any).subscription) {
     // Update payment history for healthcare billing compliance
     const { error } = await supabase
       .from('subscription_payments')
       .insert({
         stripe_invoice_id: invoice.id,
-        stripe_subscription_id: invoice.subscription,
+        stripe_subscription_id: (invoice as any).subscription,
         amount: invoice.amount_paid,
         currency: invoice.currency,
         status: 'succeeded',
@@ -209,13 +209,13 @@ async function handlePaymentFailed(
 ): Promise<void> {
   console.log('BMad Method: Processing payment failed:', invoice.id)
 
-  if (invoice.subscription) {
+  if ((invoice as any).subscription) {
     // BMad Method: Healthcare continuity - don't immediately disable critical features
     const { error } = await supabase
       .from('subscription_payments')
       .insert({
         stripe_invoice_id: invoice.id,
-        stripe_subscription_id: invoice.subscription,
+        stripe_subscription_id: (invoice as any).subscription,
         amount: invoice.amount_due,
         currency: invoice.currency,
         status: 'failed',

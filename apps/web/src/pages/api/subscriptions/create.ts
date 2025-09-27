@@ -79,8 +79,8 @@ export default async function handler(
     const subscription = await createSubscription({
       userId,
       priceId,
-      email: user.email,
-      name: name || user.raw_user_meta_data?.full_name,
+      email: user.email!,
+      name: name || user.user_metadata?.full_name,
       trialPeriodDays: 7, // BMad Method: 7-day trial for healthcare evaluation
       metadata: {
         // BMad Method: Clinical feature tracking

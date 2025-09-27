@@ -409,10 +409,18 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
   // BMad Method: Process real user mood data for visualization
   const generateMoodTrendData = () => {
     const days = timeRange === '30days' ? 30 : timeRange === '90days' ? 90 : 180
-    const data = []
+    const data: Array<{
+      date: string;
+      mood: number;
+      anxiety: number;
+      energy: number;
+      sleep: number;
+      stress: number;
+      hasRealData: boolean;
+    }> = []
 
     // Create date range
-    const dateRange = []
+    const dateRange: string[] = []
     for (let i = days; i >= 0; i--) {
       const date = new Date()
       date.setDate(date.getDate() - i)

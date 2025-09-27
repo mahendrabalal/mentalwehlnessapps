@@ -60,7 +60,7 @@ interface AlertConfiguration {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
-const BMad_KPI_TARGETS = {
+const BMad_KPI_TARGETS: Record<string, number> = {
   patientEngagementRate: 80,        // >80% weekly active usage
   crisisDetectionAccuracy: 95,      // >95% accuracy requirement
   systemUptime: 99.9,               // 99.9% uptime requirement
@@ -180,7 +180,7 @@ export default function ClinicalKPIMonitoring() {
     setAlerts(prev => [...newAlerts, ...prev.slice(0, 9)]) // Keep last 10 alerts
   }
 
-  const getKPIStatus = (metric: keyof ClinicalKPI, value: number) => {
+  const getKPIStatus = (metric: string, value: number) => {
     const target = BMad_KPI_TARGETS[metric]
     if (!target) return 'neutral'
 
@@ -401,7 +401,7 @@ export default function ClinicalKPIMonitoring() {
               {currentKPIs ? formatMetricValue('providerSatisfactionScore', currentKPIs.providerSatisfactionScore) : '0'}
             </div>
             <div className="text-sm text-gray-600">Provider Satisfaction</div>
-            <div className="text-xs text-gray-500">Target: >4.5/5</div>
+            <div className="text-xs text-gray-500">Target: &gt;4.5/5</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-green-600">

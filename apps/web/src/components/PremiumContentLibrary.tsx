@@ -33,6 +33,16 @@ interface ContentEffectiveness {
   timeOfDayEffective: string[]
 }
 
+// BMad Method: Determine current time of day
+function getCurrentTimeOfDay(): 'morning' | 'afternoon' | 'evening' | 'night' {
+  const hour = new Date().getHours()
+  if (hour < 6) return 'night'
+  if (hour < 12) return 'morning'
+  if (hour < 18) return 'afternoon'
+  if (hour < 22) return 'evening'
+  return 'night'
+}
+
 export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
   isPremium = false,
   onUpgradeClick,
@@ -41,16 +51,6 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
   moodEntries = [],
   timeOfDay = getCurrentTimeOfDay()
 }) => {
-
-  // BMad Method: Determine current time of day
-  function getCurrentTimeOfDay(): 'morning' | 'afternoon' | 'evening' | 'night' {
-    const hour = new Date().getHours()
-    if (hour < 6) return 'night'
-    if (hour < 12) return 'morning'
-    if (hour < 18) return 'afternoon'
-    if (hour < 22) return 'evening'
-    return 'night'
-  }
   const [selectedCategory, setSelectedCategory] = useState<string>('recommended')
   const [isPlaying, setIsPlaying] = useState<string | null>(null)
   const [contentEffectiveness, setContentEffectiveness] = useState<ContentEffectiveness[]>([])
@@ -215,7 +215,7 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
   }
 
   function getPersonalizedRecommendations(): ContentItem[] {
-    const recommendations = []
+    const recommendations: ContentItem[] = []
     const { currentMood, anxietyLevel, stressLevel, energyLevel, primaryConcern, moodTrend } = userContext
 
     // Crisis/urgent recommendations first
