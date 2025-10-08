@@ -78,6 +78,17 @@ export function Navbar() {
                 </Link>
 
                 <Link
+                  href="/blog"
+                  className={`transition-colors ${
+                    router.pathname.startsWith('/blog')
+                      ? 'text-therapy-600 font-medium'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Resource Library
+                </Link>
+
+                <Link
                   href="/profile"
                   className={`transition-colors ${
                     router.pathname === '/profile'
@@ -115,6 +126,9 @@ export function Navbar() {
                 {/* Non-authenticated User Navigation */}
                 <Link href="/?landing=true" className="text-gray-600 hover:text-gray-900 transition-colors">
                   Home
+                </Link>
+                <Link href="/blog" className="text-gray-600 hover:text-gray-900 transition-colors">
+                  Resource Library
                 </Link>
                 <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 transition-colors">
                   Sign In

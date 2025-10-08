@@ -32,4 +32,24 @@
   .wellness-gradient {
     @apply bg-gradient-to-r from-wellness-500 to-therapy-500;
   }
+
+  .prose {
+    @apply text-gray-700;
+  }
+
+  .prose :where(h2) {
+    @apply mt-12 text-3xl font-semibold text-gray-900;
+  }
+
+  .prose :where(h3) {
+    @apply mt-10 text-2xl font-semibold text-gray-900;
+  }
+
+  .prose :where(p) {
+    @apply leading-8;
+  }
+
+  .prose :where(blockquote) {
+    @apply border-l-4 border-wellness-300 bg-wellness-50/50 py-2 pl-6 italic text-gray-700;
+  }
 }

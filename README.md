@@ -24,7 +24,8 @@ AI-powered mental wellness platform with clinical validation and crisis interven
 ```
 mental-wellness-app/
 ├── apps/
-│   └── web/                 # Next.js frontend application
+│   ├── web/                 # Next.js frontend application
+│   └── cms/                 # Sanity Studio workspace for content authors
 ├── packages/
 │   ├── shared/              # Shared TypeScript types and utilities
 │   └── config/              # Configuration packages
@@ -53,9 +54,10 @@ cd mental-wellness-app
 npm install
 ```
 
-3. Set up environment variables:
+3. Set up environment variables for the web app and Studio:
 ```bash
 cp apps/web/.env.example apps/web/.env.local
+cp apps/cms/.env.local.example apps/cms/.env.local
 ```
 
 4. Configure your Supabase credentials in `apps/web/.env.local`:
@@ -63,6 +65,21 @@ cp apps/web/.env.example apps/web/.env.local
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
+
+5. Add your Sanity project values to `apps/web/.env.local` (used at build/runtime) and
+   `apps/cms/.env.local` (used by Sanity CLI):
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_sanity_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2023-10-25
+SANITY_PREVIEW_TOKEN=token_with_read_rights
+SANITY_PREVIEW_SECRET=random_string_for_preview_api
+SANITY_REVALIDATE_SECRET=random_string_for_webhooks
+
+SANITY_PROJECT_ID=your_sanity_project_id
+SANITY_DATASET=production
+SANITY_ENABLE_PREVIEW=true
 ```
 
 ### Development
@@ -76,10 +93,32 @@ The application will be available at `http://localhost:3000`.
 
 ### Available Scripts
 
-- `npm run dev` - Start development server
+- `npm run dev` - Start development server (Next.js + Supabase)
+- `npm run cms:dev` - Run Sanity Studio locally at `http://localhost:3000/admin`
+- `npm run cms:build` - Build the Studio for deployment
+- `npm run cms:deploy` - Deploy the Studio to Sanity managed hosting
 - `npm run build` - Build all packages and applications
 - `npm run lint` - Run ESLint
 - `npm run type-check` - Run TypeScript type checking
+
+### Sanity CMS Workflow
+
+1. Create a new project in [Sanity Manage](https://www.sanity.io/manage) and note the Project ID.
+2. Fill in the Sanity environment variables described above.
+3. Seed the Studio (optional) by running `npm run cms:dev` and creating entries for:
+   - `Site Settings` (global disclaimer + metadata)
+   - Authors
+   - Articles (hero image, SEO, clinical review metadata)
+4. Publish an article and visit `http://localhost:3000/blog` to see it rendered in the web app.
+5. Configure a webhook in Sanity to `POST https://your-domain/api/revalidate/sanity?secret=SANITY_REVALIDATE_SECRET` so published updates trigger ISR revalidation.
+
+Preview drafts:
+
+```bash
+curl "http://localhost:3000/api/preview?secret=SANITY_PREVIEW_SECRET&slug=blog/sample-article"
+```
+
+Exit preview mode at `http://localhost:3000/api/exit-preview`.
 
 ## Documentation
 
@@ -98,7 +137,7 @@ This application includes crisis intervention features. If you're experiencing a
 
 ## Contributing
 
-Please read our contributing guidelines and ensure all tests pass before submitting pull requests.
+Please review the [Repository Guidelines](AGENTS.md) and ensure all tests pass before submitting pull requests.
 
 ## License
 

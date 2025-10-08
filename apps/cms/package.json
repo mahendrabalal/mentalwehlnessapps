@@ -1,0 +1,24 @@
+{
+  "name": "mental-wellness-cms",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ./scripts/dev.mjs",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "manage": "sanity manage",
+    "dataset:create": "sanity dataset create",
+    "dataset:import": "sanity dataset import",
+    "dataset:export": "sanity dataset export",
+    "lint": "node ./scripts/validate-schema.mjs"
+  },
+  "dependencies": {
+    "@sanity/icons": "^2.10.1",
+    "@sanity/vision": "^3.36.5",
+    "sanity": "^3.58.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

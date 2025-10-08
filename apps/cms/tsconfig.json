@@ -1,0 +1,16 @@
+{
+  "extends": "@mental-wellness/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2021",
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/schemas/*": ["schemas/*"]
+    },
+    "types": ["sanity"]
+  },
+  "include": ["sanity.config.ts", "sanity.cli.ts", "schemas/**/*.ts"],
+  "exclude": ["node_modules", ".sanity"]
+}

@@ -11,7 +11,7 @@ const nextConfig = {
 
   // Security-focused image configuration
   images: {
-    domains: ['images.unsplash.com'],
+    domains: ['images.unsplash.com', 'cdn.sanity.io'],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: false,
@@ -68,7 +68,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://npiregistry.cms.hhs.gov",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://npiregistry.cms.hhs.gov https://*.sanity.io",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'"
@@ -123,11 +123,6 @@ const nextConfig = {
         permanent: true,
       },
       // Security redirects
-      {
-        source: '/admin',
-        destination: '/404',
-        permanent: false,
-      },
       {
         source: '/.env',
         destination: '/404',
