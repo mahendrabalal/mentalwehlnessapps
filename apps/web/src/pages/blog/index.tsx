@@ -3,6 +3,8 @@ import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { ArticleCard } from '@/components/blog/ArticleCard'
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 import { fetchArticles, fetchSiteSettings } from '@/lib/cms/articleService'
 
 interface BlogIndexProps {
@@ -34,6 +36,7 @@ export default function BlogIndexPage({
           />
         ) : null}
       </Head>
+      <Navbar />
       <section className="bg-gradient-to-b from-wellness-50 via-white to-white py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 text-center sm:gap-8">
@@ -77,6 +80,7 @@ export default function BlogIndexPage({
           </div>
         )}
       </main>
+      <Footer />
     </>
   )
 }

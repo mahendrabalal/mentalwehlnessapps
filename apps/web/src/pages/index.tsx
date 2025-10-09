@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import type { User } from '@supabase/supabase-js'
 
@@ -10,7 +11,6 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -32,29 +32,6 @@ export default function Home() {
 
     return () => subscription.unsubscribe()
   }, [])
-
-  const handleSignOut = async () => {
-    try {
-      console.log('Current user:', user)
-      console.log('Attempting to sign out...')
-
-      const { error } = await supabase.auth.signOut()
-      if (error) {
-        console.error('Error signing out:', error.message)
-        // Even if there's an error, try to refresh the page to clear local state
-        window.location.reload()
-      } else {
-        console.log('Sign out successful')
-        setUser(null) // Clear user state immediately
-        router.push('/')
-      }
-    } catch (err) {
-      console.error('Unexpected error during sign out:', err)
-      // Fallback: clear local storage and refresh
-      localStorage.clear()
-      window.location.reload()
-    }
-  }
 
   // Check if user wants to stay on landing page via URL parameter
   const [showLandingPage, setShowLandingPage] = useState(false)
@@ -94,7 +71,7 @@ export default function Home() {
       </Head>
 
       {/* Dashboard Shortcut for Authenticated Users */}
-      {user && (
+      {user && showLandingPage && (
         <div className="fixed top-4 right-4 z-50">
           <div className="bg-therapy-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-3">
             <span className="text-sm">Welcome back!</span>
@@ -119,141 +96,7 @@ export default function Home() {
 
       {/* Modern Landing Page */}
       <div className="min-h-screen bg-white">
-        {/* Navigation */}
-        <nav className="relative z-50 bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-4">
-              {/* Logo */}
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-                <span className="text-xl font-bold text-gray-900">MentalWellnessApps</span>
-              </div>
-
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-8">
-                <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Features</a>
-                <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
-                <a href="#about" className="text-gray-600 hover:text-gray-900 transition-colors">About</a>
-
-                {user ? (
-                  <>
-                    <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleSignOut}
-                      className="text-gray-600 hover:text-gray-900 transition-colors"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 transition-colors">
-                      Sign In
-                    </Link>
-                    <Link href="/auth/signup" className="bg-therapy-600 hover:bg-therapy-700 text-white px-4 py-2 rounded-lg transition-colors">
-                      Start Free Trial
-                    </Link>
-                  </>
-                )}
-              </div>
-
-              {/* Mobile Menu Button (Hamburger) */}
-              <div className="md:hidden">
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-therapy-600 transition-colors"
-                  aria-expanded={mobileMenuOpen}
-                  aria-label="Toggle mobile menu"
-                >
-                  <span className="sr-only">Open main menu</span>
-                  {/* Hamburger Icon */}
-                  {!mobileMenuOpen ? (
-                    <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  ) : (
-                    <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Mobile Menu Panel */}
-            {mobileMenuOpen && (
-              <div className="md:hidden border-t border-gray-100">
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  <a
-                    href="#features"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                  >
-                    Features
-                  </a>
-                  <a
-                    href="#pricing"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                  >
-                    Pricing
-                  </a>
-                  <a
-                    href="#about"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                  >
-                    About
-                  </a>
-
-                  {user ? (
-                    <>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      >
-                        Dashboard
-                      </Link>
-                      <button
-                        onClick={() => {
-                          setMobileMenuOpen(false)
-                          handleSignOut()
-                        }}
-                        className="block w-full text-left px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      >
-                        Sign Out
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        href="/auth/login"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      >
-                        Sign In
-                      </Link>
-                      <Link
-                        href="/auth/signup"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block px-3 py-3 rounded-lg text-base font-medium bg-therapy-600 text-white hover:bg-therapy-700 transition-colors text-center"
-                      >
-                        Start Free Trial
-                      </Link>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </nav>
+        <Navbar variant="marketing" />
 
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">

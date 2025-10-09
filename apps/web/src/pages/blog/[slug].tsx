@@ -10,6 +10,8 @@ import { useMemo } from 'react'
 import { format } from 'date-fns'
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer'
 import { HIPAAContentDisclaimer } from '@/components/blog/HIPAAContentDisclaimer'
+import { Navbar } from '@/components/Navbar'
+import { Footer } from '@/components/Footer'
 import {
   fetchArticleBySlug,
   fetchArticleSlugs,
@@ -58,6 +60,7 @@ export default function BlogArticlePage({
         <meta property="og:description" content={pageDescription} />
         {ogImage ? <meta property="og:image" content={ogImage} /> : null}
       </Head>
+      <Navbar />
       <article className="pb-24">
         <header className="bg-gradient-to-b from-wellness-50 via-white to-white">
           <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-0">
@@ -142,6 +145,7 @@ export default function BlogArticlePage({
           </footer>
         </div>
       </article>
+      <Footer />
     </>
   )
 }

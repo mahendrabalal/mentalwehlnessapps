@@ -9,8 +9,8 @@ export const cmsImageSchema = z.object({
   _type: z.literal('image'),
   asset: cmsImageAssetSchema,
   alt: z.string().min(1),
-  caption: z.string().optional(),
-  credit: z.string().optional(),
+  caption: z.string().nullable().optional(),
+  credit: z.string().nullable().optional(),
 })
 
 export const cmsAuthorSchema = z.object({
@@ -19,9 +19,9 @@ export const cmsAuthorSchema = z.object({
   slug: z.object({
     current: z.string(),
   }),
-  role: z.string().optional(),
-  credentials: z.string().optional(),
-  headshot: cmsImageSchema.optional(),
+  role: z.string().nullable().optional(),
+  credentials: z.string().nullable().optional(),
+  headshot: cmsImageSchema.nullable().optional(),
 })
 
 export const cmsArticleSchema = z.object({
@@ -43,8 +43,9 @@ export const cmsArticleSchema = z.object({
       credential: z.string().optional(),
       reviewedAt: z.string().optional(),
     })
+    .nullable()
     .optional(),
-  hipaaDisclaimerOverride: z.string().optional(),
+  hipaaDisclaimerOverride: z.string().nullable().optional(),
   seo: z
     .object({
       metaTitle: z.string().optional(),
