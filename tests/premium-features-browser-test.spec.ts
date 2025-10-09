@@ -214,8 +214,8 @@ test.describe('Premium Features Browser Test - BMad Method', () => {
 
     console.log('\n💰 Billing Configuration (from code analysis):');
     console.log('• 7-Day Free Trial: ✅ CONFIGURED');
-    console.log('• Monthly Plan: $19.99/month');
-    console.log('• Yearly Plan: $89.99/year (55% savings)');
+    console.log('• Monthly Plan: $5.99/month');
+    console.log('• Yearly Plan: $59.99/year (approx. 2 months free)');
     console.log('• Stripe Integration: ✅ IMPLEMENTED');
     console.log('• Webhook Processing: ✅ IMPLEMENTED');
 

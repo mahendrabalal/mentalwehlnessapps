@@ -1,6 +1,7 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function FeaturesPage() {
   const features = [
@@ -78,12 +79,37 @@ export default function FeaturesPage() {
     }
   ]
 
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Features',
+      description: SEO_CONFIG.features.description,
+      slug: '/features',
+    }),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: features.map((feature, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: feature.title,
+        description: feature.description,
+      })),
+    },
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Features', url: '/features' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Features - MentalWellnessApps</title>
-        <meta name="description" content="Discover all the powerful features designed to support your mental wellness journey" />
-      </Head>
+      <SEOHead
+        title={SEO_CONFIG.features.title}
+        description={SEO_CONFIG.features.description}
+        keywords={SEO_CONFIG.features.keywords}
+        ogImage="/og-default.png"
+        structuredData={structuredData}
+      />
 
       <Navbar />
 
@@ -103,7 +129,7 @@ export default function FeaturesPage() {
                 href="/auth/signup"
                 className="bg-white text-therapy-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
               >
-                Start Your Free Trial
+                Get Started Now
               </Link>
             </div>
           </div>
@@ -171,7 +197,7 @@ export default function FeaturesPage() {
                 href="/auth/signup"
                 className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
               >
-                Start Free Trial
+                Get Started
               </Link>
               <Link
                 href="/pricing"

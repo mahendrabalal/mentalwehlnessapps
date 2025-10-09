@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
+import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
+import { SEOHead } from '@/components/SEOHead'
 
 const GAD7_QUESTIONS = [
   "Feeling nervous, anxious or on edge",
@@ -49,6 +50,8 @@ export default function GAD7Assessment() {
   const [userLoading, setUserLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
+  const baseTitle = 'GAD-7 Anxiety Assessment - Mental Wellness App'
+  const baseDescription = 'Complete the GAD-7 anxiety assessment to monitor generalized anxiety levels and receive evidence-based guidance.'
 
   useEffect(() => {
     checkUser()
@@ -158,24 +161,30 @@ export default function GAD7Assessment() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to take assessments.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to take assessments.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (showResults && results) {
     return (
       <>
-        <Head>
-          <title>GAD-7 Results - Mental Wellness App</title>
-        </Head>
+        <SEOHead
+          title="GAD-7 Results - Mental Wellness App"
+          description="Review your GAD-7 assessment results and next-step recommendations in your secure Mental Wellness App account."
+          noindex
+          nofollow
+        />
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white shadow rounded-lg p-6">
@@ -195,23 +204,7 @@ export default function GAD7Assessment() {
                 </div>
 
                 {results.isCrisis && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-red-900 mb-2">⚠️ Severe Anxiety Detected</h4>
-                    <p className="text-red-800 mb-4">
-                      Your responses indicate severe anxiety symptoms that may benefit from immediate professional support.
-                    </p>
-                    <div className="space-y-2">
-                      <p className="text-red-800">
-                        <strong>Crisis Support:</strong> Call 988 (Suicide & Crisis Lifeline)
-                      </p>
-                      <p className="text-red-800">
-                        <strong>Text Support:</strong> Text HOME to 741741
-                      </p>
-                      <p className="text-red-800">
-                        <strong>Emergency:</strong> Call 911 or go to your nearest emergency room
-                      </p>
-                    </div>
-                  </div>
+                  <InternationalCrisisSupport variant="compact" />
                 )}
 
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -250,10 +243,12 @@ export default function GAD7Assessment() {
 
   return (
     <>
-      <Head>
-        <title>GAD-7 Anxiety Assessment - Mental Wellness App</title>
-        <meta name="description" content="Generalized Anxiety Disorder 7-item scale anxiety screening" />
-      </Head>
+      <SEOHead
+        title={baseTitle}
+        description={baseDescription}
+        noindex
+        nofollow
+      />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white shadow rounded-lg">

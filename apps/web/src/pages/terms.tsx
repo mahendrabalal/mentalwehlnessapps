@@ -1,13 +1,28 @@
-import Head from 'next/head'
+/* eslint-disable react/no-unescaped-entities -- Legal content preserves quotation marks and apostrophes for accuracy */
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function TermsOfServicePage() {
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Terms of Service',
+      description: 'Legal terms and acceptable use policies governing the Mental Wellness App platform.',
+      slug: '/terms',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Terms of Service', url: '/terms' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Terms of Service - MentalWellnessApps</title>
-        <meta name="description" content="Terms of Service for MentalWellnessApps - legal terms and conditions for using our platform" />
-      </Head>
+      <SEOHead
+        title="Terms of Service - Mental Wellness App"
+        description="Review the legal terms, usage policies, and disclaimers that govern your use of the Mental Wellness App."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 
@@ -90,17 +105,9 @@ export default function TermsOfServicePage() {
 
               <h2>6. Subscription and Payment</h2>
 
-              <h3>6.1 Free Trial</h3>
+              <h3>6.1 Premium Subscription</h3>
               <ul>
-                <li>7-day free trial for premium features</li>
-                <li>No credit card required to start trial</li>
-                <li>Automatic conversion to paid subscription unless cancelled</li>
-                <li>Cancel anytime during trial period</li>
-              </ul>
-
-              <h3>6.2 Premium Subscription</h3>
-              <ul>
-                <li>Monthly subscription at $19.99/month</li>
+                <li>Monthly subscription at $5.99/month</li>
                 <li>Automatic renewal unless cancelled</li>
                 <li>Billing occurs at the start of each billing cycle</li>
                 <li>Price changes will be communicated 30 days in advance</li>

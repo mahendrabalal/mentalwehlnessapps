@@ -3,9 +3,18 @@ import {
   defineField,
   defineType,
   SlugValidationContext,
+  type SlugValue,
 } from "sanity";
 
-const slugIsUnique = (slug: string, context: SlugValidationContext) => {
+const slugIsUnique = (
+  value: SlugValue | undefined,
+  context: SlugValidationContext
+) => {
+  const slug = value?.current?.trim();
+  if (!slug) {
+    return true;
+  }
+
   const { document, getClient } = context;
   const id = document?._id?.replace(/^drafts\./, "");
   const client = getClient({ apiVersion: "2023-10-25" });
@@ -54,7 +63,12 @@ export default defineType({
             .replace(/\s+/g, "-")
             .slice(0, 96),
       },
-      validation: (rule) => rule.required().custom(slugIsUnique),
+      validation: (rule) =>
+        rule
+          .required()
+          .custom((value, context) =>
+            slugIsUnique(value, context as SlugValidationContext)
+          ),
     }),
     defineField({
       name: "status",

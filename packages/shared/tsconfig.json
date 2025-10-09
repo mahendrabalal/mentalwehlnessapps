@@ -1,5 +1,5 @@
 {
-  "extends": "@mental-wellness/typescript-config/base.json",
+  "extends": "../config/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

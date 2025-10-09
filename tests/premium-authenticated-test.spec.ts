@@ -87,7 +87,7 @@ test.describe('Premium Features Testing with Authentication', () => {
         '24/7 AI Companion',
         'Smart Analytics',
         'Premium Content',
-        '$19.99',
+        '$5.99',
         'Free Trial'
       ];
 
@@ -161,8 +161,8 @@ test.describe('Premium Features Testing with Authentication', () => {
           const modalElements = [
             'Premium Monthly',
             'Premium Yearly',
-            '$19.99',
-            '$89.99',
+            '$5.99',
+            '$59.99',
             'HIPAA',
             'Cancel Anytime',
             'Secure Payments'

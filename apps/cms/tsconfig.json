@@ -1,5 +1,5 @@
 {
-  "extends": "@mental-wellness/typescript-config/base.json",
+  "extends": "../../packages/config/typescript-config/base.json",
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "NodeNext",

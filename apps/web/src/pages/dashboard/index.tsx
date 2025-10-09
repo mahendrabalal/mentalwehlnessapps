@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
@@ -11,6 +10,7 @@ import { AITherapyCompanion } from '@/components/AITherapyCompanion'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { DailyWellnessBriefing } from '@/components/DailyWellnessBriefing'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
 import type { User } from '@supabase/supabase-js'
 
 interface MoodEntry {
@@ -223,10 +223,12 @@ function DashboardContent() {
 
   return (
     <>
-      <Head>
-        <title>Dashboard - MentalWellnessApps</title>
-        <meta name="description" content="Your mental wellness progress and insights" />
-      </Head>
+      <SEOHead
+        title="Dashboard - Mental Wellness App"
+        description="Your private mental wellness dashboard with personalized insights, analytics, and crisis planning tools."
+        noindex
+        nofollow
+      />
       <Navbar />
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -527,16 +529,16 @@ function DashboardContent() {
                     <div className="flex items-center space-x-4">
                       <div>
                         <p className="text-sm text-gray-600">Starting at</p>
-                        <p className="text-2xl font-bold text-gray-900">$19.99<span className="text-sm font-normal">/month</span></p>
+                        <p className="text-2xl font-bold text-gray-900">$5.99<span className="text-sm font-normal">/month</span></p>
                       </div>
                       <div className="border-l border-gray-300 pl-4">
                         <button
                           onClick={() => handleUpgradeClick()}
                           className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                         >
-                          Start Free Trial
+                          Subscribe Now
                         </button>
-                        <p className="text-xs text-gray-500 mt-1">7 days free, then $19.99/month</p>
+                        <p className="text-xs text-gray-500 mt-1">$5.99/month • Instant access</p>
                       </div>
                     </div>
                   </div>

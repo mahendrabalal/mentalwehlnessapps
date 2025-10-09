@@ -56,7 +56,7 @@ async function testDirectPremiumPage() {
       console.log('📄 Page title:', pageTitle);
 
       // Check for welcome message
-      const welcomeMessage = await page.locator('text=Welcome to Your Premium Trial, text=Premium Features Active').isVisible().catch(() => false);
+      const welcomeMessage = await page.locator('text=/Premium Features Active|Premium Access Locked|Welcome to Your Premium Trial/').isVisible().catch(() => false);
       if (welcomeMessage) {
         testResults.welcomeMessageShown = true;
         console.log('✅ Welcome message displayed');

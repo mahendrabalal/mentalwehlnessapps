@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import Head from 'next/head'
 import { AuthGuard } from '@/components/AuthGuard'
 import { QualityGateDashboard } from '@/components/QualityGateDashboard'
 import { useAuth } from '@/hooks/useAuth'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function QualityGatesPage() {
   const { user, userRole } = useAuth()
@@ -23,10 +23,12 @@ export default function QualityGatesPage() {
       requiredTier="clinical"
       clinicalContext={true}
     >
-      <Head>
-        <title>Healthcare Quality Gates - Mental Wellness App</title>
-        <meta name="description" content="Healthcare quality gates, HIPAA compliance validation, and clinical safety monitoring" />
-      </Head>
+      <SEOHead
+        title="Healthcare Quality Gates - Mental Wellness App"
+        description="Healthcare quality gates, HIPAA compliance validation, and clinical safety monitoring dashboard."
+        noindex
+        nofollow
+      />
 
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">

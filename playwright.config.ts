@@ -36,6 +36,13 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
+      name: 'chrome-dev',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome-dev',
+      },
+    },
+    {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },

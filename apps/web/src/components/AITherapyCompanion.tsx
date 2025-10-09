@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { LegalDisclaimer } from './LegalDisclaimer'
 
 interface Message {
@@ -24,9 +24,17 @@ interface AITherapyCompanionProps {
     score: number
     severity: string
   }
-  moodEntries?: any[]
+  moodEntries?: MoodEntry[]
   isPremium?: boolean
   onUpgradeClick?: () => void
+}
+
+interface MoodEntry {
+  mood_score?: number
+  created_at?: string
+  sleep_quality?: number
+  stress_level?: number
+  anxiety_level?: number
 }
 
 export const AITherapyCompanion: React.FC<AITherapyCompanionProps> = ({
@@ -40,21 +48,8 @@ export const AITherapyCompanion: React.FC<AITherapyCompanionProps> = ({
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [userContext, setUserContext] = useState<UserContext>(
-    () => generateUserContext()
-  )
+  const [userContext, setUserContext] = useState<UserContext>(() => generateUserContext())
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    // Initialize with welcome message
-    const welcomeMessage: Message = {
-      id: '1',
-      type: 'ai',
-      content: getPersonalizedWelcome(),
-      timestamp: new Date()
-    }
-    setMessages([welcomeMessage])
-  }, [userMoodScore, recentAssessment])
 
   useEffect(() => {
     scrollToBottom()
@@ -136,7 +131,7 @@ export const AITherapyCompanion: React.FC<AITherapyCompanionProps> = ({
     return patterns
   }
 
-  const getPersonalizedWelcome = (): string => {
+  const getPersonalizedWelcome = useCallback((): string => {
     const { crisisRiskLevel, moodTrend, historicalPatterns } = userContext
 
     // BMad Method: Crisis-aware welcome messages
@@ -164,7 +159,17 @@ export const AITherapyCompanion: React.FC<AITherapyCompanionProps> = ({
 
     // Default personalized welcome
     return `Hello! I'm your AI wellness companion, and I'm here to provide personalized support based on your unique journey. ${recentAssessment ? `I see you recently completed a ${recentAssessment.type.toUpperCase()} assessment. ` : ''}How can I support your mental wellness today?`
-  }
+  }, [recentAssessment, userContext])
+
+  useEffect(() => {
+    const welcomeMessage: Message = {
+      id: '1',
+      type: 'ai',
+      content: getPersonalizedWelcome(),
+      timestamp: new Date()
+    }
+    setMessages([welcomeMessage])
+  }, [getPersonalizedWelcome])
 
   // BMad Method: Intelligent AI response system with crisis detection
   const generateAIResponse = async (userInput: string): Promise<string> => {
@@ -172,7 +177,7 @@ export const AITherapyCompanion: React.FC<AITherapyCompanionProps> = ({
     await new Promise(resolve => setTimeout(resolve, 1500))
 
     // Update conversation memory
-    const updatedContext = {
+    const updatedContext: UserContext = {
       ...userContext,
       conversationMemory: [...userContext.conversationMemory, userInput].slice(-5) // Keep last 5 exchanges
     }

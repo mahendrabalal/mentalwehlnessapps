@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { LegalDisclaimer } from './LegalDisclaimer'
 
 interface ContentItem {
@@ -21,8 +21,17 @@ interface PremiumContentLibraryProps {
     score: number
     severity: string
   }
-  moodEntries?: any[]
+  moodEntries?: MoodEntry[]
   timeOfDay?: 'morning' | 'afternoon' | 'evening' | 'night'
+}
+
+interface MoodEntry {
+  mood_score?: number
+  anxiety_level?: number
+  stress_level?: number
+  energy_level?: number
+  sleep_quality?: number
+  created_at: string
 }
 
 interface ContentEffectiveness {
@@ -54,27 +63,8 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('recommended')
   const [isPlaying, setIsPlaying] = useState<string | null>(null)
   const [contentEffectiveness, setContentEffectiveness] = useState<ContentEffectiveness[]>([])
-  const [userContext, setUserContext] = useState(() => generateUserContext())
 
-  // BMad Method: Generate intelligent user context for recommendations
-  function generateUserContext() {
-    const currentMood = userMoodScore || (moodEntries.length > 0 ? moodEntries[0]?.mood_score : 5)
-    const anxietyLevel = moodEntries.length > 0 ? moodEntries[0]?.anxiety_level || 5 : 5
-    const stressLevel = moodEntries.length > 0 ? moodEntries[0]?.stress_level || 5 : 5
-    const energyLevel = moodEntries.length > 0 ? moodEntries[0]?.energy_level || 5 : 5
-
-    return {
-      currentMood,
-      anxietyLevel,
-      stressLevel,
-      energyLevel,
-      timeOfDay,
-      primaryConcern: determinePrimaryConcern(),
-      moodTrend: determineMoodTrend()
-    }
-  }
-
-  function determinePrimaryConcern(): 'anxiety' | 'depression' | 'stress' | 'sleep' | 'general' {
+  const determinePrimaryConcern = useCallback((): 'anxiety' | 'depression' | 'stress' | 'sleep' | 'general' => {
     if (recentAssessment) {
       if (recentAssessment.type === 'gad7' && recentAssessment.score >= 8) return 'anxiety'
       if (recentAssessment.type === 'phq9' && recentAssessment.score >= 10) return 'depression'
@@ -94,9 +84,9 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
     }
 
     return 'general'
-  }
+  }, [moodEntries, recentAssessment])
 
-  function determineMoodTrend(): 'improving' | 'declining' | 'stable' {
+  const determineMoodTrend = useCallback((): 'improving' | 'declining' | 'stable' => {
     if (moodEntries.length < 3) return 'stable'
 
     const recent = moodEntries.slice(0, 2)
@@ -111,7 +101,27 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
     if (diff > 1.0) return 'improving'
     if (diff < -1.0) return 'declining'
     return 'stable'
-  }
+  }, [moodEntries])
+
+  const userContext = useMemo(() => {
+    const fallbackMood = moodEntries.length > 0 && typeof moodEntries[0]?.mood_score === 'number'
+      ? moodEntries[0]!.mood_score!
+      : 5
+    const currentMood = userMoodScore ?? fallbackMood
+    const anxietyLevel = moodEntries.length > 0 ? moodEntries[0]?.anxiety_level || 5 : 5
+    const stressLevel = moodEntries.length > 0 ? moodEntries[0]?.stress_level || 5 : 5
+    const energyLevel = moodEntries.length > 0 ? moodEntries[0]?.energy_level || 5 : 5
+
+    return {
+      currentMood,
+      anxietyLevel,
+      stressLevel,
+      energyLevel,
+      timeOfDay,
+      primaryConcern: determinePrimaryConcern(),
+      moodTrend: determineMoodTrend()
+    }
+  }, [determineMoodTrend, determinePrimaryConcern, moodEntries, recentAssessment, timeOfDay, userMoodScore])
 
   // Demo content library
   const contentLibrary: ContentItem[] = [
@@ -246,6 +256,12 @@ export const PremiumContentLibrary: React.FC<PremiumContentLibraryProps> = ({
         ...contentLibrary.filter(item =>
           item.category === 'depression' || item.category === 'mindfulness'
         )
+      )
+    }
+
+    if (stressLevel >= 7) {
+      recommendations.push(
+        ...contentLibrary.filter(item => item.category === 'stress')
       )
     }
 

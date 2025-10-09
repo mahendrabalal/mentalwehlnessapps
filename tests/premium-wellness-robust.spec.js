@@ -90,7 +90,7 @@ test.describe('Premium Wellness Features Testing - BMad Method Healthcare App', 
         '.bg-purple',
         'text=Premium',
         'text=AI Companion',
-        'text=$19.99',
+        'text=$5.99',
         'text=Start Free Trial'
       ];
 
@@ -163,7 +163,7 @@ test.describe('Premium Wellness Features Testing - BMad Method Healthcare App', 
       }
 
       // Check for pricing
-      const pricingTexts = ['$19.99', '19.99', '$', 'month'];
+      const pricingTexts = ['$5.99', '5.99', '$', 'month'];
       for (const text of pricingTexts) {
         if (await page.locator(`text=${text}`).first().isVisible({ timeout: 1000 })) {
           featureChecks.pricing = true;
@@ -217,7 +217,7 @@ test.describe('Premium Wellness Features Testing - BMad Method Healthcare App', 
           }
 
           // Look for plan options
-          const planTexts = ['Monthly', 'Yearly', 'Annual', '$19.99', '$89.99'];
+          const planTexts = ['Monthly', 'Yearly', 'Annual', '$5.99', '$59.99'];
           for (const text of planTexts) {
             if (await page.locator(`text=${text}`).first().isVisible({ timeout: 2000 })) {
               console.log(`✓ Plan option found: ${text}`);

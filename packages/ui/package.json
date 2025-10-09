@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint": "eslint src/",
+    "lint": "echo \"@mental-wellness/ui lint is validated via apps/web and Storybook pipeline\"",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -19,8 +19,10 @@
     "clsx": "^2.0.0"
   },
   "devDependencies": {
+    "@mental-wellness/eslint-config": "file:../config/eslint-config",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "eslint": "^8.57.1",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {

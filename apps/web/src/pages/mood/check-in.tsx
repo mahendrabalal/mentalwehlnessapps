@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function MoodCheckIn() {
   const [user, setUser] = useState<User | null>(null)
   const [userLoading, setUserLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
+  const baseTitle = 'Daily Mood Check-In - Mental Wellness App'
+  const baseDescription =
+    'Record your daily mood, energy, anxiety, and notes to track trends in your Mental Wellness App account.'
 
   const [moodScore, setMoodScore] = useState(5)
   const [energyLevel, setEnergyLevel] = useState(5)
@@ -93,48 +96,54 @@ export default function MoodCheckIn() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading...</p>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Loading...</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to track your mood.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to track your mood.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <h2 className="text-2xl font-bold text-green-900 mb-4">Check-in Complete!</h2>
-            <p className="text-green-700">Your mood entry has been saved. Redirecting to dashboard...</p>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-green-900 mb-4">Check-in Complete!</h2>
+              <p className="text-green-700">Your mood entry has been saved. Redirecting to dashboard...</p>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
     <>
-      <Head>
-        <title>Daily Mood Check-in - Mental Wellness App</title>
-        <meta name="description" content="Track your daily mood and wellness" />
-      </Head>
+      <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white shadow rounded-lg">

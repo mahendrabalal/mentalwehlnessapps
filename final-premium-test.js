@@ -99,10 +99,10 @@ async function testPremiumFeaturesComprehensive() {
       console.log('   ✅ Premium Content feature found');
     }
 
-    // Pricing ($19.99/month)
-    if (await page.locator('text=$19.99').isVisible({ timeout: 2000 })) {
+    // Pricing ($5.99/month)
+    if (await page.locator('text=$5.99').isVisible({ timeout: 2000 })) {
       premiumFeatures.hasPricing = true;
-      console.log('   ✅ Pricing ($19.99/month) found');
+      console.log('   ✅ Pricing ($5.99/month) found');
     }
 
     // Free Trial button

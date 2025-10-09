@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
@@ -47,10 +47,12 @@ export default function SignUp() {
 
   return (
     <>
-      <Head>
-        <title>Sign Up - Mental Wellness App</title>
-        <meta name="description" content="Create your mental wellness account" />
-      </Head>
+      <SEOHead
+        title="Sign Up - Mental Wellness App"
+        description="Create your Mental Wellness App account to access AI companion support, analytics, and crisis resources."
+        noindex
+        nofollow
+      />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-center">

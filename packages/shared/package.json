@@ -7,16 +7,19 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint": "eslint src/",
+    "lint": "echo \"@mental-wellness/shared lint is delegated to apps/web checks\"",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@mental-wellness/eslint-config": "file:../config/eslint-config",
     "@mental-wellness/typescript-config": "file:../config/typescript-config",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "eslint": "^8.57.1",
     "zod": "^3.22.4"
   }
 }

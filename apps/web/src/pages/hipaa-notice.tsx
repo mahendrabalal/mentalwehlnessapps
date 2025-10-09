@@ -1,13 +1,27 @@
-import Head from 'next/head'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function HIPAANoticePage() {
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'HIPAA Notice of Privacy Practices',
+      description: 'Learn how Mental Wellness App protects your PHI under HIPAA and how you can exercise your privacy rights.',
+      slug: '/hipaa-notice',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'HIPAA Notice', url: '/hipaa-notice' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>HIPAA Notice - MentalWellnessApps</title>
-        <meta name="description" content="HIPAA Notice of Privacy Practices for MentalWellnessApps" />
-      </Head>
+      <SEOHead
+        title="HIPAA Notice - Mental Wellness App"
+        description="Review the Mental Wellness App HIPAA Notice of Privacy Practices and your rights over protected health information."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

@@ -62,7 +62,7 @@ test.describe('Modern Landing Page - Fixed', () => {
 
     // Check pricing
     await expect(page.locator('text=$0')).toBeVisible();
-    await expect(page.locator('text=$19.99')).toBeVisible();
+    await expect(page.locator('text=$5.99')).toBeVisible();
 
     // Check "Most Popular" badge
     await expect(page.locator('text=Most Popular')).toBeVisible();

@@ -18,7 +18,7 @@ Your existing Stripe account can be used for the Mental Wellness App. You just n
    - **Name:** Mental Wellness Premium Monthly
    - **Description:** Unlimited AI therapy companion, advanced analytics, premium content library, and priority crisis support
    - **Pricing Model:** Standard pricing
-   - **Price:** $19.99 USD
+   - **Price:** $5.99 USD
    - **Billing Period:** Monthly
    - **Usage Type:** Licensed
 
@@ -43,7 +43,7 @@ Your existing Stripe account can be used for the Mental Wellness App. You just n
    - **Name:** Mental Wellness Premium Yearly
    - **Description:** All premium monthly features plus annual clinical report, 2 months free, and extended data retention
    - **Pricing Model:** Standard pricing
-   - **Price:** $89.99 USD
+   - **Price:** $59.99 USD
    - **Billing Period:** Yearly
    - **Usage Type:** Licensed
 

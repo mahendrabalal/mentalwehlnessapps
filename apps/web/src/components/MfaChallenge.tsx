@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 
 interface MfaChallengeProps {
@@ -18,6 +18,12 @@ interface MfaSetup {
   setupComplete: boolean
 }
 
+interface MfaEventPayload extends Record<string, unknown> {
+  method?: MfaMethod
+  requiredTier?: MfaChallengeProps['requiredTier']
+  crisisLevel?: MfaChallengeProps['crisisLevel']
+}
+
 export function MfaChallenge({
   onSuccess,
   onCancel,
@@ -32,20 +38,9 @@ export function MfaChallenge({
   const [availableMethods, setAvailableMethods] = useState<MfaSetup[]>([])
   const [showBackupCodes, setShowBackupCodes] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
 
-  useEffect(() => {
-    loadAvailableMethods()
-  }, [userId])
-
-  useEffect(() => {
-    if (resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [resendCooldown])
-
-  const loadAvailableMethods = async () => {
+  const loadAvailableMethods = useCallback(async () => {
     try {
       const { data } = await supabase
         .from('user_mfa_methods')
@@ -71,7 +66,18 @@ export function MfaChallenge({
     } catch (err) {
       console.error('Error loading MFA methods:', err)
     }
-  }
+  }, [supabase, userId])
+
+  useEffect(() => {
+    loadAvailableMethods()
+  }, [loadAvailableMethods])
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [resendCooldown])
 
   const handleVerification = async () => {
     if (!verificationCode.trim()) {
@@ -237,7 +243,7 @@ export function MfaChallenge({
     }
   }
 
-  const logMfaEvent = async (event: string, data: any) => {
+  const logMfaEvent = async (event: string, data: MfaEventPayload) => {
     try {
       await supabase
         .from('mfa_audit_log')

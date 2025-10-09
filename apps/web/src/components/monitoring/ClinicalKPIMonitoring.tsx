@@ -8,11 +8,8 @@
 
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -20,9 +17,6 @@ import {
   Legend,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
   ResponsiveContainer
 } from 'recharts'
 
@@ -58,7 +52,11 @@ interface AlertConfiguration {
   notificationChannels: ('email' | 'sms' | 'slack' | 'pagerduty')[]
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
+interface MonitoringAlert extends AlertConfiguration {
+  currentValue: number
+  timestamp: string
+  id: string
+}
 
 const BMad_KPI_TARGETS: Record<string, number> = {
   patientEngagementRate: 80,        // >80% weekly active usage
@@ -73,67 +71,11 @@ const BMad_KPI_TARGETS: Record<string, number> = {
 export default function ClinicalKPIMonitoring() {
   const [kpiData, setKpiData] = useState<ClinicalKPI[]>([])
   const [currentKPIs, setCurrentKPIs] = useState<ClinicalKPI | null>(null)
-  const [alerts, setAlerts] = useState<any[]>([])
+  const [alerts, setAlerts] = useState<MonitoringAlert[]>([])
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h')
-  const supabase = createClient()
 
-  useEffect(() => {
-    loadKPIData()
-    const interval = setInterval(loadKPIData, 60000) // Update every minute
-    return () => clearInterval(interval)
-  }, [timeRange])
-
-  const loadKPIData = async () => {
-    try {
-      // In real implementation, fetch from monitoring database
-      const mockData = generateMockKPIData()
-      setKpiData(mockData)
-      setCurrentKPIs(mockData[mockData.length - 1])
-
-      // Check for alerts
-      checkAlerts(mockData[mockData.length - 1])
-      setLoading(false)
-    } catch (error) {
-      console.error('Failed to load KPI data:', error)
-      setLoading(false)
-    }
-  }
-
-  const generateMockKPIData = (): ClinicalKPI[] => {
-    const data: ClinicalKPI[] = []
-    const now = new Date()
-
-    for (let i = 23; i >= 0; i--) {
-      const timestamp = new Date(now.getTime() - i * 60 * 60 * 1000).toISOString()
-      data.push({
-        // Patient Outcomes (simulated positive trends)
-        patientEngagementRate: Math.min(95, 75 + Math.random() * 20 + (23-i) * 0.5),
-        moodImprovementRate: Math.min(90, 60 + Math.random() * 15 + (23-i) * 0.8),
-        assessmentCompletionRate: Math.min(98, 85 + Math.random() * 10 + (23-i) * 0.3),
-        crisisPreventionRate: Math.min(99, 88 + Math.random() * 8 + (23-i) * 0.2),
-
-        // Provider Performance
-        providerSatisfactionScore: Math.min(5.0, 4.2 + Math.random() * 0.6 + (23-i) * 0.02),
-        clinicalWorkflowEfficiency: Math.min(50, 30 + Math.random() * 15 + (23-i) * 0.4),
-        providerResponseTime: Math.max(15, 45 - Math.random() * 20 - (23-i) * 0.8),
-        patientSafetyIncidents: Math.max(0, Math.floor(Math.random() * 2)),
-
-        // System Performance
-        crisisDetectionAccuracy: Math.max(94, 98 - Math.random() * 3),
-        systemUptime: Math.max(99.5, 99.95 - Math.random() * 0.4),
-        averageResponseTime: Math.max(500, 1800 - Math.random() * 800 - (23-i) * 20),
-        hipaaComplianceScore: Math.max(98, 99.8 + Math.random() * 0.2),
-
-        timestamp,
-        reportingPeriod: 'hourly'
-      })
-    }
-
-    return data
-  }
-
-  const checkAlerts = (kpi: ClinicalKPI) => {
+  const checkAlerts = useCallback((kpi: ClinicalKPI) => {
     const alertConfig: AlertConfiguration[] = [
       {
         metric: 'crisisDetectionAccuracy',
@@ -166,19 +108,85 @@ export default function ClinicalKPIMonitoring() {
     ]
 
     const newAlerts = alertConfig
-      .filter(config => {
-        const value = kpi[config.metric] as number
-        return config.condition === 'above' ? value > config.threshold : value < config.threshold
+      .map(config => {
+        const rawValue = kpi[config.metric]
+        if (typeof rawValue !== 'number') {
+          return null
+        }
+
+        const triggered = config.condition === 'above'
+          ? rawValue > config.threshold
+          : rawValue < config.threshold
+
+        if (!triggered) {
+          return null
+        }
+
+        return {
+          ...config,
+          currentValue: rawValue,
+          timestamp: new Date().toISOString(),
+          id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        }
       })
-      .map(config => ({
-        ...config,
-        currentValue: kpi[config.metric],
-        timestamp: new Date().toISOString(),
-        id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-      }))
+      .filter((alert): alert is MonitoringAlert => alert !== null)
 
     setAlerts(prev => [...newAlerts, ...prev.slice(0, 9)]) // Keep last 10 alerts
-  }
+  }, [])
+
+  const generateMockKPIData = useCallback((): ClinicalKPI[] => {
+    const data: ClinicalKPI[] = []
+    const now = new Date()
+
+    for (let i = 23; i >= 0; i--) {
+      const timestamp = new Date(now.getTime() - i * 60 * 60 * 1000).toISOString()
+      data.push({
+        // Patient Outcomes (simulated positive trends)
+        patientEngagementRate: Math.min(95, 75 + Math.random() * 20 + (23-i) * 0.5),
+        moodImprovementRate: Math.min(90, 60 + Math.random() * 15 + (23-i) * 0.8),
+        assessmentCompletionRate: Math.min(98, 85 + Math.random() * 10 + (23-i) * 0.3),
+        crisisPreventionRate: Math.min(99, 88 + Math.random() * 8 + (23-i) * 0.2),
+
+        // Provider Performance
+        providerSatisfactionScore: Math.min(5.0, 4.2 + Math.random() * 0.6 + (23-i) * 0.02),
+        clinicalWorkflowEfficiency: Math.min(50, 30 + Math.random() * 15 + (23-i) * 0.4),
+        providerResponseTime: Math.max(15, 45 - Math.random() * 20 - (23-i) * 0.8),
+        patientSafetyIncidents: Math.max(0, Math.floor(Math.random() * 2)),
+
+        // System Performance
+        crisisDetectionAccuracy: Math.max(94, 98 - Math.random() * 3),
+        systemUptime: Math.max(99.5, 99.95 - Math.random() * 0.4),
+        averageResponseTime: Math.max(500, 1800 - Math.random() * 800 - (23-i) * 20),
+        hipaaComplianceScore: Math.max(98, 99.8 + Math.random() * 0.2),
+
+        timestamp,
+        reportingPeriod: 'hourly'
+      })
+    }
+
+    return data
+  }, [])
+
+  const loadKPIData = useCallback(async () => {
+    try {
+      const mockData = generateMockKPIData()
+      setKpiData(mockData)
+      setCurrentKPIs(mockData[mockData.length - 1])
+
+      // Check for alerts
+      checkAlerts(mockData[mockData.length - 1])
+      setLoading(false)
+    } catch (error) {
+      console.error('Failed to load KPI data:', error)
+      setLoading(false)
+    }
+  }, [checkAlerts, generateMockKPIData])
+
+  useEffect(() => {
+    loadKPIData()
+    const interval = setInterval(loadKPIData, 60000) // Update every minute
+    return () => clearInterval(interval)
+  }, [loadKPIData, timeRange])
 
   const getKPIStatus = (metric: string, value: number) => {
     const target = BMad_KPI_TARGETS[metric]
@@ -246,7 +254,7 @@ export default function ClinicalKPIMonitoring() {
           <div className="flex space-x-4">
             <select
               value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value as any)}
+              onChange={(e) => setTimeRange(e.target.value as typeof timeRange)}
               className="border border-gray-300 rounded-md px-3 py-2"
             >
               <option value="1h">Last Hour</option>

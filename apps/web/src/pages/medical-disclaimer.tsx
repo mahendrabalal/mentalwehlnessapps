@@ -1,14 +1,28 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function MedicalDisclaimerPage() {
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Medical Disclaimer',
+      description: 'Important medical disclaimers and emergency guidance for users of the Mental Wellness App.',
+      slug: '/medical-disclaimer',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Medical Disclaimer', url: '/medical-disclaimer' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Medical Disclaimer - MentalWellnessApps</title>
-        <meta name="description" content="Important medical disclaimer and limitations for MentalWellnessApps services" />
-      </Head>
+      <SEOHead
+        title="Medical Disclaimer - Mental Wellness App"
+        description="Review the Mental Wellness App medical disclaimer, emergency limitations, and guidance on when to seek professional care."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

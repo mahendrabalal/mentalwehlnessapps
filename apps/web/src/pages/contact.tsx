@@ -1,7 +1,8 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -42,12 +43,39 @@ export default function ContactPage() {
     })
   }
 
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Contact Mental Wellness App Support',
+      description: 'Get in touch with our HIPAA-compliant support team for billing, technical, privacy, or crisis concerns.',
+      slug: '/contact',
+    }),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Mental Wellness App Support',
+      url: 'https://mentalwellnessapp.com/contact',
+      contactType: 'customer support',
+      contactOption: categories.map((category) => category.label),
+      availableLanguage: ['English'],
+      audience: {
+        '@type': 'Audience',
+        audienceType: ['Patients', 'Providers', 'Caregivers'],
+      },
+    },
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Contact', url: '/contact' },
+    ]),
+  ]
+
   if (isSubmitted) {
     return (
       <>
-        <Head>
-          <title>Message Sent - MentalWellnessApps</title>
-        </Head>
+        <SEOHead
+          title="Message Sent - Mental Wellness App"
+          description="Thanks for contacting Mental Wellness App. Our support team will respond within 24 hours."
+          structuredData={structuredData}
+        />
 
         <Navbar />
 
@@ -96,10 +124,11 @@ export default function ContactPage() {
 
   return (
     <>
-      <Head>
-        <title>Contact Us - MentalWellnessApps</title>
-        <meta name="description" content="Get in touch with our support team for help with your mental wellness journey" />
-      </Head>
+      <SEOHead
+        title="Contact Mental Wellness App Support"
+        description="Contact our HIPAA-compliant support team for billing, technical issues, crisis help, or privacy questions."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

@@ -54,7 +54,7 @@ async function testPremiumFeatures() {
     const hasAI = pageContent.includes('AI') || pageContent.includes('🤖');
     const hasAnalytics = pageContent.includes('Analytics') || pageContent.includes('📊');
     const hasPremium = pageContent.includes('Premium') || pageContent.includes('premium');
-    const hasPricing = pageContent.includes('19.99') || pageContent.includes('$19');
+    const hasPricing = pageContent.includes('5.99') || pageContent.includes('$5');
     const hasTrial = pageContent.includes('Free Trial') || pageContent.includes('trial');
 
     console.log('Feature detection results:');

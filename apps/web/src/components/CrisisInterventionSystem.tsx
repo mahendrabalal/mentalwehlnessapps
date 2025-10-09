@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useAuth, CrisisLevel } from '@/hooks/useAuth'
+import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 
 interface CrisisResource {
   id: string
@@ -53,20 +54,24 @@ export function CrisisInterventionSystem({
   const [calculatedRisk, setCalculatedRisk] = useState<CrisisLevel>('none')
   const supabase = createClient()
 
-  useEffect(() => {
-    loadCrisisResources()
-  }, [])
-
-  useEffect(() => {
-    if (emergencyMode) {
-      setShowAssessment(true)
-      logCrisisEvent('emergency_mode_activated', {
-        trigger: 'component_prop'
-      })
+  const logCrisisEvent = useCallback(async (event: string, data: Record<string, unknown>) => {
+    try {
+      await supabase
+        .from('security_audit_log')
+        .insert({
+          event_type: event,
+          severity: 'high',
+          user_id: user?.id,
+          event_details: data,
+          hipaa_relevant: true,
+          timestamp: new Date().toISOString()
+        })
+    } catch (err) {
+      console.error('Error logging crisis event:', err)
     }
-  }, [emergencyMode])
+  }, [supabase, user?.id])
 
-  const loadCrisisResources = async () => {
+  const loadCrisisResources = useCallback(async () => {
     // Default crisis resources
     const defaultResources: CrisisResource[] = [
       {
@@ -132,15 +137,31 @@ export function CrisisInterventionSystem({
     } catch (err) {
       console.error('Error loading crisis resources:', err)
     }
-  }
+  }, [supabase])
 
-  const handleAssessmentChange = (field: keyof CrisisAssessment, value: any) => {
-    const updated = { ...assessment, [field]: value }
-    setAssessment(updated)
+  useEffect(() => {
+    loadCrisisResources()
+  }, [loadCrisisResources])
 
-    // Real-time risk calculation
-    const risk = calculateCrisisLevel(updated)
-    setCalculatedRisk(risk)
+  useEffect(() => {
+    if (emergencyMode) {
+      setShowAssessment(true)
+      logCrisisEvent('emergency_mode_activated', {
+        trigger: 'component_prop'
+      })
+    }
+  }, [emergencyMode, logCrisisEvent])
+
+  const handleAssessmentChange = <K extends keyof CrisisAssessment>(
+    field: K,
+    value: CrisisAssessment[K]
+  ) => {
+    setAssessment(prev => {
+      const updated = { ...prev, [field]: value }
+      const risk = calculateCrisisLevel(updated)
+      setCalculatedRisk(risk)
+      return updated
+    })
   }
 
   const calculateCrisisLevel = (assessment: CrisisAssessment): CrisisLevel => {
@@ -256,23 +277,6 @@ export function CrisisInterventionSystem({
 
     } catch (err) {
       console.error('Error triggering emergency protocols:', err)
-    }
-  }
-
-  const logCrisisEvent = async (event: string, data: any) => {
-    try {
-      await supabase
-        .from('security_audit_log')
-        .insert({
-          event_type: event,
-          severity: 'high',
-          user_id: user?.id,
-          event_details: data,
-          hipaa_relevant: true,
-          timestamp: new Date().toISOString()
-        })
-    } catch (err) {
-      console.error('Error logging crisis event:', err)
     }
   }
 
@@ -415,10 +419,14 @@ export function CrisisInterventionSystem({
               </label>
               <select
                 value={assessment.timeline}
-                onChange={(e) => handleAssessmentChange('timeline', e.target.value)}
+                onChange={(e) =>
+                  handleAssessmentChange(
+                    'timeline',
+                    e.target.value as CrisisAssessment['timeline']
+                  )}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-therapy-500 focus:border-therapy-500"
               >
-                <option value="none">I'm not planning to act on these thoughts</option>
+                <option value="none">I&apos;m not planning to act on these thoughts</option>
                 <option value="weeks">In the next few weeks</option>
                 <option value="days">In the next few days</option>
                 <option value="hours">In the next few hours</option>
@@ -432,7 +440,11 @@ export function CrisisInterventionSystem({
               </label>
               <select
                 value={assessment.support_system}
-                onChange={(e) => handleAssessmentChange('support_system', e.target.value)}
+                onChange={(e) =>
+                  handleAssessmentChange(
+                    'support_system',
+                    e.target.value as CrisisAssessment['support_system']
+                  )}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-therapy-500 focus:border-therapy-500"
               >
                 <option value="strong">Strong - I have people I can rely on</option>
@@ -478,51 +490,14 @@ export function CrisisInterventionSystem({
         </div>
       )}
 
-      {/* Crisis Resources */}
+      {/* Crisis Resources - International */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Crisis Support Resources</h3>
         <p className="text-sm text-gray-600 mb-6">
-          Professional help is available 24/7. You don't have to go through this alone.
+          Professional help is available 24/7. You don&apos;t have to go through this alone.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {crisisResources.map((resource) => (
-            <div
-              key={resource.id}
-              className="border border-gray-200 rounded-lg p-4 hover:border-therapy-300 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <h4 className="font-medium text-gray-900">{resource.name}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{resource.description}</p>
-                  <p className="text-xs text-gray-500 mt-1">Available: {resource.availability}</p>
-                </div>
-                <div className="ml-4 flex flex-col space-y-2">
-                  {resource.phone && (
-                    <button
-                      onClick={() => callResource(resource)}
-                      className={`px-3 py-1 text-sm rounded-md font-medium ${
-                        resource.type === 'emergency'
-                          ? 'bg-red-600 text-white hover:bg-red-700'
-                          : 'bg-therapy-600 text-white hover:bg-therapy-700'
-                      }`}
-                    >
-                      Call {resource.phone}
-                    </button>
-                  )}
-                  {resource.url && (
-                    <button
-                      onClick={() => openResourceUrl(resource)}
-                      className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
-                    >
-                      Visit Website
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <InternationalCrisisSupport variant="full" showCountrySelector={true} />
       </div>
 
       {/* Quick Actions */}
@@ -536,12 +511,12 @@ export function CrisisInterventionSystem({
             >
               Take Safety Assessment
             </button>
-            <button
-              onClick={() => callResource(crisisResources[0])}
-              className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            <a
+              href="/crisis-support"
+              className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 text-center"
             >
-              Call Crisis Lifeline (988)
-            </button>
+              View Crisis Resources
+            </a>
           </div>
         </div>
       )}

@@ -1,10 +1,11 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
+import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
@@ -61,14 +62,24 @@ export default function Home() {
   }
 
   // Show modern landing page for non-authenticated users OR authenticated users who want to view it
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App - AI-Powered Mental Health Support',
+      description: SEO_CONFIG.home.description,
+      slug: '/',
+    }),
+    buildBreadcrumbList([{ name: 'Mental Wellness App', url: '/' }]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Intelligence that moves your mental wellness forward - MentalWellnessApps</title>
-        <meta name="description" content="AI-powered insights, clinical-grade assessments, and 24/7 support for your mental health journey. Start your free trial today." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEOHead
+        title={SEO_CONFIG.home.title}
+        description={SEO_CONFIG.home.description}
+        keywords={SEO_CONFIG.home.keywords}
+        ogImage="/og-default.png"
+        structuredData={structuredData}
+      />
 
       {/* Dashboard Shortcut for Authenticated Users */}
       {user && showLandingPage && (
@@ -125,7 +136,7 @@ export default function Home() {
                     onClick={() => setShowUpgradeFlow(true)}
                     className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                   >
-                    Start Your Free Trial
+                    Subscribe to Premium
                   </button>
                   <Link
                     href="#features"
@@ -140,7 +151,7 @@ export default function Home() {
                     <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>7-day free trial</span>
+                    <span>Instant access</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -419,15 +430,10 @@ export default function Home() {
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium</h3>
                   <div className="text-4xl font-bold text-gray-900 mb-2">
-                    $19.99
+                    $5.99
                     <span className="text-lg font-normal text-gray-600">/month</span>
                   </div>
                   <p className="text-gray-600">Advanced AI-powered wellness intelligence</p>
-                  <div className="mt-2">
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                      7-day free trial
-                    </span>
-                  </div>
                 </div>
 
                 <ul className="space-y-4 mb-8">
@@ -473,11 +479,11 @@ export default function Home() {
                   onClick={() => setShowUpgradeFlow(true)}
                   className="block w-full bg-therapy-600 hover:bg-therapy-700 text-white text-center py-3 px-6 rounded-lg font-semibold transition-colors"
                 >
-                  Start Free Trial
+                  Subscribe Now
                 </button>
 
                 <p className="text-xs text-gray-500 text-center mt-3">
-                  No credit card required • Cancel anytime
+                  Instant access • Cancel anytime
                 </p>
               </div>
             </div>

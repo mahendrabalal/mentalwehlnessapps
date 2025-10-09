@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
+import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
+import { SEOHead } from '@/components/SEOHead'
 
 const PHQ9_QUESTIONS = [
   "Little interest or pleasure in doing things",
@@ -53,6 +54,8 @@ export default function PHQ9Assessment() {
   const [userLoading, setUserLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
+  const baseTitle = 'PHQ-9 Depression Assessment - Mental Wellness App'
+  const baseDescription = 'Complete the PHQ-9 depression assessment to track symptoms and receive personalized guidance inside your Mental Wellness App account.'
 
   const [responses, setResponses] = useState<number[]>(new Array(9).fill(-1))
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -162,24 +165,30 @@ export default function PHQ9Assessment() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to take assessments.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to take assessments.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (showResults && results) {
     return (
       <>
-        <Head>
-          <title>PHQ-9 Results - Mental Wellness App</title>
-        </Head>
+        <SEOHead
+          title="PHQ-9 Results - Mental Wellness App"
+          description="Review your PHQ-9 depression assessment results and recommended next steps in your secure Mental Wellness App account."
+          noindex
+          nofollow
+        />
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
             <div className="bg-white shadow rounded-lg p-6">
@@ -199,23 +208,7 @@ export default function PHQ9Assessment() {
                 </div>
 
                 {results.isCrisis && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <h4 className="font-semibold text-red-900 mb-2">⚠️ Immediate Support Recommended</h4>
-                    <p className="text-red-800 mb-4">
-                      Your responses indicate you may benefit from immediate professional support.
-                    </p>
-                    <div className="space-y-2">
-                      <p className="text-red-800">
-                        <strong>Crisis Support:</strong> Call 988 (Suicide & Crisis Lifeline)
-                      </p>
-                      <p className="text-red-800">
-                        <strong>Text Support:</strong> Text HOME to 741741
-                      </p>
-                      <p className="text-red-800">
-                        <strong>Emergency:</strong> Call 911 or go to your nearest emergency room
-                      </p>
-                    </div>
-                  </div>
+                  <InternationalCrisisSupport variant="compact" />
                 )}
 
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -244,10 +237,12 @@ export default function PHQ9Assessment() {
 
   return (
     <>
-      <Head>
-        <title>PHQ-9 Depression Assessment - Mental Wellness App</title>
-        <meta name="description" content="Patient Health Questionnaire-9 depression screening" />
-      </Head>
+      <SEOHead
+        title={baseTitle}
+        description={baseDescription}
+        noindex
+        nofollow
+      />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white shadow rounded-lg">

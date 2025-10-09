@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import HealthcareQualityGates, { QualityGateResult } from '@/lib/healthcare-quality-gates'
 
@@ -13,7 +13,7 @@ export function QualityGateDashboard({
   autoRefresh = false,
   showDetailedFindings = true
 }: QualityGateDashboardProps) {
-  const { user, userRole } = useAuth()
+  const { user } = useAuth()
   const [results, setResults] = useState<{
     overallResult?: QualityGateResult
     authenticationSecurity?: QualityGateResult
@@ -23,27 +23,12 @@ export function QualityGateDashboard({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastRunTime, setLastRunTime] = useState<Date | null>(null)
+  const userRole = (user?.user_metadata?.role as 'provider' | 'admin' | 'member' | undefined) ?? 'member'
 
   const targetUserId = userId || user?.id
-  const qualityGates = new HealthcareQualityGates()
+  const qualityGates = useMemo(() => new HealthcareQualityGates(), [])
 
-  useEffect(() => {
-    if (targetUserId) {
-      runQualityGates()
-    }
-  }, [targetUserId])
-
-  useEffect(() => {
-    if (autoRefresh && targetUserId) {
-      const interval = setInterval(() => {
-        runQualityGates()
-      }, 5 * 60 * 1000) // Refresh every 5 minutes
-
-      return () => clearInterval(interval)
-    }
-  }, [autoRefresh, targetUserId])
-
-  const runQualityGates = async () => {
+  const runQualityGates = useCallback(async () => {
     if (!targetUserId) return
 
     setLoading(true)
@@ -59,7 +44,23 @@ export function QualityGateDashboard({
     } finally {
       setLoading(false)
     }
-  }
+  }, [qualityGates, targetUserId])
+
+  useEffect(() => {
+    if (targetUserId) {
+      runQualityGates()
+    }
+  }, [runQualityGates, targetUserId])
+
+  useEffect(() => {
+    if (autoRefresh && targetUserId) {
+      const interval = setInterval(() => {
+        runQualityGates()
+      }, 5 * 60 * 1000) // Refresh every 5 minutes
+
+      return () => clearInterval(interval)
+    }
+  }, [autoRefresh, runQualityGates, targetUserId])
 
   const getScoreColor = (score: number): string => {
     if (score >= 90) return 'text-green-600 bg-green-50 border-green-200'

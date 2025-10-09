@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function OnboardingStep1() {
   const [user, setUser] = useState<User | null>(null)
@@ -11,6 +11,8 @@ export default function OnboardingStep1() {
   const [userLoading, setUserLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
+  const seoTitle = 'Onboarding Step 1 - Personal Details | Mental Wellness App'
+  const seoDescription = 'Provide personal information to tailor your Mental Wellness App experience during onboarding.'
 
   const [formData, setFormData] = useState({
     preferred_name: '',
@@ -120,35 +122,38 @@ export default function OnboardingStep1() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading...</p>
+      <>
+        <SEOHead title={seoTitle} description={seoDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Loading...</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        <SEOHead title={seoTitle} description={seoDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
     <>
-      <Head>
-        <title>Personal Information - Mental Wellness App</title>
-        <meta name="description" content="Tell us a bit about yourself" />
-      </Head>
+      <SEOHead title={seoTitle} description={seoDescription} noindex nofollow />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white shadow rounded-lg">

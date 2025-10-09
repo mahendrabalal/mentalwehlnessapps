@@ -147,8 +147,8 @@ async function testPremiumFeatures() {
 
     // Test Stripe configuration
     console.log('\n💳 Checking Stripe Configuration:');
-    console.log('- Monthly Plan: $19.99 with 7-day trial');
-    console.log('- Yearly Plan: $89.99 (55% savings)');
+    console.log('- Monthly Plan: $5.99 with 7-day trial');
+    console.log('- Yearly Plan: $59.99 (approx. 2 months free)');
     console.log('- Trial Period: 7 days');
     console.log('- Webhook Endpoint: /api/subscriptions/webhook');
     console.log('- Features: AI Companion, Analytics, Content Library');
@@ -192,8 +192,8 @@ async function testPremiumFeatures() {
     console.log('1. User subscribes → 7-day free trial starts');
     console.log('2. Trial period → No charge, full premium access');
     console.log('3. Trial ends → Automatic billing begins');
-    console.log('4. Monthly: $19.99 charged every month');
-    console.log('5. Yearly: $89.99 charged annually (2 months free)');
+    console.log('4. Monthly: $5.99 charged every month');
+    console.log('5. Yearly: $59.99 charged annually (2 months free)');
 
   } catch (error) {
     console.error('❌ Test failed:', error);

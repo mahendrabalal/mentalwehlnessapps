@@ -1,31 +1,12 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
+import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
+import { useUserCountry } from '@/hooks/useUserCountry'
+import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function CrisisSupportPage() {
-  const emergencyContacts = [
-    {
-      title: 'Emergency Services',
-      number: '911',
-      description: 'For immediate danger or medical emergencies',
-      color: 'red',
-      icon: '🚨'
-    },
-    {
-      title: 'Suicide & Crisis Lifeline',
-      number: '988',
-      description: 'Call or text for 24/7 free and confidential support',
-      color: 'blue',
-      icon: '📞'
-    },
-    {
-      title: 'Crisis Text Line',
-      number: 'Text HOME to 741741',
-      description: '24/7 crisis support via text message',
-      color: 'green',
-      icon: '💬'
-    }
-  ]
+  const { countryName } = useUserCountry()
 
   const warningSignsCategories = [
     {
@@ -65,14 +46,14 @@ export default function CrisisSupportPage() {
     {
       step: '1',
       title: 'Ensure Immediate Safety',
-      description: 'If you\'re in immediate danger, call 911. Remove any means of self-harm from your environment.',
-      action: 'Call 911 if in immediate danger'
+      description: 'If you\'re in immediate danger, call emergency services. Remove any means of self-harm from your environment.',
+      action: 'Call emergency services immediately'
     },
     {
       step: '2',
       title: 'Reach Out for Support',
-      description: 'Contact the crisis lifeline, a trusted friend, family member, or mental health professional.',
-      action: 'Call 988 or text HOME to 741741'
+      description: 'Contact a crisis lifeline, trusted friend, family member, or mental health professional.',
+      action: 'Connect with crisis support'
     },
     {
       step: '3',
@@ -88,51 +69,39 @@ export default function CrisisSupportPage() {
     }
   ]
 
-  const resources = [
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Crisis Support Resources',
+      description: SEO_CONFIG.crisisSupport.description,
+      slug: '/crisis-support',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Crisis Support', url: '/crisis-support' },
+    ]),
     {
-      name: 'National Suicide Prevention Lifeline',
-      phone: '988',
-      website: 'suicidepreventionlifeline.org',
-      description: '24/7 free and confidential emotional support'
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to respond in a mental health crisis',
+      description: 'Immediate steps to keep yourself safe and connected during a mental health emergency.',
+      step: safetySteps.map((step) => ({
+        '@type': 'HowToStep',
+        position: Number(step.step),
+        name: step.title,
+        text: `${step.description} ${step.action}`,
+      })),
     },
-    {
-      name: 'Crisis Text Line',
-      phone: 'Text HOME to 741741',
-      website: 'crisistextline.org',
-      description: 'Free, 24/7 support for those in crisis'
-    },
-    {
-      name: 'SAMHSA National Helpline',
-      phone: '1-800-662-4357',
-      website: 'samhsa.gov',
-      description: 'Treatment referral and information service'
-    },
-    {
-      name: 'The Trevor Project (LGBTQ+ Youth)',
-      phone: '1-866-488-7386',
-      website: 'thetrevorproject.org',
-      description: 'Crisis intervention for LGBTQ+ young people'
-    },
-    {
-      name: 'Trans Lifeline',
-      phone: '877-565-8860',
-      website: 'translifeline.org',
-      description: 'Support for transgender people in crisis'
-    },
-    {
-      name: 'Veterans Crisis Line',
-      phone: '1-800-273-8255 (Press 1)',
-      website: 'veteranscrisisline.net',
-      description: 'Support for veterans and service members'
-    }
   ]
 
   return (
     <>
-      <Head>
-        <title>Crisis Support - MentalWellnessApps</title>
-        <meta name="description" content="Immediate crisis support resources and emergency mental health contacts" />
-      </Head>
+      <SEOHead
+        title={SEO_CONFIG.crisisSupport.title}
+        description={SEO_CONFIG.crisisSupport.description}
+        keywords={SEO_CONFIG.crisisSupport.keywords}
+        ogImage="/og-default.png"
+        structuredData={structuredData}
+      />
 
       <Navbar />
 
@@ -142,7 +111,8 @@ export default function CrisisSupportPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <p className="text-lg font-medium">
-                🚨 If you are in immediate danger, call 911 or go to your nearest emergency room
+                🚨 If you are in immediate danger, call your local emergency number
+                {countryName && ` (${countryName})`}
               </p>
             </div>
           </div>
@@ -160,43 +130,19 @@ export default function CrisisSupportPage() {
           </div>
         </div>
 
-        {/* Emergency Contacts */}
+        {/* International Crisis Support */}
         <div className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Immediate Help
+                Immediate Help {countryName && `in ${countryName}`}
               </h2>
               <p className="text-xl text-gray-600">
-                These resources are available 24/7 for immediate support
+                These resources are available for immediate support
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {emergencyContacts.map((contact, index) => (
-                <div
-                  key={index}
-                  className={`bg-white rounded-lg shadow-lg overflow-hidden border-t-4 ${
-                    contact.color === 'red' ? 'border-red-500' :
-                    contact.color === 'blue' ? 'border-blue-500' :
-                    'border-green-500'
-                  }`}
-                >
-                  <div className="p-6 text-center">
-                    <div className="text-4xl mb-4">{contact.icon}</div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{contact.title}</h3>
-                    <div className={`text-2xl font-bold mb-4 ${
-                      contact.color === 'red' ? 'text-red-600' :
-                      contact.color === 'blue' ? 'text-blue-600' :
-                      'text-green-600'
-                    }`}>
-                      {contact.number}
-                    </div>
-                    <p className="text-gray-600 text-sm">{contact.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <InternationalCrisisSupport variant="full" showCountrySelector={true} />
           </div>
         </div>
 
@@ -265,31 +211,6 @@ export default function CrisisSupportPage() {
           </div>
         </div>
 
-        {/* Additional Resources */}
-        <div className="bg-white py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Additional Support Resources
-              </h2>
-              <p className="text-xl text-gray-600">
-                Specialized support for different communities and needs
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {resources.map((resource, index) => (
-                <div key={index} className="bg-gray-50 rounded-lg p-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{resource.name}</h3>
-                  <div className="text-therapy-600 font-bold text-lg mb-2">{resource.phone}</div>
-                  <div className="text-therapy-600 text-sm mb-3">{resource.website}</div>
-                  <p className="text-gray-600 text-sm">{resource.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Safety Planning */}
         <div className="bg-therapy-50 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -309,64 +230,6 @@ export default function CrisisSupportPage() {
               <p className="text-sm text-gray-500">
                 Work with our guided tool to create a personalized crisis safety plan
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* International Resources */}
-        <div className="py-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-                International Crisis Resources
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Americas</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li><strong>Canada:</strong> 1-833-456-4566</li>
-                    <li><strong>Mexico:</strong> 5255-1259</li>
-                    <li><strong>Brazil:</strong> 188</li>
-                    <li><strong>Argentina:</strong> 135</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Europe</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li><strong>UK:</strong> 116 123</li>
-                    <li><strong>Germany:</strong> 0800 111 0 111</li>
-                    <li><strong>France:</strong> 3114</li>
-                    <li><strong>Netherlands:</strong> 113</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Asia-Pacific</h3>
-                  <ul className="space-y-2 text-sm">
-                    <li><strong>Australia:</strong> 13 11 14</li>
-                    <li><strong>Japan:</strong> +81 3-5774-0992</li>
-                    <li><strong>South Korea:</strong> 1393</li>
-                    <li><strong>India:</strong> +91 9152987821</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Find More</h3>
-                  <p className="text-sm text-gray-600">
-                    For a comprehensive list of international crisis resources, visit{' '}
-                    <a
-                      href="https://findahelpline.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-therapy-600 hover:underline"
-                    >
-                      findahelpline.com
-                    </a>
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

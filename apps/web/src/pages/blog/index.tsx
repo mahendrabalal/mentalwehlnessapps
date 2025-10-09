@@ -1,11 +1,12 @@
 import { CmsArticle, CmsSiteSettings } from '@mental-wellness/shared'
 import { GetStaticProps } from 'next'
-import Head from 'next/head'
 import Link from 'next/link'
 import { ArticleCard } from '@/components/blog/ArticleCard'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { fetchArticles, fetchSiteSettings } from '@/lib/cms/articleService'
+import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
+import { buildBreadcrumbList } from '@/lib/seo'
 
 interface BlogIndexProps {
   articles: CmsArticle[]
@@ -18,24 +19,48 @@ export default function BlogIndexPage({
   siteSettings,
   preview,
 }: BlogIndexProps) {
+  const title = siteSettings?.title ?? SEO_CONFIG.blog.title
+  const description =
+    siteSettings?.description ?? SEO_CONFIG.blog.description
+  const ogDescription =
+    siteSettings?.socialSharing?.metaDescription ?? description
+
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      url: 'https://mentalwellnessapp.com/blog',
+      name: title,
+      description,
+      blogPost: articles.slice(0, 10).map((article) => ({
+        '@type': 'BlogPosting',
+        headline: article.seo?.metaTitle ?? article.title,
+        description: article.seo?.metaDescription ?? article.excerpt,
+        url: `https://mentalwellnessapp.com/blog/${article.slug.current}`,
+        datePublished: article.publishedAt ?? article._createdAt,
+        dateModified: article.updatedAt ?? article._updatedAt ?? article.publishedAt ?? article._createdAt,
+      })),
+    },
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Resource Library', url: '/blog' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>{siteSettings?.title ?? 'Mental Wellness Library'}</title>
-        {siteSettings?.description ? (
-          <meta name="description" content={siteSettings.description} />
-        ) : null}
+      <SEOHead
+        title={title}
+        description={description}
+        keywords={SEO_CONFIG.blog.keywords}
+        ogImage="/og-default.png"
+        structuredData={structuredData}
+      >
         <meta
-          property="og:title"
-          content={siteSettings?.socialSharing?.metaTitle ?? 'Mental Wellness Library'}
+          property="og:description"
+          content={ogDescription}
         />
-        {siteSettings?.socialSharing?.metaDescription ? (
-          <meta
-            property="og:description"
-            content={siteSettings.socialSharing.metaDescription}
-          />
-        ) : null}
-      </Head>
+      </SEOHead>
       <Navbar />
       <section className="bg-gradient-to-b from-wellness-50 via-white to-white py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">

@@ -55,7 +55,7 @@ async function testPremiumFeatures() {
       console.log('🎵 Premium Content feature:', premiumContent ? '✅ Found' : '❌ Not found');
 
       // Check pricing
-      const pricing = await page.locator('text=$19.99/month').isVisible();
+      const pricing = await page.locator('text=$5.99/month').isVisible();
       console.log('💰 Pricing display:', pricing ? '✅ Found' : '❌ Not found');
 
       // Check Start Free Trial button

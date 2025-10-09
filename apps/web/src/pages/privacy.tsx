@@ -1,13 +1,28 @@
-import Head from 'next/head'
+/* eslint-disable react/no-unescaped-entities -- Privacy policy retains precise quoted language for legal clarity */
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function PrivacyPolicyPage() {
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Privacy Policy',
+      description: 'Understand how Mental Wellness App safeguards your personal and protected health information.',
+      slug: '/privacy',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Privacy Policy', url: '/privacy' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Privacy Policy - MentalWellnessApps</title>
-        <meta name="description" content="Privacy policy for MentalWellnessApps - how we protect and handle your personal information" />
-      </Head>
+      <SEOHead
+        title="Privacy Policy - Mental Wellness App"
+        description="Learn how Mental Wellness App processes, protects, and stores your personal and HIPAA-protected information."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

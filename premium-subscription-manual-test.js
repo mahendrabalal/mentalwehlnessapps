@@ -367,8 +367,8 @@ class PremiumSubscriptionTester {
       await this.page.waitForTimeout(1000);
 
       // Look for pricing information
-      const monthlyPriceVisible = await this.page.locator('text="$19.99"').isVisible();
-      const yearlyPriceVisible = await this.page.locator('text="$89.99"').isVisible();
+      const monthlyPriceVisible = await this.page.locator('text="$5.99"').isVisible();
+      const yearlyPriceVisible = await this.page.locator('text="$59.99"').isVisible();
       const monthlyTextVisible = await this.page.locator('text=/monthly/i').isVisible();
       const yearlyTextVisible = await this.page.locator('text=/yearly/i, text=/year/i').isVisible();
 
@@ -409,15 +409,15 @@ class PremiumSubscriptionTester {
       await this.recordStep(6, 'Verified pricing plans display', 'completed', { pricingDetails });
 
       if (monthlyPriceVisible) {
-        console.log('✅ Monthly plan ($19.99) found');
+        console.log('✅ Monthly plan ($5.99) found');
       } else {
-        console.log('❌ Monthly plan ($19.99) not found');
+        console.log('❌ Monthly plan ($5.99) not found');
       }
 
       if (yearlyPriceVisible) {
-        console.log('✅ Yearly plan ($89.99) found');
+        console.log('✅ Yearly plan ($59.99) found');
       } else {
-        console.log('❌ Yearly plan ($89.99) not found');
+        console.log('❌ Yearly plan ($59.99) not found');
       }
 
       return pricingDetails;

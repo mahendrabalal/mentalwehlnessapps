@@ -25,7 +25,7 @@ export const SUBSCRIPTION_PLANS = {
   PREMIUM_MONTHLY: {
     priceId: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || 'price_mental_wellness_monthly_placeholder',
     name: 'Premium Monthly',
-    price: 1999, // $19.99 in cents
+    price: 599, // $5.99 in cents
     interval: 'month',
     features: [
       'Unlimited AI Therapy Companion',
@@ -39,12 +39,12 @@ export const SUBSCRIPTION_PLANS = {
   PREMIUM_YEARLY: {
     priceId: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || 'price_mental_wellness_yearly_placeholder',
     name: 'Premium Yearly',
-    price: 8999, // $89.99 in cents (55% savings)
+    price: 5999, // $59.99 in cents (approx. 2 months free)
     interval: 'year',
     features: [
       'All Premium Monthly features',
       'Annual wellness report',
-      '2 months free',
+      'Equivalent to 2 months free',
       'Advanced analytics export'
     ]
   }
@@ -71,7 +71,7 @@ export async function createSubscription({
   priceId,
   email,
   name,
-  trialPeriodDays = 7,
+  trialPeriodDays = 0,
   metadata = {}
 }: CreateSubscriptionParams): Promise<SubscriptionResponse> {
   try {
@@ -99,13 +99,16 @@ export async function createSubscription({
     }
 
     // Create subscription with healthcare-compliant settings
-    const subscription = await stripeInstance.subscriptions.create({
+    const subscriptionParams: any = {
       customer: customer.id,
       items: [{ price: priceId }],
-      payment_behavior: 'default_incomplete',
-      payment_settings: { save_default_payment_method: 'on_subscription' },
-      expand: ['latest_invoice.payment_intent'],
-      trial_period_days: trialPeriodDays,
+      // Use allow_incomplete to create payment intent immediately
+      payment_behavior: 'allow_incomplete',
+      payment_settings: {
+        save_default_payment_method: 'on_subscription',
+        payment_method_types: ['card']
+      },
+      expand: ['latest_invoice', 'latest_invoice.payment_intent'],
       metadata: {
         userId,
         planType: getPlanTypeFromPriceId(priceId),
@@ -116,29 +119,98 @@ export async function createSubscription({
         contentLibraryAccess: 'full',
         ...metadata
       }
+    }
+
+    // Only add trial period if specified
+    if (trialPeriodDays > 0) {
+      subscriptionParams.trial_period_days = trialPeriodDays
+    }
+
+    const subscription = await stripeInstance.subscriptions.create(subscriptionParams)
+
+    console.log('BMad Method: Subscription created', {
+      subscriptionId: subscription.id,
+      status: subscription.status,
+      latest_invoice: subscription.latest_invoice
     })
 
-    const invoice = subscription.latest_invoice as Stripe.Invoice | null
+    type InvoiceWithIntent = Stripe.Invoice & {
+      payment_intent?: string | Stripe.PaymentIntent | null
+    }
 
-    // BMad Method: Handle trial subscriptions properly
-    if (!invoice) {
-      // No invoice for trial subscriptions
-      return {
-        subscriptionId: subscription.id,
-        clientSecret: null, // No payment needed during trial
-        status: subscription.status
+    // BMad Method: Retrieve and finalize the invoice to create payment intent
+    const latestInvoice = subscription.latest_invoice
+    let invoice: InvoiceWithIntent | null = null
+
+    if (!latestInvoice) {
+      throw new Error('No invoice created for subscription')
+    }
+
+    if (typeof latestInvoice === 'string') {
+      invoice = await stripeInstance.invoices.retrieve(latestInvoice, {
+        expand: ['payment_intent']
+      }) as InvoiceWithIntent
+    } else {
+      invoice = latestInvoice as InvoiceWithIntent
+    }
+
+    console.log('BMad Method: Invoice retrieved', {
+      invoiceId: invoice.id,
+      status: invoice.status,
+      amount: invoice.amount_due,
+      payment_intent: invoice.payment_intent
+    })
+
+    // If invoice is still draft, attempt to finalize once to generate the payment intent
+    if (invoice.status === 'draft') {
+      console.log('BMad Method: Finalizing draft invoice to create payment intent')
+      if (!invoice.id) {
+        throw new Error('Invoice is missing an identifier')
+      }
+      const invoiceId = invoice.id
+      try {
+        invoice = await stripeInstance.invoices.finalizeInvoice(invoiceId, {
+          expand: ['payment_intent']
+        }) as InvoiceWithIntent
+        console.log('BMad Method: Invoice finalized', {
+          invoiceId: invoice.id,
+          status: invoice.status,
+          payment_intent: invoice.payment_intent
+        })
+      } catch (finalizeError) {
+        const message = finalizeError instanceof Error ? finalizeError.message : ''
+        // Stripe returns an error when we try to finalize an invoice that is already finalized/open.
+        if (message.includes('already finalized')) {
+          console.warn('BMad Method: Invoice already finalized, retrieving latest state instead')
+          invoice = await stripeInstance.invoices.retrieve(invoiceId, {
+            expand: ['payment_intent']
+          }) as InvoiceWithIntent
+        } else {
+          throw finalizeError
+        }
       }
     }
 
-    const paymentIntent = (invoice as any).payment_intent as Stripe.PaymentIntent | null
-
-    // For trial subscriptions or when no payment is needed immediately
-    if (!paymentIntent || !paymentIntent.client_secret) {
-      return {
-        subscriptionId: subscription.id,
-        clientSecret: null, // No payment needed during trial
-        status: subscription.status
+    // If invoice is open but has no payment intent, we need to refresh the invoice
+    if (invoice.status === 'open' && !invoice.payment_intent) {
+      console.log('BMad Method: Open invoice without payment intent, retrieving again')
+      if (!invoice.id) {
+        throw new Error('Invoice is missing an identifier')
       }
+      invoice = await stripeInstance.invoices.retrieve(invoice.id, {
+        expand: ['payment_intent']
+      }) as InvoiceWithIntent
+    }
+
+    const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent | null
+
+    // BMad Method: Immediate payment required for non-trial subscriptions
+    if (!paymentIntent || typeof paymentIntent === 'string') {
+      throw new Error(`Payment setup required - no payment intent object. Invoice status: ${invoice.status}, PI: ${typeof paymentIntent}`)
+    }
+
+    if (!paymentIntent.client_secret) {
+      throw new Error(`Payment intent exists but has no client secret. Status: ${paymentIntent.status}`)
     }
 
     return {

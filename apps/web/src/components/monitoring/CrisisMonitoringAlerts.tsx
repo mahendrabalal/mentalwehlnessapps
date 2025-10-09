@@ -8,8 +8,7 @@
 
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
-import { createClient } from '@/lib/supabase'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 
 interface CrisisAlert {
   id: string
@@ -146,7 +145,125 @@ export default function CrisisMonitoringAlerts() {
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [autoRefresh, setAutoRefresh] = useState(true)
   const alertSoundRef = useRef<HTMLAudioElement | null>(null)
-  const supabase = createClient()
+
+  const generateMockAlerts = useCallback((): CrisisAlert[] => [
+    {
+      id: 'alert_001',
+      type: 'phq9_crisis',
+      severity: 'critical',
+      status: 'active',
+      patientId: 'patient_12345',
+      providerId: 'provider_67890',
+      assessmentId: 'phq9_assessment_789',
+      triggerData: {
+        phq9Score: 24,
+        responses: [3, 3, 3, 3, 2, 2, 2, 3, 2],
+        riskFactors: ['severe_depression', 'hopelessness', 'social_isolation'],
+        location: { lat: 40.7128, lng: -74.0060 },
+        contactInfo: '+1-555-0123'
+      },
+      responseRequired: true,
+      responseTime: {
+        detected: new Date(Date.now() - 120000).toISOString(), // 2 minutes ago
+        targetResponseTime: 30000 // 30 seconds
+      },
+      automaticActions: {
+        crisisHotlineNotified: true,
+        emergencyServicesContacted: false,
+        providerAlerted: true,
+        backupProviderContacted: false,
+        familyContactsNotified: true,
+        systemFailoverActivated: false
+      },
+      responseTeam: {
+        primaryProvider: 'provider_67890',
+        backupProvider: 'provider_11111',
+        crisisSpecialist: 'crisis_specialist_001'
+      },
+      escalationRules: {
+        escalateAfter: 2,
+        escalationLevels: ['provider', 'backup_provider', 'emergency_services'],
+        currentLevel: 1
+      },
+      patientInfo: {
+        name: 'Alex Johnson',
+        age: 32,
+        riskProfile: 'high',
+        previousCrises: 2,
+        emergencyContacts: ['+1-555-0456', '+1-555-0789']
+      },
+      interventions: [
+        {
+          timestamp: new Date(Date.now() - 90000).toISOString(),
+          action: 'provider_contacted',
+          performedBy: 'automated_system',
+          result: 'successful',
+          notes: 'Primary provider notified via secure channel'
+        }
+      ],
+      priority: 9,
+      tags: ['high_risk', 'immediate_response']
+    },
+    {
+      id: 'alert_002',
+      type: 'provider_unresponsive',
+      severity: 'high',
+      status: 'responding',
+      patientId: 'patient_24680',
+      providerId: 'provider_67890',
+      triggerData: {
+        riskFactors: ['recent_crisis_alert', 'provider_unresponsive'],
+        contactInfo: '+1-555-0246'
+      },
+      responseRequired: true,
+      responseTime: {
+        detected: new Date(Date.now() - 600000).toISOString(), // 10 minutes ago
+        acknowledged: new Date(Date.now() - 480000).toISOString(), // 8 minutes ago
+        responseStarted: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+        targetResponseTime: 600000 // 10 minutes
+      },
+      automaticActions: {
+        crisisHotlineNotified: false,
+        emergencyServicesContacted: false,
+        providerAlerted: true,
+        backupProviderContacted: true,
+        familyContactsNotified: false,
+        systemFailoverActivated: false
+      },
+      responseTeam: {
+        primaryProvider: 'provider_67890',
+        backupProvider: 'provider_54321',
+        crisisSpecialist: 'crisis_specialist_002'
+      },
+      escalationRules: {
+        escalateAfter: 5,
+        escalationLevels: ['backup_provider', 'clinical_supervisor', 'emergency_services'],
+        currentLevel: 2
+      },
+      interventions: [
+        {
+          timestamp: new Date(Date.now() - 450000).toISOString(),
+          action: 'backup_provider_assigned',
+          performedBy: 'clinical_supervisor_001',
+          result: 'successful',
+          notes: 'Backup provider assigned to crisis case'
+        }
+      ],
+      priority: 7,
+      tags: ['provider_response', 'escalation']
+    }
+  ], [])
+
+  const loadAlerts = useCallback(async () => {
+    try {
+      const mockAlerts = generateMockAlerts()
+      setAlerts(mockAlerts)
+      setLoading(false)
+    } catch (error) {
+      console.error('Failed to load crisis alerts:', error)
+      setLoading(false)
+    }
+  }, [generateMockAlerts])
 
   useEffect(() => {
     loadAlerts()
@@ -155,7 +272,9 @@ export default function CrisisMonitoringAlerts() {
       const interval = setInterval(loadAlerts, 5000) // Update every 5 seconds
       return () => clearInterval(interval)
     }
-  }, [autoRefresh])
+
+    return undefined
+  }, [autoRefresh, loadAlerts])
 
   useEffect(() => {
     // Play alert sound for new critical alerts
@@ -169,216 +288,6 @@ export default function CrisisMonitoringAlerts() {
       }
     }
   }, [alerts, soundEnabled])
-
-  const loadAlerts = async () => {
-    try {
-      // In real implementation, fetch from real-time alerts database
-      const mockAlerts = generateMockAlerts()
-      setAlerts(mockAlerts)
-      setLoading(false)
-    } catch (error) {
-      console.error('Failed to load crisis alerts:', error)
-      setLoading(false)
-    }
-  }
-
-  const generateMockAlerts = (): CrisisAlert[] => {
-    return [
-      {
-        id: 'alert_001',
-        type: 'phq9_crisis',
-        severity: 'critical',
-        status: 'active',
-        patientId: 'patient_12345',
-        providerId: 'provider_67890',
-        assessmentId: 'phq9_assessment_789',
-        triggerData: {
-          phq9Score: 24,
-          responses: [3, 3, 3, 3, 2, 2, 2, 3, 2],
-          riskFactors: ['severe_depression', 'hopelessness', 'social_isolation'],
-          location: { lat: 40.7128, lng: -74.0060 },
-          contactInfo: '+1-555-0123'
-        },
-        responseRequired: true,
-        responseTime: {
-          detected: new Date(Date.now() - 120000).toISOString(), // 2 minutes ago
-          targetResponseTime: 30000 // 30 seconds
-        },
-        automaticActions: {
-          crisisHotlineNotified: true,
-          emergencyServicesContacted: false,
-          providerAlerted: true,
-          backupProviderContacted: false,
-          familyContactsNotified: true,
-          systemFailoverActivated: false
-        },
-        responseTeam: {
-          primaryProvider: 'provider_67890',
-          backupProvider: 'provider_11111',
-          crisisSpecialist: 'crisis_specialist_001'
-        },
-        escalationRules: {
-          escalateAfter: 5,
-          escalationLevels: ['primary_provider', 'backup_provider', 'crisis_specialist', 'emergency_services'],
-          currentLevel: 2
-        },
-        patientInfo: {
-          name: 'John D.',
-          age: 34,
-          riskProfile: 'high',
-          previousCrises: 2,
-          emergencyContacts: ['spouse', 'mother']
-        },
-        interventions: [
-          {
-            timestamp: new Date(Date.now() - 90000).toISOString(),
-            action: 'Crisis hotline notification sent',
-            performedBy: 'system_automated',
-            result: 'successful',
-            notes: '988 Suicide & Crisis Lifeline contacted'
-          },
-          {
-            timestamp: new Date(Date.now() - 75000).toISOString(),
-            action: 'Provider alert sent',
-            performedBy: 'system_automated',
-            result: 'successful',
-            notes: 'SMS and email alert sent to Dr. Johnson'
-          }
-        ],
-        priority: 9,
-        tags: ['urgent', 'high_risk', 'repeat_patient']
-      },
-      {
-        id: 'alert_002',
-        type: 'gad7_crisis',
-        severity: 'high',
-        status: 'acknowledged',
-        patientId: 'patient_54321',
-        providerId: 'provider_22222',
-        assessmentId: 'gad7_assessment_456',
-        triggerData: {
-          gad7Score: 18,
-          responses: [3, 3, 2, 3, 2, 2, 3],
-          riskFactors: ['severe_anxiety', 'panic_attacks', 'agoraphobia'],
-          contactInfo: '+1-555-0456'
-        },
-        responseRequired: true,
-        responseTime: {
-          detected: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
-          acknowledged: new Date(Date.now() - 240000).toISOString(), // 4 minutes ago
-          targetResponseTime: 30000
-        },
-        automaticActions: {
-          crisisHotlineNotified: true,
-          emergencyServicesContacted: false,
-          providerAlerted: true,
-          backupProviderContacted: false,
-          familyContactsNotified: false,
-          systemFailoverActivated: false
-        },
-        responseTeam: {
-          primaryProvider: 'provider_22222'
-        },
-        escalationRules: {
-          escalateAfter: 10,
-          escalationLevels: ['primary_provider', 'supervisor', 'crisis_team'],
-          currentLevel: 1
-        },
-        patientInfo: {
-          name: 'Sarah M.',
-          age: 28,
-          riskProfile: 'moderate',
-          previousCrises: 0,
-          emergencyContacts: ['partner']
-        },
-        interventions: [
-          {
-            timestamp: new Date(Date.now() - 270000).toISOString(),
-            action: 'Provider notified of severe anxiety score',
-            performedBy: 'system_automated',
-            result: 'successful',
-            notes: 'Alert acknowledged by Dr. Chen'
-          }
-        ],
-        priority: 6,
-        tags: ['anxiety', 'first_episode']
-      },
-      {
-        id: 'alert_003',
-        type: 'suicide_ideation',
-        severity: 'emergency',
-        status: 'escalated',
-        patientId: 'patient_98765',
-        providerId: 'provider_33333',
-        assessmentId: 'phq9_assessment_999',
-        triggerData: {
-          phq9Score: 22,
-          responses: [3, 3, 2, 3, 2, 3, 2, 2, 3], // Question 9 = 3 (suicide ideation)
-          riskFactors: ['suicide_ideation', 'means_available', 'social_isolation', 'substance_use'],
-          location: { lat: 34.0522, lng: -118.2437 },
-          contactInfo: '+1-555-0789'
-        },
-        responseRequired: true,
-        responseTime: {
-          detected: new Date(Date.now() - 900000).toISOString(), // 15 minutes ago
-          acknowledged: new Date(Date.now() - 870000).toISOString(), // 14.5 minutes ago
-          responseStarted: new Date(Date.now() - 600000).toISOString(), // 10 minutes ago
-          targetResponseTime: 30000
-        },
-        automaticActions: {
-          crisisHotlineNotified: true,
-          emergencyServicesContacted: true,
-          providerAlerted: true,
-          backupProviderContacted: true,
-          familyContactsNotified: true,
-          systemFailoverActivated: false
-        },
-        responseTeam: {
-          primaryProvider: 'provider_33333',
-          backupProvider: 'provider_44444',
-          crisisSpecialist: 'crisis_specialist_002',
-          emergencyContact: '911_dispatcher_001'
-        },
-        escalationRules: {
-          escalateAfter: 2,
-          escalationLevels: ['immediate_intervention', 'emergency_services', 'mobile_crisis_team'],
-          currentLevel: 3
-        },
-        patientInfo: {
-          name: 'Michael R.',
-          age: 45,
-          riskProfile: 'high',
-          previousCrises: 4,
-          emergencyContacts: ['brother', 'crisis_case_manager']
-        },
-        interventions: [
-          {
-            timestamp: new Date(Date.now() - 870000).toISOString(),
-            action: 'Emergency protocol activated',
-            performedBy: 'system_automated',
-            result: 'successful',
-            notes: 'All emergency contacts notified immediately'
-          },
-          {
-            timestamp: new Date(Date.now() - 600000).toISOString(),
-            action: '911 contacted with patient location',
-            performedBy: 'crisis_specialist_002',
-            result: 'successful',
-            notes: 'Mobile crisis team dispatched to patient location'
-          },
-          {
-            timestamp: new Date(Date.now() - 300000).toISOString(),
-            action: 'Mobile crisis team arrived on scene',
-            performedBy: 'mobile_crisis_team',
-            result: 'successful',
-            notes: 'Patient safely contacted, intervention in progress'
-          }
-        ],
-        priority: 10,
-        tags: ['emergency', 'suicide_risk', 'active_intervention']
-      }
-    ]
-  }
 
   const handleAcknowledge = async (alertId: string) => {
     try {

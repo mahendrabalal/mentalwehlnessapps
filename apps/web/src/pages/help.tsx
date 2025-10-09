@@ -1,7 +1,8 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function HelpCenterPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -108,12 +109,27 @@ export default function HelpCenterPage() {
     faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const faqList = Object.values(faqs).flat()
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Help Center',
+      description: 'Find answers to common questions about subscriptions, crisis support, privacy, and technical troubleshooting.',
+      slug: '/help',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Help Center', url: '/help' },
+    ]),
+    buildFaqStructuredData(faqList),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Help Center - MentalWellnessApps</title>
-        <meta name="description" content="Find answers to frequently asked questions and get help with your mental wellness journey" />
-      </Head>
+      <SEOHead
+        title="Help Center - Mental Wellness App"
+        description="Browse the Mental Wellness App help center for account, privacy, crisis support, and troubleshooting guidance."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

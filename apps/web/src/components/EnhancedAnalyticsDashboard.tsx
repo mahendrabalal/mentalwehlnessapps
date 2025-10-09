@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { LegalDisclaimer } from './LegalDisclaimer'
 
 interface AnalyticsData {
@@ -25,14 +25,30 @@ interface AnalyticsData {
 
 interface EnhancedAnalyticsDashboardProps {
   userId?: string
-  moodEntries?: any[]
-  assessments?: any[]
+  moodEntries?: MoodEntry[]
+  assessments?: AssessmentResult[]
   isPremium?: boolean
   onUpgradeClick?: () => void
 }
 
+interface MoodEntry {
+  created_at: string
+  mood_score?: number
+  anxiety_level?: number
+  energy_level?: number
+  sleep_quality?: number
+  stress_level?: number
+}
+
+interface AssessmentResult {
+  assessment_type: 'phq9' | 'gad7' | string
+  total_score: number
+  severity_level: string
+  completed_at?: string
+}
+
 export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
-  userId,
+  userId: _userId,
   moodEntries = [],
   assessments = [],
   isPremium = false,
@@ -41,18 +57,16 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
   const [timeRange, setTimeRange] = useState<'30days' | '90days' | '6months'>('30days')
   const [isLoading, setIsLoading] = useState(false)
+  const generateAnalyticsRef = useRef<null | ((signal: AbortSignal) => Promise<void>)>(null)
 
-  useEffect(() => {
-    if (isPremium) {
-      generateAnalytics()
-    }
-  }, [moodEntries, assessments, timeRange, isPremium])
-
-  const generateAnalytics = async (): Promise<void> => {
+  generateAnalyticsRef.current = async (signal: AbortSignal) => {
     setIsLoading(true)
 
     // Simulate AI analytics processing (BMad Method: Evidence-based delay simulation)
     await new Promise(resolve => setTimeout(resolve, 2000))
+    if (signal.aborted) {
+      return
+    }
 
     // Generate evidence-based analytics data
     const mockAnalytics: AnalyticsData = {
@@ -66,9 +80,27 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
       insights: generateClinicalInsights()
     }
 
+    if (signal.aborted) {
+      return
+    }
+
     setAnalyticsData(mockAnalytics)
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    if (!isPremium || !generateAnalyticsRef.current) {
+      return
+    }
+
+    const controller = new AbortController()
+
+    generateAnalyticsRef.current(controller.signal)
+
+    return () => {
+      controller.abort()
+    }
+  }, [assessments, isPremium, moodEntries, timeRange])
 
   // BMad Method: Real pattern analysis based on user data
   const generateClinicalInsights = () => {
@@ -129,8 +161,8 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
     if (validEntries.length < 5) return { correlation: 0, strength: 'insufficient' }
 
     // Simple correlation calculation
-    const sleepScores = validEntries.map(e => e.sleep_quality)
-    const moodScores = validEntries.map(e => e.mood_score)
+    const sleepScores = validEntries.map(e => e.sleep_quality!)
+    const moodScores = validEntries.map(e => e.mood_score!)
 
     const correlation = calculateCorrelation(sleepScores, moodScores)
     const strength = correlation > 0.7 ? 'strong' : correlation > 0.4 ? 'moderate' : 'weak'
@@ -218,9 +250,11 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
   }
 
   function analyzeStressMoodRelation(): string | null {
-    const validEntries = moodEntries.filter(entry =>
-      entry.stress_level != null && entry.mood_score != null
-    ).slice(0, 14)
+    const validEntries = moodEntries
+      .filter((entry): entry is MoodEntry & { stress_level: number, mood_score: number } =>
+        entry.stress_level != null && entry.mood_score != null
+      )
+      .slice(0, 14)
 
     if (validEntries.length < 5) return null
 
@@ -241,9 +275,11 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
   }
 
   function analyzeAnxietyPatterns(): string | null {
-    const validEntries = moodEntries.filter(entry =>
-      entry.anxiety_level != null
-    ).slice(0, 14)
+    const validEntries = moodEntries
+      .filter((entry): entry is MoodEntry & { anxiety_level: number } =>
+        entry.anxiety_level != null
+      )
+      .slice(0, 14)
 
     if (validEntries.length < 5) return null
 
@@ -381,10 +417,10 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
       const avgStress = moodEntries.slice(0, 7).reduce((sum, e) => sum + (e.stress_level || 5), 0) / 7
 
       if (avgSleep < 6) {
-        personalizedRecommendations.push("Focus on Sleep Hygiene Protocol - your low sleep scores (${avgSleep.toFixed(1)}/10) impact mood")
+        personalizedRecommendations.push(`Focus on Sleep Hygiene Protocol - your low sleep scores (${avgSleep.toFixed(1)}/10) impact mood`)
       }
       if (avgStress > 6) {
-        personalizedRecommendations.push("Implement daily stress reduction - your stress average (${avgStress.toFixed(1)}/10) is elevated")
+        personalizedRecommendations.push(`Implement daily stress reduction - your stress average (${avgStress.toFixed(1)}/10) is elevated`)
       }
       if (avgMood < 5) {
         personalizedRecommendations.push("Practice Mindfulness-Based Stress Reduction (MBSR) - particularly helpful for low mood")
@@ -429,8 +465,6 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
 
     // Process real mood entries or fill with interpolated data
     dateRange.forEach(dateStr => {
-      const dateObj = new Date(dateStr)
-
       // Find mood entry for this date
       const moodEntry = moodEntries.find(entry => {
         const entryDate = new Date(entry.created_at).toISOString().split('T')[0]
@@ -450,7 +484,7 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
         })
       } else {
         // Interpolate or use baseline values
-        const interpolatedData = interpolateDataPoint(dateStr, moodEntries)
+        const interpolatedData = interpolateDataPoint(moodEntries)
         data.push({
           date: dateStr,
           mood: interpolatedData.mood,
@@ -466,7 +500,7 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
     return data
   }
 
-  function interpolateDataPoint(targetDate: string, entries: any[]) {
+  function interpolateDataPoint(entries: MoodEntry[]) {
     if (entries.length === 0) {
       return {
         mood: 5,
@@ -501,7 +535,6 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
     if (moodEntries.length < 7) return 'stable'
 
     // Use weighted analysis - recent data has more influence
-    const weights = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4] // Most recent gets highest weight
     const recentEntries = moodEntries.slice(0, 7)
 
     if (recentEntries.length < 5) return 'stable'
@@ -515,7 +548,7 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
     return 'stable'
   }
 
-  function calculateTrendSlope(entries: any[]): number {
+  function calculateTrendSlope(entries: MoodEntry[]): number {
     const n = entries.length
     const xValues = entries.map((_, index) => index) // 0, 1, 2, 3...
     const yValues = entries.map(entry => entry.mood_score || 5)
@@ -676,7 +709,7 @@ export const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProp
             onClick={onUpgradeClick}
             className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-3 rounded-lg font-medium text-lg transition-colors"
           >
-            Unlock Analytics - $19.99/month
+            Unlock Analytics - $5.99/month
           </button>
 
           <div className="mt-4">

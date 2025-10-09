@@ -1,4 +1,3 @@
-import type { SanityClient } from '@sanity/client'
 import { createClient } from 'next-sanity'
 import {
   SANITY_PREVIEW_TOKEN,
@@ -6,9 +5,11 @@ import {
   sanityConfig,
 } from './config'
 
-let cachedClient: SanityClient | null = null
+type SanityClientInstance = ReturnType<typeof createClient>
 
-export function getSanityClient(): SanityClient {
+let cachedClient: SanityClientInstance | null = null
+
+export function getSanityClient(): SanityClientInstance {
   if (!isSanityConfigured) {
     throw new Error('Sanity project configuration is missing.')
   }
@@ -24,7 +25,7 @@ export function getSanityClient(): SanityClient {
   return cachedClient
 }
 
-export function getPreviewClient(): SanityClient {
+export function getPreviewClient(): SanityClientInstance {
   if (!isSanityConfigured) {
     throw new Error('Sanity project configuration is missing.')
   }

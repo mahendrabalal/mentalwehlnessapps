@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function OnboardingStep3() {
   const [user, setUser] = useState<User | null>(null)
@@ -11,6 +11,8 @@ export default function OnboardingStep3() {
   const [userLoading, setUserLoading] = useState(true)
   const supabase = createClient()
   const router = useRouter()
+  const seoTitle = 'Onboarding Step 3 - Privacy Preferences | Mental Wellness App'
+  const seoDescription = 'Set your privacy, notification, and crisis plan preferences to configure your Mental Wellness App experience.'
 
   const [preferences, setPreferences] = useState({
     notifications_enabled: true,
@@ -22,6 +24,9 @@ export default function OnboardingStep3() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const seoMeta = (
+    <SEOHead title={seoTitle} description={seoDescription} noindex nofollow />
+  )
 
   useEffect(() => {
     checkUser()
@@ -115,35 +120,38 @@ export default function OnboardingStep3() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading...</p>
+      <>
+        {seoMeta}
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Loading...</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        {seoMeta}
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
     <>
-      <Head>
-        <title>Privacy Preferences - Mental Wellness App</title>
-        <meta name="description" content="Set your privacy and notification preferences" />
-      </Head>
+      {seoMeta}
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white shadow rounded-lg">

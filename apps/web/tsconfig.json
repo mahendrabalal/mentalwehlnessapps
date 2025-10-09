@@ -1,5 +1,5 @@
 {
-  "extends": "@mental-wellness/typescript-config/nextjs.json",
+  "extends": "../../packages/config/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

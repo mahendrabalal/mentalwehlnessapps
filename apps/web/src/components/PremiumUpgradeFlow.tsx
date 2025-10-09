@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { loadStripe } from '@stripe/stripe-js'
+import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { LegalDisclaimer } from './LegalDisclaimer'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/lib/supabase'
 
 // BMad Method: Healthcare-compliant Stripe configuration with lazy loading
-let stripePromise: Promise<any> | null = null
+let stripePromise: Promise<Stripe | null> | null = null
 
 const getStripePromise = () => {
   if (!stripePromise) {
@@ -55,7 +55,7 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
     {
       id: 'monthly',
       name: 'Premium Monthly',
-      price: 19.99,
+      price: 5.99,
       interval: 'month',
       priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_MONTHLY_PRICE_ID || 'price_mental_wellness_monthly_placeholder',
       features: [
@@ -72,17 +72,17 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
     {
       id: 'yearly',
       name: 'Premium Yearly',
-      price: 89.99,
+      price: 59.99,
       interval: 'year',
-      originalPrice: 239.88,
-      savings: 'Save $150/year',
+      originalPrice: 71.88,
+      savings: 'Save $11.89/year (approx. 2 months free)',
       recommended: true,
       priceId: process.env.NEXT_PUBLIC_STRIPE_PREMIUM_YEARLY_PRICE_ID || 'price_mental_wellness_yearly_placeholder',
       features: [
         'All Premium Monthly features',
         'Annual Clinical Wellness Report',
         'Advanced Analytics Export',
-        '2 Months Free',
+        'Equivalent to 2 months free',
         'Priority Feature Updates',
         'Extended Data Retention',
         'Telehealth Integration Ready'
@@ -141,10 +141,9 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
 
       const { clientSecret: cs, status } = await response.json()
 
-      // Handle trial subscriptions (no immediate payment required)
-      if (!cs && status === 'trialing') {
-        setCurrentStep('success')
-        return
+      // Payment is always required for non-trial subscriptions
+      if (!cs) {
+        throw new Error('Payment setup required. Please try again.')
       }
 
       setClientSecret(cs)
@@ -324,7 +323,7 @@ const PricingStep: React.FC<PricingStepProps> = ({
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
               } disabled:opacity-50`}
             >
-              {isLoading ? 'Processing...' : `Start 7-Day Free Trial`}
+              {isLoading ? 'Processing...' : 'Subscribe Now'}
             </button>
           </div>
         ))}
@@ -356,9 +355,9 @@ const PricingStep: React.FC<PricingStepProps> = ({
           </div>
         </div>
         <p>
-          7-day free trial • No setup fees • Cancel anytime during trial
+          No setup fees • Cancel anytime
           <br />
-          After trial: ${plans.find(p => p.id === selectedPlan)?.price}/month • Secure payment processing by Stripe
+          ${plans.find(p => p.id === selectedPlan)?.price}/{plans.find(p => p.id === selectedPlan)?.interval} • Secure payment processing by Stripe
         </p>
       </div>
     </div>
@@ -459,13 +458,13 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
             disabled={!stripe || isProcessing}
             className="flex-1 py-3 px-4 bg-therapy-600 hover:bg-therapy-700 text-white rounded-lg disabled:opacity-50"
           >
-            {isProcessing ? 'Processing...' : 'Start Free Trial'}
+            {isProcessing ? 'Processing...' : 'Subscribe Now'}
           </button>
         </div>
       </form>
 
       <div className="mt-6 text-xs text-gray-500 text-center">
-        <p>Your trial starts immediately. You won't be charged until your 7-day trial ends.</p>
+        <p>You will be charged immediately upon subscription.</p>
         <p className="mt-1">By subscribing, you agree to our Terms of Service and Privacy Policy.</p>
       </div>
     </div>
@@ -497,7 +496,7 @@ const SuccessStep: React.FC<SuccessStepProps> = ({
       </p>
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-        <h3 className="font-semibold text-green-900 mb-2">What's Next?</h3>
+        <h3 className="font-semibold text-green-900 mb-2">What&apos;s Next?</h3>
         <ul className="text-sm text-green-800 text-left space-y-1">
           <li>• Start chatting with your AI therapy companion</li>
           <li>• Explore advanced mood analytics</li>

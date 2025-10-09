@@ -189,22 +189,22 @@ test.describe('Premium Subscription Upgrade Flow - Healthcare E2E Testing', () =
         console.log('💰 Step 6: Verifying pricing plans...');
 
         // Look for pricing information
-        const pricingElements = await page.locator('text="$19.99", text="$89.99", text="monthly", text="yearly"').all();
-        const monthlyPlan = page.locator('text="$19.99"').first();
-        const yearlyPlan = page.locator('text="$89.99"').first();
+        const pricingElements = await page.locator('text="$5.99", text="$59.99", text="monthly", text="yearly"').all();
+        const monthlyPlan = page.locator('text="$5.99"').first();
+        const yearlyPlan = page.locator('text="$59.99"').first();
 
         console.log(`Found ${pricingElements.length} pricing elements`);
 
         if (await monthlyPlan.isVisible()) {
-          console.log('✅ Monthly plan ($19.99) found');
+          console.log('✅ Monthly plan ($5.99) found');
         } else {
-          console.log('❌ Monthly plan ($19.99) not found');
+          console.log('❌ Monthly plan ($5.99) not found');
         }
 
         if (await yearlyPlan.isVisible()) {
-          console.log('✅ Yearly plan ($89.99) found');
+          console.log('✅ Yearly plan ($59.99) found');
         } else {
-          console.log('❌ Yearly plan ($89.99) not found');
+          console.log('❌ Yearly plan ($59.99) not found');
         }
 
         // Test switching between plans if toggle exists

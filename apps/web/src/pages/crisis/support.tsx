@@ -1,13 +1,28 @@
-import Head from 'next/head'
 import Link from 'next/link'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function CrisisSupport() {
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Crisis Support Resources',
+      description: 'Immediate crisis hotlines, coping strategies, and mental health support resources.',
+      slug: '/crisis/support',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Crisis Support', url: '/crisis/support' },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Crisis Support - Mental Wellness App</title>
-        <meta name="description" content="Immediate mental health crisis support and resources" />
-      </Head>
+      <SEOHead
+        title="Crisis Support - Mental Wellness App"
+        description="Immediate mental health crisis support, hotlines, and coping strategies to help you stay safe."
+        structuredData={structuredData}
+        ogImage="/og-default.png"
+      />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white shadow rounded-lg">

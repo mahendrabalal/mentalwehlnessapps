@@ -91,7 +91,7 @@ test.describe('Modern Landing Page', () => {
 
     // Check Premium plan
     await expect(page.locator('text=Premium')).toBeVisible();
-    await expect(page.locator('text=$19.99')).toBeVisible();
+    await expect(page.locator('text=$5.99')).toBeVisible();
     await expect(page.locator('text=/month')).toBeVisible();
     await expect(page.locator('text=Most Popular')).toBeVisible();
     await expect(page.locator('text=7-day free trial')).toBeVisible();

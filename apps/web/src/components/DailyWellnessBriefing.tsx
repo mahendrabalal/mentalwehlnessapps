@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { LegalDisclaimer } from './LegalDisclaimer'
 
 interface DailyWellnessBriefingProps {
@@ -8,7 +8,7 @@ interface DailyWellnessBriefingProps {
     score: number
     severity: string
   }
-  moodEntries?: any[]
+  moodEntries?: MoodEntry[]
   isPremium?: boolean
   onUpgradeClick?: () => void
 }
@@ -23,6 +23,29 @@ interface WellnessBriefing {
   riskAlerts?: string[]
 }
 
+interface MoodEntry {
+  mood_score?: number
+  created_at?: string
+  sleep_quality?: number
+  stress_level?: number
+  anxiety_level?: number
+}
+
+type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night'
+
+interface UserContextInsight {
+  currentMood: number
+  avgMood: number
+  avgSleep: number
+  avgStress: number
+  avgAnxiety: number
+  moodTrend: 'improving' | 'declining' | 'stable'
+  trackingStreak: number
+  assessmentRisk: 'low' | 'medium' | 'high'
+  weatherMood: string
+  dayOfWeek: number
+}
+
 export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
   userMoodScore,
   recentAssessment,
@@ -32,45 +55,85 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
 }) => {
   const [briefing, setBriefing] = useState<WellnessBriefing | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [timeOfDay, setTimeOfDay] = useState<'morning' | 'afternoon' | 'evening' | 'night'>('morning')
 
-  useEffect(() => {
-    const currentTime = getCurrentTimeOfDay()
-    setTimeOfDay(currentTime)
-
-    if (isPremium) {
-      generateDailyBriefing(currentTime)
-    }
-  }, [isPremium, userMoodScore, recentAssessment, moodEntries])
-
-  function getCurrentTimeOfDay(): 'morning' | 'afternoon' | 'evening' | 'night' {
+  const getCurrentTimeOfDay = useCallback((): TimeOfDay => {
     const hour = new Date().getHours()
     if (hour < 6) return 'night'
     if (hour < 12) return 'morning'
     if (hour < 18) return 'afternoon'
     if (hour < 22) return 'evening'
     return 'night'
-  }
+  }, [])
 
-  // BMad Method: Generate intelligent daily wellness briefing
-  function generateDailyBriefing(timeOfDay: string) {
-    const userContext = analyzeUserContext()
+  const calculateMoodTrend = useCallback((): 'improving' | 'declining' | 'stable' => {
+    if (moodEntries.length < 3) return 'stable'
 
-    const briefing: WellnessBriefing = {
-      greeting: generatePersonalizedGreeting(timeOfDay, userContext),
-      insights: generateDailyInsights(userContext),
-      predictions: generateDayPredictions(userContext),
-      recommendations: generateDailyRecommendations(userContext, timeOfDay),
-      todaysFocus: generateTodaysFocus(userContext),
-      motivationalMessage: generateMotivationalMessage(userContext),
-      riskAlerts: generateRiskAlerts(userContext)
+    const recent = moodEntries.slice(0, 3)
+    const older = moodEntries.slice(3, 6)
+
+    if (older.length === 0) return 'stable'
+
+    const recentAvg = recent.reduce((sum, e) => sum + (e.mood_score || 5), 0) / recent.length
+    const olderAvg = older.reduce((sum, e) => sum + (e.mood_score || 5), 0) / older.length
+
+    const diff = recentAvg - olderAvg
+    if (diff > 1.0) return 'improving'
+    if (diff < -1.0) return 'declining'
+    return 'stable'
+  }, [moodEntries])
+
+  const calculateTrackingStreak = useCallback((): number => {
+    if (moodEntries.length === 0) return 0
+
+    let streak = 1
+    const parseDate = (value?: string) => (value ? new Date(value) : new Date(0))
+    const sortedEntries = [...moodEntries].sort((a, b) =>
+      parseDate(b.created_at).getTime() - parseDate(a.created_at).getTime()
+    )
+
+    for (let i = 1; i < sortedEntries.length; i++) {
+      const currentDate = parseDate(sortedEntries[i - 1].created_at)
+      const previousDate = parseDate(sortedEntries[i].created_at)
+      const dayDiff = Math.floor((currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24))
+
+      if (dayDiff <= 1) {
+        streak++
+      } else {
+        break
+      }
     }
 
-    setBriefing(briefing)
-  }
+    return streak
+  }, [moodEntries])
 
-  function analyzeUserContext() {
-    const currentMood = userMoodScore || (moodEntries.length > 0 ? moodEntries[0]?.mood_score : 5)
+  const getAssessmentRisk = useCallback((): 'low' | 'medium' | 'high' => {
+    if (!recentAssessment) return 'low'
+
+    if (recentAssessment.type === 'phq9') {
+      if (recentAssessment.score >= 20) return 'high'
+      if (recentAssessment.score >= 15) return 'medium'
+      return 'low'
+    }
+
+    if (recentAssessment.type === 'gad7') {
+      if (recentAssessment.score >= 15) return 'high'
+      if (recentAssessment.score >= 10) return 'medium'
+      return 'low'
+    }
+
+    return 'low'
+  }, [recentAssessment])
+
+  const getWeatherMoodCorrelation = useCallback((): string => {
+    const weatherEffects = ['sunny', 'rainy', 'cloudy', 'stormy']
+    return weatherEffects[Math.floor(Math.random() * weatherEffects.length)]
+  }, [])
+
+  const analyzeUserContext = useCallback((): UserContextInsight => {
+    const fallbackMood = moodEntries.length > 0 && typeof moodEntries[0]?.mood_score === 'number'
+      ? moodEntries[0]!.mood_score!
+      : 5
+    const currentMood = userMoodScore ?? fallbackMood
 
     // Calculate recent averages
     const recentEntries = moodEntries.slice(0, 7)
@@ -105,73 +168,41 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
       weatherMood: getWeatherMoodCorrelation(),
       dayOfWeek: new Date().getDay()
     }
-  }
+  }, [
+    calculateMoodTrend,
+    calculateTrackingStreak,
+    getAssessmentRisk,
+    getWeatherMoodCorrelation,
+    moodEntries,
+    userMoodScore
+  ])
 
-  function calculateMoodTrend(): 'improving' | 'declining' | 'stable' {
-    if (moodEntries.length < 3) return 'stable'
+  // BMad Method: Generate intelligent daily wellness briefing
+  const generateDailyBriefing = useCallback((timeOfDay: TimeOfDay) => {
+    const userContext = analyzeUserContext()
 
-    const recent = moodEntries.slice(0, 3)
-    const older = moodEntries.slice(3, 6)
-
-    if (older.length === 0) return 'stable'
-
-    const recentAvg = recent.reduce((sum, e) => sum + (e.mood_score || 5), 0) / recent.length
-    const olderAvg = older.reduce((sum, e) => sum + (e.mood_score || 5), 0) / older.length
-
-    const diff = recentAvg - olderAvg
-    if (diff > 1.0) return 'improving'
-    if (diff < -1.0) return 'declining'
-    return 'stable'
-  }
-
-  function calculateTrackingStreak(): number {
-    if (moodEntries.length === 0) return 0
-
-    let streak = 1
-    const sortedEntries = [...moodEntries].sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    )
-
-    for (let i = 1; i < sortedEntries.length; i++) {
-      const currentDate = new Date(sortedEntries[i - 1].created_at)
-      const previousDate = new Date(sortedEntries[i].created_at)
-      const dayDiff = Math.floor((currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24))
-
-      if (dayDiff <= 1) {
-        streak++
-      } else {
-        break
-      }
+    const briefing: WellnessBriefing = {
+      greeting: generatePersonalizedGreeting(timeOfDay, userContext),
+      insights: generateDailyInsights(userContext),
+      predictions: generateDayPredictions(userContext),
+      recommendations: generateDailyRecommendations(userContext, timeOfDay),
+      todaysFocus: generateTodaysFocus(userContext),
+      motivationalMessage: generateMotivationalMessage(userContext),
+      riskAlerts: generateRiskAlerts(userContext)
     }
 
-    return streak
-  }
+    setBriefing(briefing)
+  }, [analyzeUserContext])
 
-  function getAssessmentRisk(): 'low' | 'medium' | 'high' {
-    if (!recentAssessment) return 'low'
+  useEffect(() => {
+    const currentTime = getCurrentTimeOfDay()
 
-    if (recentAssessment.type === 'phq9') {
-      if (recentAssessment.score >= 20) return 'high'
-      if (recentAssessment.score >= 15) return 'medium'
-      return 'low'
+    if (isPremium) {
+      generateDailyBriefing(currentTime)
     }
+  }, [generateDailyBriefing, getCurrentTimeOfDay, isPremium])
 
-    if (recentAssessment.type === 'gad7') {
-      if (recentAssessment.score >= 15) return 'high'
-      if (recentAssessment.score >= 10) return 'medium'
-      return 'low'
-    }
-
-    return 'low'
-  }
-
-  function getWeatherMoodCorrelation(): string {
-    // Simulate weather-mood correlation
-    const weatherEffects = ['sunny', 'rainy', 'cloudy', 'stormy']
-    return weatherEffects[Math.floor(Math.random() * weatherEffects.length)]
-  }
-
-  function generatePersonalizedGreeting(timeOfDay: string, context: any): string {
+  function generatePersonalizedGreeting(timeOfDay: TimeOfDay, context: UserContextInsight): string {
     const dayOfWeekNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     const dayName = dayOfWeekNames[context.dayOfWeek]
 
@@ -192,7 +223,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     return greeting
   }
 
-  function generateDailyInsights(context: any): string[] {
+  function generateDailyInsights(context: UserContextInsight): string[] {
     const insights = []
 
     // Sleep-mood correlation
@@ -220,7 +251,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     return insights.slice(0, 2) // Limit to 2 insights
   }
 
-  function generateDayPredictions(context: any): string[] {
+  function generateDayPredictions(context: UserContextInsight): string[] {
     const predictions = []
 
     // Mood predictions based on patterns
@@ -243,7 +274,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     return predictions.slice(0, 2)
   }
 
-  function generateDailyRecommendations(context: any, timeOfDay: string): string[] {
+  function generateDailyRecommendations(context: UserContextInsight, timeOfDay: TimeOfDay): string[] {
     const recommendations = []
 
     // Time-based recommendations
@@ -276,7 +307,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     return recommendations.slice(0, 3)
   }
 
-  function generateTodaysFocus(context: any): string {
+  function generateTodaysFocus(context: UserContextInsight): string {
     if (context.assessmentRisk === 'high') {
       return `Safety and professional support`
     } else if (context.assessmentRisk === 'medium') {
@@ -294,7 +325,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     }
   }
 
-  function generateMotivationalMessage(context: any): string {
+  function generateMotivationalMessage(context: UserContextInsight): string {
     const messages = [
       "Your mental health journey is unique and valuable. Every step forward, no matter how small, is progress worth celebrating.",
       "You're investing in the most important relationship you'll ever have - the one with yourself.",
@@ -314,7 +345,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
     return messages[Math.floor(Math.random() * messages.length)]
   }
 
-  function generateRiskAlerts(context: any): string[] | undefined {
+  function generateRiskAlerts(context: UserContextInsight): string[] | undefined {
     const alerts = []
 
     if (context.assessmentRisk === 'high') {
@@ -346,7 +377,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
             <div className="bg-white rounded-lg p-3">
               <div className="text-2xl mb-1">🔮</div>
               <p className="text-sm font-medium text-gray-900">Smart Predictions</p>
-              <p className="text-xs text-gray-600">Today's mood & energy forecast</p>
+              <p className="text-xs text-gray-600">Today&apos;s mood & energy forecast</p>
             </div>
             <div className="bg-white rounded-lg p-3">
               <div className="text-2xl mb-1">💡</div>
@@ -363,7 +394,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
             onClick={onUpgradeClick}
             className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
           >
-            Unlock Daily Briefings - $19.99/month
+            Unlock Daily Briefings - $5.99/month
           </button>
         </div>
       </div>
@@ -426,12 +457,12 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
       )}
 
       {/* Today's Focus */}
-      <div className="bg-white rounded-lg p-4 mb-4">
-        <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
-          <span className="text-xl mr-2">🎯</span>
-          Today's Focus: {briefing.todaysFocus}
-        </h4>
-      </div>
+          <div className="bg-white rounded-lg p-4 mb-4">
+            <h4 className="font-semibold text-gray-900 mb-2 flex items-center">
+              <span className="text-xl mr-2">🎯</span>
+              Today&apos;s Focus: {briefing.todaysFocus}
+            </h4>
+          </div>
 
       {/* Expandable Content */}
       {isExpanded && (
@@ -459,7 +490,7 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
             <div className="bg-white rounded-lg p-4">
               <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                 <span className="text-xl mr-2">🔮</span>
-                Today's Predictions
+                Today&apos;s Predictions
               </h4>
               <ul className="space-y-2">
                 {briefing.predictions.map((prediction, index) => (

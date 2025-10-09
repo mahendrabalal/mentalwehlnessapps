@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -18,6 +18,13 @@ interface ProviderCredentialVerificationProps {
   showStatus?: boolean
 }
 
+interface VerificationResults {
+  npiValid: boolean
+  deaValid: boolean
+  licenseValid: boolean
+  overallValid: boolean
+}
+
 export function ProviderCredentialVerification({
   onVerificationComplete,
   showStatus = true
@@ -29,54 +36,64 @@ export function ProviderCredentialVerification({
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [verificationResults, setVerificationResults] = useState<any>(null)
-  const supabase = createClient()
+  const [verificationResults, setVerificationResults] = useState<VerificationResults | null>(null)
+  const supabase = useMemo(() => createClient(), [])
 
   useEffect(() => {
     if (user && userRole === 'provider') {
-      loadExistingCredentials()
-    }
-  }, [user, userRole])
+      let isActive = true
 
-  const loadExistingCredentials = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select(`
-          npi_number,
-          dea_number,
-          license_number,
-          license_state,
-          license_expiry,
-          credential_verification_status,
-          credential_verified_at,
-          credential_verified_by
-        `)
-        .eq('user_id', user?.id)
-        .single()
+      const fetchCredentials = async () => {
+        try {
+          setLoading(true)
+          const { data, error } = await supabase
+            .from('user_profiles')
+            .select(`
+              npi_number,
+              dea_number,
+              license_number,
+              license_state,
+              license_expiry,
+              credential_verification_status,
+              credential_verified_at,
+              credential_verified_by
+            `)
+            .eq('user_id', user.id)
+            .single()
 
-      if (error) throw error
+          if (error) throw error
 
-      if (data) {
-        setCredentials({
-          npiNumber: data.npi_number || '',
-          deaNumber: data.dea_number || '',
-          licenseNumber: data.license_number || '',
-          licenseState: data.license_state || '',
-          licenseExpiry: data.license_expiry || '',
-          verificationStatus: data.credential_verification_status || 'pending',
-          verifiedAt: data.credential_verified_at,
-          verifiedBy: data.credential_verified_by
-        })
+          if (data && isActive) {
+            setCredentials({
+              npiNumber: data.npi_number || '',
+              deaNumber: data.dea_number || '',
+              licenseNumber: data.license_number || '',
+              licenseState: data.license_state || '',
+              licenseExpiry: data.license_expiry || '',
+              verificationStatus: data.credential_verification_status || 'pending',
+              verifiedAt: data.credential_verified_at,
+              verifiedBy: data.credential_verified_by
+            })
+          }
+        } catch (err) {
+          console.error('Error loading credentials:', err)
+          if (isActive) {
+            setError('Failed to load existing credentials')
+          }
+        } finally {
+          if (isActive) {
+            setLoading(false)
+          }
+        }
       }
-    } catch (err) {
-      console.error('Error loading credentials:', err)
-      setError('Failed to load existing credentials')
-    } finally {
-      setLoading(false)
+
+      fetchCredentials()
+
+      return () => {
+        isActive = false
+      }
     }
-  }
+  }, [supabase, user, userRole])
 
   const handleInputChange = (field: keyof ProviderCredentials, value: string) => {
     setCredentials(prev => ({
@@ -154,7 +171,7 @@ export function ProviderCredentialVerification({
         )
       }
 
-      const results = {
+      const results: VerificationResults = {
         npiValid,
         deaValid,
         licenseValid,
@@ -300,7 +317,6 @@ export function ProviderCredentialVerification({
 
   const validateDEAChecksum = (dea: string): boolean => {
     // DEA checksum validation
-    const letters = dea.substring(0, 2)
     const digits = dea.substring(2)
 
     const sum1 = parseInt(digits[0]) + parseInt(digits[2]) + parseInt(digits[4])
@@ -310,7 +326,7 @@ export function ProviderCredentialVerification({
     return checkDigit === parseInt(digits[6])
   }
 
-  const logCredentialEvent = async (event: string, data: any) => {
+  const logCredentialEvent = async (event: string, data: Record<string, unknown>) => {
     try {
       await supabase
         .from('security_audit_log')

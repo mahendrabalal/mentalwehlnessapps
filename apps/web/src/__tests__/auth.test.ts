@@ -1,13 +1,58 @@
 // Comprehensive Authentication Testing Suite
 // Mental Wellness App - HIPAA-Compliant Healthcare Authentication
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals'
+import { describe, it, expect, beforeEach, jest } from '@jest/globals'
 import { renderHook, act } from '@testing-library/react'
 import { useAuth } from '@/hooks/useAuth'
-import { AuthGuard } from '@/components/AuthGuard'
-import { ProviderCredentialVerification } from '@/components/ProviderCredentialVerification'
-import { CrisisInterventionSystem } from '@/components/CrisisInterventionSystem'
 import HealthcareQualityGates from '@/lib/healthcare-quality-gates'
+import type { Session, User } from '@supabase/supabase-js'
+
+interface CrisisAssessment {
+  thoughts_of_harm: boolean
+  specific_plan: boolean
+  means_available: boolean
+  timeline: 'immediate' | 'hours' | 'days' | 'weeks' | 'none'
+}
+
+interface PatientData {
+  id: string
+  name: string
+  email: string
+  phone: string
+  ssn: string
+  medical_record: string
+  assessment_scores: { phq9: number; gad7: number }
+}
+
+const createMockUser = (overrides: Partial<User> = {}): User =>
+  ({
+    id: 'test-user',
+    email: 'test@example.com',
+    role: 'authenticated',
+    aud: 'authenticated',
+    created_at: new Date().toISOString(),
+    app_metadata: {},
+    user_metadata: {},
+    identities: [],
+    factors: [],
+    ...overrides
+  } as unknown as User)
+
+const createMockSession = (overrides: Partial<Session> = {}): Session => {
+  const user = overrides.user ?? createMockUser()
+  return {
+    access_token: 'access-token',
+    refresh_token: 'refresh-token',
+    expires_in: overrides.expires_in ?? 3600,
+    token_type: 'bearer',
+    user,
+    expires_at: overrides.expires_at,
+    provider_token: null,
+    provider_refresh_token: null,
+    ...overrides,
+    user
+  } as Session
+}
 
 // Mock Supabase client
 jest.mock('@/lib/supabase', () => ({
@@ -64,8 +109,9 @@ describe('Healthcare Authentication System', () => {
 
       // Mock authenticated user with proper profile
       act(() => {
-        result.current.user = { id: 'test-user' } as any
-        result.current.session = { user: { id: 'test-user' } } as any
+        const mockUser = createMockUser()
+        result.current.user = mockUser
+        result.current.session = createMockSession({ user: mockUser })
         result.current.authenticationTier = 'clinical'
         result.current.userRole = 'provider'
       })
@@ -122,26 +168,26 @@ describe('Healthcare Authentication System', () => {
       const { result } = renderHook(() => useAuth())
 
       // Mock session data with expiration
-      const mockSession = {
+      const mockSession = createMockSession({
         expires_at: Date.now() / 1000 + 3600, // 1 hour from now
-        user: { id: 'test-user' }
-      }
+        user: createMockUser()
+      })
 
       act(() => {
-        result.current.session = mockSession as any
+        result.current.session = mockSession
       })
 
       // Session should be valid
       expect(result.current.isAuthenticated).toBe(true)
 
       // Mock expired session
-      const expiredSession = {
+      const expiredSession = createMockSession({
         expires_at: Date.now() / 1000 - 3600, // 1 hour ago
-        user: { id: 'test-user' }
-      }
+        user: createMockUser()
+      })
 
       act(() => {
-        result.current.session = expiredSession as any
+        result.current.session = expiredSession
       })
 
       // Session should be invalid
@@ -151,7 +197,7 @@ describe('Healthcare Authentication System', () => {
 
   describe('Crisis Intervention System', () => {
     it('should calculate crisis risk scores accurately', () => {
-      const calculateCrisisLevel = (assessment: any) => {
+      const calculateCrisisLevel = (assessment: CrisisAssessment) => {
         let score = 0
         if (assessment.thoughts_of_harm) score += 3
         if (assessment.specific_plan) score += 4
@@ -287,7 +333,7 @@ describe('Healthcare Authentication System', () => {
         assessment_scores: { phq9: 15, gad7: 12 }
       }
 
-      const minimizeDataForRole = (data: any, userRole: string) => {
+      const minimizeDataForRole = (data: PatientData, userRole: string) => {
         if (userRole === 'patient') {
           // Patients can see their own basic info
           return {

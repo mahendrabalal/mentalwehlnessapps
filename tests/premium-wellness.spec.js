@@ -122,8 +122,8 @@ test.describe('Premium Wellness Features Testing - BMad Method Healthcare App', 
       console.log('✓ Premium Content feature found');
     }
 
-    // Check for pricing ($19.99/month)
-    if (await page.locator('text=$19.99, text=19.99').first().isVisible()) {
+    // Check for pricing ($5.99/month)
+    if (await page.locator('text=$5.99, text=5.99').first().isVisible()) {
       featureChecks.pricing = true;
       console.log('✓ Pricing display found');
     }

@@ -1,4 +1,4 @@
-import { defineConfig } from "sanity";
+import { defineConfig, type PluginOptions } from "sanity";
 import { deskTool } from "sanity/desk";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "./schemas";
@@ -43,40 +43,42 @@ const dataset =
   readEnv("SANITY_STUDIO_DATASET", "SANITY_DATASET", "NEXT_PUBLIC_SANITY_DATASET") ??
   "production";
 
+const plugins: PluginOptions[] = [
+  deskTool({
+    structure: (S) =>
+      S.list()
+        .title("Content")
+        .items([
+          S.listItem()
+            .title("Articles")
+            .schemaType("article")
+            .child(S.documentTypeList("article").title("Articles")),
+          S.listItem()
+            .title("Authors")
+            .schemaType("author")
+            .child(S.documentTypeList("author").title("Authors")),
+          S.divider(),
+          S.listItem()
+            .title("Site Settings")
+            .schemaType("siteSettings")
+            .child(
+              S.editor()
+                .id("siteSettings")
+                .schemaType("siteSettings")
+                .documentId("siteSettings")
+            ),
+        ]),
+  }),
+  ...(enableVision ? [visionTool()] : []),
+];
+
 export default defineConfig({
   name: "mental-wellness-studio",
   title: "Mental Wellness Studio",
   projectId,
   dataset,
   basePath: "/admin",
-  plugins: [
-    deskTool({
-      structure: (S) =>
-        S.list()
-          .title("Content")
-          .items([
-            S.listItem()
-              .title("Articles")
-              .schemaType("article")
-              .child(S.documentTypeList("article").title("Articles")),
-            S.listItem()
-              .title("Authors")
-              .schemaType("author")
-              .child(S.documentTypeList("author").title("Authors")),
-            S.divider(),
-            S.listItem()
-              .title("Site Settings")
-              .schemaType("siteSettings")
-              .child(
-                S.editor()
-                  .id("siteSettings")
-                  .schemaType("siteSettings")
-                  .documentId("siteSettings")
-              ),
-          ]),
-    }),
-    enableVision ? visionTool() : null,
-  ].filter(Boolean),
+  plugins,
   schema: {
     types: schemaTypes,
   },

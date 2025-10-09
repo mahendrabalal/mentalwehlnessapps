@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
+/* eslint-disable react/no-unescaped-entities -- Copy uses natural contractions for empathetic tone */
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { AuthGuard } from '@/components/AuthGuard'
 import { CrisisInterventionSystem } from '@/components/CrisisInterventionSystem'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth, type CrisisLevel } from '@/hooks/useAuth'
 import { Navbar } from '@/components/Navbar'
-import type { User } from '@supabase/supabase-js'
+import { SEOHead } from '@/components/SEOHead'
 
 interface SafetyPlan {
   id?: string
@@ -28,11 +27,12 @@ interface SafetyPlan {
 }
 
 export default function SafetyPlanPage() {
-  const { user, session, loading: authLoading, crisisLevel, reportCrisis } = useAuth()
+  const { user, session, crisisLevel, reportCrisis } = useAuth()
   const [showCrisisSystem, setShowCrisisSystem] = useState(false)
   const [crisisDetected, setCrisisDetected] = useState(false)
-  const supabase = createClient()
-  const router = useRouter()
+  const supabase = useMemo(() => createClient(), [])
+  const baseTitle = 'Safety Plan - Mental Wellness App'
+  const baseDescription = 'Create, review, and update your personalized crisis safety plan with trusted contacts and coping strategies.'
 
   const [safetyPlan, setSafetyPlan] = useState<SafetyPlan>({
     user_id: '',
@@ -55,12 +55,37 @@ export default function SafetyPlanPage() {
 
   const totalSteps = 9
 
+  const fetchExistingSafetyPlan = useCallback(async (userId?: string) => {
+    if (!userId) return
+
+    try {
+      const { data, error } = await supabase
+        .from('safety_plans')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      if (error && error.code !== 'PGRST116') {
+        throw error
+      }
+
+      if (data) {
+        setSafetyPlan(data)
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err)
+      console.error('Error fetching safety plan:', message)
+    } finally {
+      setLoading(false)
+    }
+  }, [supabase])
+
   useEffect(() => {
     if (user) {
       setSafetyPlan(prev => ({ ...prev, user_id: user.id }))
       fetchExistingSafetyPlan(user.id)
     }
-  }, [user])
+  }, [fetchExistingSafetyPlan, user])
 
   useEffect(() => {
     // Show crisis intervention if user has elevated crisis level
@@ -70,7 +95,7 @@ export default function SafetyPlanPage() {
     }
   }, [crisisLevel])
 
-  const handleCrisisReported = async (level: any) => {
+  const handleCrisisReported = async (level: CrisisLevel) => {
     setCrisisDetected(true)
     setShowCrisisSystem(true)
 
@@ -92,30 +117,6 @@ export default function SafetyPlanPage() {
         })
     } catch (err) {
       console.error('Error logging crisis access:', err)
-    }
-  }
-
-  const fetchExistingSafetyPlan = async (userId?: string) => {
-    if (!userId) return
-
-    try {
-      const { data, error } = await supabase
-        .from('safety_plans')
-        .select('*')
-        .eq('user_id', userId)
-        .single()
-
-      if (error && error.code !== 'PGRST116') {
-        throw error
-      }
-
-      if (data) {
-        setSafetyPlan(data)
-      }
-    } catch (err: any) {
-      console.error('Error fetching safety plan:', err.message)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -147,10 +148,13 @@ export default function SafetyPlanPage() {
     setError('')
     setSuccess('')
 
+    const userIdToUse = session.user.id
+
     try {
       // Filter out empty strings from arrays
       const cleanedPlan = {
         ...safetyPlan,
+        user_id: userIdToUse,
         warning_signs: safetyPlan.warning_signs.filter(item => item.trim() !== ''),
         coping_strategies: safetyPlan.coping_strategies.filter(item => item.trim() !== ''),
         support_contacts: safetyPlan.support_contacts.filter(item => item.trim() !== ''),
@@ -170,9 +174,10 @@ export default function SafetyPlanPage() {
       if (error) throw error
 
       setSuccess('Safety plan saved successfully!')
-      await fetchExistingSafetyPlan()
-    } catch (err: any) {
-      setError(err.message)
+      await fetchExistingSafetyPlan(userIdToUse)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An unexpected error occurred while saving the safety plan.'
+      setError(message)
     } finally {
       setSaving(false)
     }
@@ -376,10 +381,7 @@ export default function SafetyPlanPage() {
 
   const safetyPlanContent = (
     <>
-      <Head>
-        <title>Safety Plan - MentalWellnessApps</title>
-        <meta name="description" content="Create and manage your personal safety plan" />
-      </Head>
+      <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
       <Navbar />
 
       {/* Crisis Intervention System */}

@@ -81,7 +81,7 @@ export default async function handler(
       priceId,
       email: user.email!,
       name: name || user.user_metadata?.full_name,
-      trialPeriodDays: 7, // BMad Method: 7-day trial for healthcare evaluation
+      trialPeriodDays: 0, // BMad Method: No trial - immediate paid subscription
       metadata: {
         // BMad Method: Clinical feature tracking
         mentalWellnessApp: 'true',
@@ -99,15 +99,13 @@ export default async function handler(
       userId: userId,
       email: user.email,
       planType: getPlanTypeFromPriceId(priceId),
-      status: subscription.status,
-      trialDays: 7
+      status: subscription.status
     })
 
     return res.status(200).json({
       subscriptionId: subscription.subscriptionId,
       clientSecret: subscription.clientSecret,
-      status: subscription.status,
-      trialDays: 7
+      status: subscription.status
     })
 
   } catch (error) {

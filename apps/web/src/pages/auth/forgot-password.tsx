@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -35,10 +35,12 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Head>
-        <title>Reset Password - Mental Wellness App</title>
-        <meta name="description" content="Reset your mental wellness account password" />
-      </Head>
+      <SEOHead
+        title="Reset Password - Mental Wellness App"
+        description="Reset your Mental Wellness App password to regain secure access to your account."
+        noindex
+        nofollow
+      />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="text-center">

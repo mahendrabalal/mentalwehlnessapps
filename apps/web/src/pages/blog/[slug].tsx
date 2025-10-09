@@ -5,19 +5,20 @@ import {
 } from '@mental-wellness/shared'
 import type { PortableTextBlock } from '@portabletext/types'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import Head from 'next/head'
 import { useMemo } from 'react'
 import { format } from 'date-fns'
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer'
 import { HIPAAContentDisclaimer } from '@/components/blog/HIPAAContentDisclaimer'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
+import { SEOHead } from '@/components/SEOHead'
 import {
   fetchArticleBySlug,
   fetchArticleSlugs,
   fetchSiteSettings,
 } from '@/lib/cms/articleService'
 import { urlFor } from '@/lib/cms/image'
+import { buildBreadcrumbList, organizationStructuredData } from '@/lib/seo'
 
 interface BlogArticlePageProps {
   article: CmsArticle
@@ -51,15 +52,49 @@ export default function BlogArticlePage({
     return urlFor(article.heroImage).width(1600).auto('format').url()
   }, [article.heroImage])
 
+  const articleUrl = `https://mentalwellnessapp.com/blog/${article.slug.current}`
+  const updatedDate = article.updatedAt ?? article._updatedAt ?? publishedDate ?? undefined
+
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'MedicalScholarlyArticle',
+      headline: pageTitle,
+      description: pageDescription,
+      url: articleUrl,
+      datePublished: publishedDate,
+      dateModified: updatedDate ?? publishedDate,
+      image: ogImage ?? heroImageUrl ?? 'https://mentalwellnessapp.com/og-default.png',
+      author: authors.length
+        ? authors.map((author) => ({
+            '@type': 'Person',
+            name: author.name,
+          }))
+        : undefined,
+      publisher: organizationStructuredData({ includeContext: false }),
+      isAccessibleForFree: true,
+      inLanguage: article.language ?? 'en-US',
+    },
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Resource Library', url: '/blog' },
+      { name: article.title, url: articleUrl },
+    ]),
+  ]
+
   return (
     <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        {ogImage ? <meta property="og:image" content={ogImage} /> : null}
-      </Head>
+      <SEOHead
+        title={pageTitle}
+        description={pageDescription}
+        ogType="article"
+        ogImage={ogImage ?? heroImageUrl ?? '/og-default.png'}
+        ogImageAlt={article.heroImage?.alt ?? article.title}
+        publishedTime={publishedDate ?? undefined}
+        modifiedTime={updatedDate}
+        author={authors.length ? authors.map((author) => author.name).join(', ') : undefined}
+        structuredData={structuredData}
+      />
       <Navbar />
       <article className="pb-24">
         <header className="bg-gradient-to-b from-wellness-50 via-white to-white">

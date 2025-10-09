@@ -1,44 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { AuthGuard } from '@/components/AuthGuard'
 import { Navbar } from '@/components/Navbar'
-
-interface UserProfile {
-  id: string
-  first_name: string
-  last_name: string
-  date_of_birth: string | null
-  phone_number: string | null
-  emergency_contact_name: string | null
-  emergency_contact_phone: string | null
-  emergency_contact_relationship: string | null
-  preferred_name: string | null
-  pronouns: string | null
-  timezone: string | null
-  notifications_enabled: boolean
-  crisis_plan_enabled: boolean
-  data_sharing_consent: boolean
-  research_participation_consent: boolean
-  created_at: string
-  updated_at: string
-}
+import { SEOHead } from '@/components/SEOHead'
 
 export default function ProfilePage() {
-  const { user, session } = useAuth()
-  const supabase = createClient()
+  const { user } = useAuth()
+  const supabase = useMemo(() => createClient(), [])
   const router = useRouter()
-
-  useEffect(() => {
-    if (user) {
-      fetchProfile(user.id)
-    }
-  }, [user])
-
-  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const baseTitle = 'Profile Settings - Mental Wellness App'
+  const baseDescription = 'Manage your personal details, emergency contacts, and privacy settings inside your secure Mental Wellness App account.'
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -64,7 +38,7 @@ export default function ProfilePage() {
     research_participation_consent: false
   })
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = useCallback(async (userId: string) => {
     if (!userId) return
 
     try {
@@ -79,7 +53,6 @@ export default function ProfilePage() {
       }
 
       if (data) {
-        setProfile(data)
         setFormData({
           first_name: data.first_name || '',
           last_name: data.last_name || '',
@@ -97,12 +70,19 @@ export default function ProfilePage() {
           research_participation_consent: data.research_participation_consent ?? false
         })
       }
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to load profile details.'
+      setError(message)
     } finally {
       setLoading(false)
     }
-  }
+  }, [supabase])
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile(user.id)
+    }
+  }, [fetchProfile, user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -139,8 +119,9 @@ export default function ProfilePage() {
 
       setSuccess('Profile updated successfully!')
       await fetchProfile(user.id)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to update profile.'
+      setError(message)
     } finally {
       setSaving(false)
     }
@@ -186,8 +167,9 @@ export default function ProfilePage() {
         router.push('/')
       }, 3000)
 
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to delete account.'
+      setError(message)
     } finally {
       setSaving(false)
     }
@@ -202,12 +184,15 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading profile...</p>
+      <>
+        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-therapy-600 mx-auto"></div>
+            <p className="text-gray-600 mt-4">Loading profile...</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -216,10 +201,7 @@ export default function ProfilePage() {
       redirectMessage="Please log in"
       redirectSubtitle="You need to be logged in to view your profile."
     >
-      <Head>
-        <title>Profile Settings - MentalWellnessApps</title>
-        <meta name="description" content="Manage your profile and privacy settings" />
-      </Head>
+      <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
       <Navbar />
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -597,7 +579,7 @@ export default function ProfilePage() {
                   <textarea
                     value={deletionReason}
                     onChange={(e) => setDeletionReason(e.target.value)}
-                    placeholder="Help us improve by sharing why you're leaving..."
+                    placeholder="Help us improve by sharing why you&apos;re leaving..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-therapy-500 focus:border-therapy-500"
                     rows={3}
                   />
@@ -609,7 +591,7 @@ export default function ProfilePage() {
                     <div className="text-yellow-600 mr-2">⚠️</div>
                     <div className="text-sm text-yellow-800">
                       <strong>Important:</strong> This action affects your mental health data.
-                      If you're in crisis or need support, please contact:
+                      If you&apos;re in crisis or need support, please contact:
                       <div className="mt-2 font-medium">
                         • Crisis Text Line: Text HOME to 741741<br/>
                         • National Suicide Prevention Lifeline: 988

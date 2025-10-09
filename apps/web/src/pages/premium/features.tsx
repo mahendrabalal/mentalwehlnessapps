@@ -1,17 +1,19 @@
-import { useState, useEffect } from 'react'
-import Head from 'next/head'
+import { useState } from 'react'
 import Link from 'next/link'
-import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { AuthGuard } from '@/components/AuthGuard'
 import { AITherapyCompanion } from '@/components/AITherapyCompanion'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { Navbar } from '@/components/Navbar'
+import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
+import { SEOHead } from '@/components/SEOHead'
 
 function PremiumFeaturesContent() {
-  const { user } = useAuth()
-  const { subscription, isPremium, isTrialing } = useSubscription()
+  const { subscription, isPremium, isTrialing, loading, error } = useSubscription()
   const [activeFeature, setActiveFeature] = useState<string>('ai-companion')
+  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
+  const baseTitle = 'Premium Features - Mental Wellness App'
+  const baseDescription = 'Explore your premium mental wellness features and start your wellness journey with AI therapy, analytics, and crisis support.'
 
   const features = [
     {
@@ -89,12 +91,43 @@ function PremiumFeaturesContent() {
     }
   ]
 
+  const hasPremiumAccess = isPremium || isTrialing
+  const headerTitle = isTrialing
+    ? 'Welcome to Your Premium Trial!'
+    : hasPremiumAccess
+      ? 'Premium Features Active'
+      : 'Premium Access Locked'
+  const headerSubtitle = isTrialing
+    ? `Your ${subscription.planType === 'premium_monthly' ? '7-day' : 'premium'} trial is now active`
+    : hasPremiumAccess
+      ? 'You have access to all premium wellness features'
+      : 'Upgrade to unlock all premium wellness features'
+
+  if (loading) {
+    return (
+      <>
+        <SEOHead
+          title={baseTitle}
+          description={baseDescription}
+          noindex
+          nofollow
+        />
+        <Navbar />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <p className="text-gray-600">Loading premium experience...</p>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
-      <Head>
-        <title>Premium Features - MentalWellnessApps</title>
-        <meta name="description" content="Explore your premium mental wellness features and start your wellness journey" />
-      </Head>
+      <SEOHead
+        title={baseTitle}
+        description={baseDescription}
+        noindex
+        nofollow
+      />
 
       <Navbar />
       <div className="min-h-screen bg-gray-50">
@@ -103,25 +136,49 @@ function PremiumFeaturesContent() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <div className="text-4xl mb-4">🎉</div>
-              <h1 className="text-3xl font-bold mb-2">
-                {isTrialing ? 'Welcome to Your Premium Trial!' : 'Premium Features Active'}
-              </h1>
-              <p className="text-green-100 text-lg">
-                {isTrialing
-                  ? `Your ${subscription.planType === 'premium_monthly' ? '7-day' : 'premium'} trial is now active`
-                  : 'You have access to all premium wellness features'
-                }
-              </p>
-              {subscription.trialEndsAt && (
+              <h1 className="text-3xl font-bold mb-2">{headerTitle}</h1>
+              <p className="text-green-100 text-lg">{headerSubtitle}</p>
+              {isTrialing && subscription.trialEndsAt && (
                 <p className="text-sm text-green-200 mt-2">
                   Trial ends: {new Date(subscription.trialEndsAt).toLocaleDateString()}
                 </p>
+              )}
+              {!hasPremiumAccess && (
+                <button
+                  type="button"
+                  onClick={() => setShowUpgradeFlow(true)}
+                  className="mt-6 inline-flex items-center justify-center rounded-lg border border-white/40 bg-white/10 px-6 py-2 text-sm font-medium text-white transition hover:bg-white/20"
+                >
+                  Upgrade to Premium
+                </button>
               )}
             </div>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
+          {!hasPremiumAccess && (
+            <div className="mb-8 rounded-lg border border-green-200 bg-green-50 p-6 text-green-800">
+              <h2 className="text-xl font-semibold mb-2">Unlock Premium Wellness Support</h2>
+              <p className="mb-4">
+                Upgrade now to access unlimited AI therapy support, advanced mood analytics, and the full premium content library.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowUpgradeFlow(true)}
+                className="rounded-md bg-green-600 px-5 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+              >
+                View Premium Plans
+              </button>
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">🚀 Quick Start</h2>
@@ -130,18 +187,27 @@ function PremiumFeaturesContent() {
                 <Link
                   key={action.title}
                   href={action.link}
+                  onClick={(event) => {
+                    if (!hasPremiumAccess && action.highlight) {
+                      event.preventDefault()
+                      setShowUpgradeFlow(true)
+                    }
+                  }}
                   className={`block p-6 rounded-lg border-2 transition-all hover:shadow-md ${
                     action.highlight
-                      ? 'border-green-500 bg-green-50 hover:border-green-600'
+                      ? hasPremiumAccess
+                        ? 'border-green-500 bg-green-50 hover:border-green-600'
+                        : 'border-green-200 bg-white hover:border-green-300'
                       : 'border-gray-200 bg-white hover:border-gray-300'
-                  }`}
+                  } ${!hasPremiumAccess && action.highlight ? 'cursor-pointer' : ''}`}
+                  aria-disabled={!hasPremiumAccess && action.highlight}
                 >
                   <div className="text-2xl mb-2">{action.icon}</div>
                   <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
                   <p className="text-sm text-gray-600">{action.description}</p>
                   {action.highlight && (
                     <span className="inline-block mt-2 px-2 py-1 bg-green-600 text-white text-xs rounded-full">
-                      Premium
+                      {hasPremiumAccess ? 'Premium' : 'Upgrade'}
                     </span>
                   )}
                 </Link>
@@ -210,21 +276,56 @@ function PremiumFeaturesContent() {
 
                       <div className="space-y-2">
                         {feature.id === 'ai-companion' && (
-                          <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                            Start AI Conversation
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (hasPremiumAccess) return
+                              setShowUpgradeFlow(true)
+                            }}
+                            disabled={!hasPremiumAccess}
+                            className={`w-full rounded-lg px-4 py-2 font-medium transition-colors ${
+                              hasPremiumAccess
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
+                          >
+                            {hasPremiumAccess ? 'Start AI Conversation' : 'Upgrade to Unlock'}
                           </button>
                         )}
                         {feature.id === 'analytics' && (
                           <Link
                             href="/dashboard"
-                            className="block w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center"
+                            onClick={(event) => {
+                              if (!hasPremiumAccess) {
+                                event.preventDefault()
+                                setShowUpgradeFlow(true)
+                              }
+                            }}
+                            className={`block w-full rounded-lg px-4 py-2 text-center font-medium transition-colors ${
+                              hasPremiumAccess
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : 'bg-gray-200 text-gray-500'
+                            }`}
+                            aria-disabled={!hasPremiumAccess}
                           >
-                            View Your Analytics
+                            {hasPremiumAccess ? 'View Your Analytics' : 'Upgrade to Unlock'}
                           </Link>
                         )}
                         {feature.id === 'content' && (
-                          <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                            Browse Content Library
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (hasPremiumAccess) return
+                              setShowUpgradeFlow(true)
+                            }}
+                            disabled={!hasPremiumAccess}
+                            className={`w-full rounded-lg px-4 py-2 font-medium transition-colors ${
+                              hasPremiumAccess
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
+                          >
+                            {hasPremiumAccess ? 'Browse Content Library' : 'Upgrade to Unlock'}
                           </button>
                         )}
                       </div>
@@ -280,13 +381,20 @@ function PremiumFeaturesContent() {
 
         {/* AI Companion */}
         <AITherapyCompanion
-          isPremium={isPremium}
+          isPremium={hasPremiumAccess}
           userMoodScore={8} // Positive mood for new premium users
+          onUpgradeClick={() => setShowUpgradeFlow(true)}
         />
 
         {/* Legal Disclaimer */}
         <LegalDisclaimer variant="footer" />
       </div>
+
+      <PremiumUpgradeFlow
+        isOpen={showUpgradeFlow}
+        onClose={() => setShowUpgradeFlow(false)}
+        defaultPlan="monthly"
+      />
     </>
   )
 }

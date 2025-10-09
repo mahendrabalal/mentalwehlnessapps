@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
-import type { User } from '@supabase/supabase-js'
+import type { Session } from '@supabase/supabase-js'
+import { SEOHead } from '@/components/SEOHead'
 
 export default function OnboardingStep4() {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [userLoading, setUserLoading] = useState(true)
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const router = useRouter()
   const { userId } = router.query
+  const seoTitle = 'Onboarding Step 4 - Emergency Contact | Mental Wellness App'
+  const seoDescription = 'Add an optional emergency contact to enhance your crisis safety plan and completion of onboarding.'
 
   const [emergencyContact, setEmergencyContact] = useState({
     name: '',
@@ -22,35 +23,19 @@ export default function OnboardingStep4() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [completing, setCompleting] = useState(false)
+  const seoMeta = (
+    <SEOHead title={seoTitle} description={seoDescription} noindex nofollow />
+  )
 
-  useEffect(() => {
-    checkUser()
-  }, [])
-
-  const checkUser = async () => {
-    try {
-      const { data: { session }, error } = await supabase.auth.getSession()
-      if (error) throw error
-
-      setSession(session)
-      setUser(session?.user || null)
-
-      if (session?.user) {
-        fetchExistingData(session.user.id)
-      }
-    } catch (error) {
-      console.error('Error checking user:', error)
-    } finally {
-      setUserLoading(false)
-    }
-  }
-
-  const fetchExistingData = async (currentUserId?: string) => {
+  const fetchExistingData = useCallback(async (
+    currentUserId: string | string[] | undefined,
+    supabaseClient = supabase
+  ) => {
     const userIdToUse = currentUserId || userId || session?.user?.id
     if (!userIdToUse) return
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('user_profiles')
         .select('emergency_contact_name, emergency_contact_phone, emergency_contact_relationship')
         .eq('id', userIdToUse)
@@ -74,10 +59,42 @@ export default function OnboardingStep4() {
         const parsed = JSON.parse(stored)
         setEmergencyContact(prev => ({ ...prev, ...parsed }))
       }
-    } catch (err: any) {
-      console.error('Error fetching emergency contact:', err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to fetch emergency contact.'
+      console.error('Error fetching emergency contact:', message)
     }
-  }
+  }, [session?.user?.id, supabase, userId])
+
+  useEffect(() => {
+    let isActive = true
+
+    const initializeUser = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+        if (error) throw error
+
+        if (!isActive) return
+
+        setSession(session)
+
+        if (session?.user) {
+          await fetchExistingData(session.user.id, supabase)
+        }
+      } catch (error) {
+        console.error('Error checking user:', error)
+      } finally {
+        if (isActive) {
+          setUserLoading(false)
+        }
+      }
+    }
+
+    initializeUser()
+
+    return () => {
+      isActive = false
+    }
+  }, [fetchExistingData, supabase])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -114,8 +131,9 @@ export default function OnboardingStep4() {
 
       // Redirect to dashboard
       router.push('/dashboard?onboarding_complete=true')
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to complete onboarding.'
+      setError(message)
     } finally {
       setCompleting(false)
     }
@@ -144,9 +162,10 @@ export default function OnboardingStep4() {
       // Store progress in localStorage
       localStorage.setItem('onboarding_step_4', JSON.stringify(emergencyContact))
 
-      handleCompleteOnboarding()
-    } catch (err: any) {
-      setError(err.message)
+      await handleCompleteOnboarding()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unable to save emergency contact.'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -158,36 +177,39 @@ export default function OnboardingStep4() {
 
   if (userLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-therapy-600 mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h2>
-          <p className="text-gray-600">Please wait while we load your profile.</p>
+      <>
+        {seoMeta}
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-therapy-600 mx-auto mb-4"></div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h2>
+            <p className="text-gray-600">Please wait while we load your profile.</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
-          <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
-          <Link href="/auth/login" className="btn-primary inline-block">
-            Log In
-          </Link>
+      <>
+        {seoMeta}
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>
+            <p className="text-gray-600 mb-6">You need to be logged in to complete onboarding.</p>
+            <Link href="/auth/login" className="btn-primary inline-block">
+              Log In
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
     <>
-      <Head>
-        <title>Emergency Contact - Mental Wellness App</title>
-        <meta name="description" content="Set up your emergency contact and complete onboarding" />
-      </Head>
+      {seoMeta}
       <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white shadow rounded-lg">
@@ -231,7 +253,7 @@ export default function OnboardingStep4() {
                       <li>• Provides additional support during crisis situations</li>
                       <li>• Can be notified if you indicate severe symptoms (with your permission)</li>
                       <li>• Helps ensure your safety and well-being</li>
-                      <li>• You maintain full control over when and how they're contacted</li>
+                      <li>• You maintain full control over when and how they&apos;re contacted</li>
                     </ul>
                   </div>
 
@@ -300,7 +322,7 @@ export default function OnboardingStep4() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-green-900 mb-2">🎉 You're All Set!</h3>
+                      <h3 className="text-lg font-semibold text-green-900 mb-2">🎉 You&apos;re All Set!</h3>
                       <p className="text-green-800 mb-4">
                         Congratulations on taking this important step for your mental health. Your personalized
                         mental wellness app is ready to support you on your journey.
@@ -309,7 +331,7 @@ export default function OnboardingStep4() {
                         <h4 className="font-medium mb-2">What happens next:</h4>
                         <ul className="space-y-1">
                           <li>• Explore your personalized dashboard</li>
-                          <li>• Take your first assessment when you're ready</li>
+                          <li>• Take your first assessment when you&apos;re ready</li>
                           <li>• Complete daily check-ins to track your progress</li>
                           <li>• Access crisis support resources anytime</li>
                           <li>• Create your safety plan for additional support</li>

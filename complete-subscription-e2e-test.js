@@ -116,8 +116,8 @@ async function completeSubscriptionE2ETest() {
         const monthlyVisible = await monthlyPlan.isVisible();
         const yearlyVisible = await yearlyPlan.isVisible();
 
-        console.log(`${monthlyVisible ? '✅' : '❌'} Monthly plan ($19.99/month)`);
-        console.log(`${yearlyVisible ? '✅' : '❌'} Yearly plan ($89.99/year)`);
+        console.log(`${monthlyVisible ? '✅' : '❌'} Monthly plan ($5.99/month)`);
+        console.log(`${yearlyVisible ? '✅' : '❌'} Yearly plan ($59.99/year)`);
 
         if (monthlyVisible || yearlyVisible) {
           testResults.planSelectionWorking = true;

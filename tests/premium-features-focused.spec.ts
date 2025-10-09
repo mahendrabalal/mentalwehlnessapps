@@ -141,7 +141,7 @@ test.describe('Premium Wellness Features - Focused Testing', () => {
 
         // Check modal content
         const modalContent = await page.textContent('.modal, [role="dialog"], .fixed');
-        if (modalContent?.includes('Premium') || modalContent?.includes('$19.99')) {
+        if (modalContent?.includes('Premium') || modalContent?.includes('$5.99')) {
           console.log('✅ Modal contains expected premium content');
         }
 

@@ -1,8 +1,9 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function FreeTrialPage() {
   const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
@@ -63,12 +64,47 @@ export default function FreeTrialPage() {
     }
   ]
 
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Free Trial',
+      description: 'Start a free 7-day trial of the Mental Wellness App to access premium AI therapy, analytics, and crisis prevention features.',
+      slug: '/free-trial',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Free Trial', url: '/free-trial' },
+    ]),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Premium Trial Features',
+      itemListElement: trialFeatures.map((feature, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: feature.title,
+        description: feature.description,
+      })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'Start your Mental Wellness App free trial',
+      step: steps.map((step) => ({
+        '@type': 'HowToStep',
+        position: Number(step.step),
+        name: step.title,
+        text: step.description,
+      })),
+    },
+  ]
+
   return (
     <>
-      <Head>
-        <title>7-Day Free Trial - MentalWellnessApps</title>
-        <meta name="description" content="Start your 7-day free trial and experience the full power of AI-driven mental wellness support" />
-      </Head>
+      <SEOHead
+        title="7-Day Free Trial - Mental Wellness App"
+        description="Experience the full power of Mental Wellness App with a 7-day premium trial—AI therapy, analytics, crisis prevention, and more with no credit card required."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 
@@ -218,7 +254,7 @@ export default function FreeTrialPage() {
                   <ul className="space-y-2 text-gray-600">
                     <li>• No credit card required to start</li>
                     <li>• Cancel anytime during trial period</li>
-                    <li>• Auto-converts to premium at $19.99/month</li>
+                    <li>• Auto-converts to premium at $5.99/month</li>
                     <li>• Downgrade to free plan anytime</li>
                     <li>• Your data is always secure</li>
                     <li>• HIPAA compliant and private</li>

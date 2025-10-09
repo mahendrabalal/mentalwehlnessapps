@@ -1,7 +1,8 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
+import { SEOHead } from '@/components/SEOHead'
+import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function DocumentationPage() {
   const [activeSection, setActiveSection] = useState('getting-started')
@@ -307,14 +308,38 @@ POST /api/v1/assessments</code></pre>
     }
   }
 
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Documentation',
+      description: 'Guides for onboarding, analytics, API usage, privacy controls, and crisis workflows within the Mental Wellness App.',
+      slug: '/documentation',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Documentation', url: '/documentation' },
+    ]),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Documentation Sections',
+      itemListElement: sections.map((section, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: section.title,
+        url: `https://mentalwellnessapp.com/documentation#${section.id}`,
+      })),
+    },
+  ]
+
   const currentContent = content[activeSection as keyof typeof content]
 
   return (
     <>
-      <Head>
-        <title>Documentation - MentalWellnessApps</title>
-        <meta name="description" content="Complete documentation and guides for using MentalWellnessApps effectively" />
-      </Head>
+      <SEOHead
+        title="Documentation - Mental Wellness App"
+        description="Explore detailed documentation to master onboarding, analytics, privacy controls, API usage, and crisis workflows within the Mental Wellness App."
+        structuredData={structuredData}
+      />
 
       <Navbar />
 

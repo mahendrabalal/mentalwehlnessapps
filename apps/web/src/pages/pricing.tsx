@@ -1,8 +1,10 @@
-import Head from 'next/head'
+/* eslint-disable react/no-unescaped-entities -- Pricing copy preserves conversational tone with contractions */
 import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
+import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
+import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function PricingPage() {
   const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
@@ -28,7 +30,7 @@ export default function PricingPage() {
     },
     {
       name: 'Premium',
-      price: '$19.99',
+      price: '$5.99',
       period: 'per month',
       description: 'Advanced AI-powered wellness intelligence and unlimited support',
       features: [
@@ -43,7 +45,7 @@ export default function PricingPage() {
         'Priority support',
         'Data export capabilities'
       ],
-      cta: 'Start 7-Day Free Trial',
+      cta: 'Subscribe Now',
       ctaAction: () => setShowUpgradeFlow(true),
       popular: true,
       color: 'therapy'
@@ -56,8 +58,8 @@ export default function PricingPage() {
       answer: 'Yes, absolutely. You can cancel your premium subscription at any time from your profile settings. Your premium features will remain active until the end of your current billing period.'
     },
     {
-      question: 'What happens after my 7-day free trial?',
-      answer: 'After your 7-day free trial, you\'ll be automatically enrolled in the premium plan unless you cancel. You can cancel anytime during the trial period without being charged.'
+      question: 'How does billing work?',
+      answer: 'You will be charged immediately when you subscribe to the premium plan. Your subscription will automatically renew each month unless you cancel.'
     },
     {
       question: 'Is my data secure and private?',
@@ -73,12 +75,28 @@ export default function PricingPage() {
     }
   ]
 
+  const structuredData = [
+    medicalWebPageStructuredData({
+      name: 'Mental Wellness App Pricing',
+      description: SEO_CONFIG.pricing.description,
+      slug: '/pricing',
+    }),
+    buildBreadcrumbList([
+      { name: 'Mental Wellness App', url: '/' },
+      { name: 'Pricing', url: '/pricing' },
+    ]),
+    buildFaqStructuredData(faqs),
+  ]
+
   return (
     <>
-      <Head>
-        <title>Pricing - MentalWellnessApps</title>
-        <meta name="description" content="Simple, transparent pricing for your mental wellness journey. Start free or unlock premium AI features." />
-      </Head>
+      <SEOHead
+        title={SEO_CONFIG.pricing.title}
+        description={SEO_CONFIG.pricing.description}
+        keywords={SEO_CONFIG.pricing.keywords}
+        ogImage="/og-default.png"
+        structuredData={structuredData}
+      />
 
       <Navbar />
 
@@ -127,14 +145,6 @@ export default function PricingPage() {
                         <span className="text-lg font-normal text-gray-600">/{plan.period}</span>
                       </div>
                       <p className="text-gray-600">{plan.description}</p>
-
-                      {plan.name === 'Premium' && (
-                        <div className="mt-4">
-                          <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                            7-day free trial
-                          </span>
-                        </div>
-                      )}
                     </div>
 
                     <ul className="space-y-4 mb-8">
@@ -182,7 +192,7 @@ export default function PricingPage() {
 
                     {plan.name === 'Premium' && (
                       <p className="text-xs text-gray-500 text-center mt-3">
-                        No credit card required • Cancel anytime
+                        Instant access • Cancel anytime
                       </p>
                     )}
                   </div>

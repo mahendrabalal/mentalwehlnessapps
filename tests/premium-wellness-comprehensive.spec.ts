@@ -79,14 +79,14 @@ test.describe('Premium Wellness Features Comprehensive Testing', () => {
 
     // Verify pricing display
     console.log('💰 Checking pricing display...');
-    await expect(page.locator('text=$19.99')).toBeVisible();
+    await expect(page.locator('text=$5.99')).toBeVisible();
     await expect(page.locator('text=/month')).toBeVisible();
 
     // Verify "Start Free Trial" button
     console.log('🎯 Checking Start Free Trial button...');
     const trialButton = page.locator('button:has-text("Start Free Trial")').first();
     await expect(trialButton).toBeVisible();
-    await expect(page.locator('text=7 days free, then $19.99/month')).toBeVisible();
+    await expect(page.locator('text=7 days free, then $5.99/month')).toBeVisible();
 
     console.log('✅ All visual elements verified successfully');
   });
@@ -129,15 +129,15 @@ test.describe('Premium Wellness Features Comprehensive Testing', () => {
 
     // Check monthly plan details
     const monthlyPlan = page.locator('div:has-text("Premium Monthly")').first();
-    await expect(monthlyPlan.locator('text=$19.99')).toBeVisible();
+    await expect(monthlyPlan.locator('text=$5.99')).toBeVisible();
     await expect(monthlyPlan.locator('text=/month')).toBeVisible();
 
     // Check yearly plan details
     const yearlyPlan = page.locator('div:has-text("Premium Yearly")').first();
-    await expect(yearlyPlan.locator('text=$89.99')).toBeVisible();
+    await expect(yearlyPlan.locator('text=$59.99')).toBeVisible();
     await expect(yearlyPlan.locator('text=/year')).toBeVisible();
     await expect(yearlyPlan.locator('text=Most Popular')).toBeVisible();
-    await expect(yearlyPlan.locator('text=Save $150/year')).toBeVisible();
+    await expect(yearlyPlan.locator('text=Save $11.89/year')).toBeVisible();
 
     // Test plan switching
     console.log('🔄 Testing plan switching functionality...');
@@ -382,7 +382,7 @@ test.describe('Premium Wellness Features Comprehensive Testing', () => {
       findings: {
         premiumSectionDisplay: 'Premium Features section displays correctly with purple gradient background',
         featurePresentation: 'All 3 features (AI Companion, Smart Analytics, Premium Content) are properly displayed',
-        pricingInformation: '$19.99/month pricing clearly shown with 7-day trial offer',
+        pricingInformation: '$5.99/month pricing clearly shown with 7-day trial offer',
         modalFunctionality: 'Premium upgrade modal opens and closes correctly',
         planSelection: 'Both Monthly and Yearly plans are selectable with proper visual feedback',
         healthcareCompliance: 'All required disclaimers and trust signals are present',

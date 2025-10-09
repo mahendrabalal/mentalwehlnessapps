@@ -54,6 +54,9 @@ export const cmsArticleSchema = z.object({
     .optional(),
   body: z.array(z.unknown()).optional(),
   status: z.string().optional(),
+  language: z.string().optional(),
+  updatedAt: z.string().optional(),
+  _updatedAt: z.string().optional(),
 })
 
 export type CmsImage = z.infer<typeof cmsImageSchema>

@@ -65,7 +65,7 @@ test.describe('Premium Wellness Features - BMad Method Healthcare Testing', () =
 
     // Verify pricing display
     await expect(page.locator('text=Starting at')).toBeVisible()
-    await expect(page.locator('text=$19.99')).toBeVisible()
+    await expect(page.locator('text=$5.99')).toBeVisible()
     await expect(page.locator('text=/month')).toBeVisible()
 
     // Verify "Start Free Trial" button
@@ -109,16 +109,16 @@ test.describe('Premium Wellness Features - BMad Method Healthcare Testing', () =
     // Verify Monthly plan card
     const monthlyPlan = page.locator('[data-testid="monthly-plan"], .cursor-pointer:has-text("Premium Monthly")')
     await expect(monthlyPlan.locator('text=Premium Monthly')).toBeVisible()
-    await expect(monthlyPlan.locator('text=$19.99')).toBeVisible()
+    await expect(monthlyPlan.locator('text=$5.99')).toBeVisible()
     await expect(monthlyPlan.locator('text=/month')).toBeVisible()
 
     // Verify Yearly plan card
     const yearlyPlan = page.locator('[data-testid="yearly-plan"], .cursor-pointer:has-text("Premium Yearly")')
     await expect(yearlyPlan.locator('text=Premium Yearly')).toBeVisible()
-    await expect(yearlyPlan.locator('text=$89.99')).toBeVisible()
+    await expect(yearlyPlan.locator('text=$59.99')).toBeVisible()
     await expect(yearlyPlan.locator('text=/year')).toBeVisible()
     await expect(yearlyPlan.locator('text=Most Popular')).toBeVisible()
-    await expect(yearlyPlan.locator('text=Save $150/year')).toBeVisible()
+    await expect(yearlyPlan.locator('text=Save $11.89/year')).toBeVisible()
 
     // Test plan selection - click on yearly plan
     await yearlyPlan.click()

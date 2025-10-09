@@ -30,7 +30,7 @@ test.describe('Premium Features Visual and Functional Testing', () => {
       'Trial',
       'AI Companion',
       'Smart Analytics',
-      '$19.99',
+      '$5.99',
       'Free Trial',
       'Healthcare',
       'HIPAA'
@@ -164,7 +164,7 @@ test.describe('Premium Features Visual and Functional Testing', () => {
       },
       findings: {
         premiumSectionPresent: foundKeywords.includes('Premium') || foundKeywords.includes('Upgrade'),
-        pricingVisible: foundKeywords.includes('$19.99'),
+        pricingVisible: foundKeywords.includes('$5.99'),
         trialOfferVisible: foundKeywords.includes('Free Trial') || foundKeywords.includes('Trial'),
         aiFeaturesMentioned: foundKeywords.includes('AI Companion'),
         healthcareConcernsAddressed: foundKeywords.includes('HIPAA') || foundKeywords.includes('Healthcare'),

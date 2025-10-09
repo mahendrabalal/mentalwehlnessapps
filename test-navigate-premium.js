@@ -47,7 +47,7 @@ async function testPremiumFeaturesNavigation() {
       const pageTitle = await page.title();
       console.log('📄 Page title:', pageTitle);
 
-      const welcomeTitle = await page.locator('text=Welcome to Your Premium Trial, text=Premium Features Active').isVisible().catch(() => false);
+      const welcomeTitle = await page.locator('text=/Premium Features Active|Premium Access Locked|Welcome to Your Premium Trial/').isVisible().catch(() => false);
       console.log(`${welcomeTitle ? '✅' : '❌'} Welcome title displayed`);
 
       const quickStartSection = await page.locator('text=🚀 Quick Start').isVisible().catch(() => false);
