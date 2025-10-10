@@ -155,7 +155,6 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: apps/web
-          scope: ${{ secrets.VERCEL_ORG_ID }}
           alias-domains: staging.your-domain.com
 
       - name: Run smoke tests on staging
