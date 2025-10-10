@@ -31,7 +31,7 @@ export const moodEntrySchema = z.object({
 // Crisis Contact Schema
 export const crisisContactSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  phone: z.string().regex(/^[\+]?[1-9][\d]{0,15}$/, 'Invalid phone number'),
+  phone: z.string().regex(/^\+?[1-9]\d{0,15}$/, 'Invalid phone number'),
   relationship: z.string().min(1, 'Relationship is required'),
   is_primary: z.boolean().default(false),
 })

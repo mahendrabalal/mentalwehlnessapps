@@ -214,37 +214,37 @@ describe('GAD-7 Clinical Validation', () => {
 
   describe('Integration with Crisis Response System', () => {
 
-    test('should properly integrate GAD-7 scores with overall crisis assessment', () => {
-      // Test integration between GAD-7 and broader crisis detection system
-      const integrationTests = [
-        {
-          scenario: 'High GAD-7 with low PHQ-9',
-          phq9: 8,
-          gad7: 18,
-          expectedCrisis: true,
-          reason: 'GAD-7 severe anxiety should trigger crisis response'
-        },
-        {
-          scenario: 'High PHQ-9 with moderate GAD-7',
-          phq9: 22,
-          gad7: 12,
-          expectedCrisis: true,
-          reason: 'PHQ-9 severe depression should trigger crisis response'
-        },
-        {
-          scenario: 'Both moderate scores',
-          phq9: 12,
-          gad7: 12,
-          expectedCrisis: false,
-          reason: 'Moderate scores alone should not trigger crisis'
-        }
-      ]
+    const integrationTests = [
+      {
+        scenario: 'High GAD-7 with low PHQ-9',
+        phq9: 8,
+        gad7: 18,
+        expectedCrisis: true,
+        reason: 'GAD-7 severe anxiety should trigger crisis response'
+      },
+      {
+        scenario: 'High PHQ-9 with moderate GAD-7',
+        phq9: 22,
+        gad7: 12,
+        expectedCrisis: true,
+        reason: 'PHQ-9 severe depression should trigger crisis response'
+      },
+      {
+        scenario: 'Both moderate scores',
+        phq9: 12,
+        gad7: 12,
+        expectedCrisis: false,
+        reason: 'Moderate scores alone should not trigger crisis'
+      }
+    ]
 
-      integrationTests.forEach(({ scenario, phq9, gad7, expectedCrisis, reason }) => {
+    test.each(integrationTests)(
+      'should integrate GAD-7 with crisis system: $scenario - $reason',
+      ({ phq9, gad7, expectedCrisis }) => {
         const result = isCrisisScore(phq9, gad7)
         expect(result).toBe(expectedCrisis)
-      })
-    })
+      }
+    )
   })
 })
 

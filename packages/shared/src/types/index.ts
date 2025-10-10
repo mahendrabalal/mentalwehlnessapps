@@ -94,7 +94,7 @@ export interface CrisisIntervention {
 export interface InterventionAction {
   action_type: 'coping_tools' | 'crisis_hotline' | 'emergency_contact' | 'provider_call';
   timestamp: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   effective: boolean;
 }
 
@@ -184,7 +184,7 @@ export interface ApiResponse<T> {
 export interface ApiError {
   code: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   timestamp: string;
   request_id: string;
 }
