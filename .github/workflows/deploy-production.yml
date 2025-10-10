@@ -148,6 +148,40 @@ jobs:
           path: apps/web/public
         continue-on-error: true
 
+      - name: Resolve Vercel scope
+        id: vercel_scope
+        shell: bash
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${VERCEL_ORG_ID:-}" ]]; then
+            echo "scope=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "${VERCEL_ORG_ID}" != team_* ]]; then
+            echo "scope=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          response="$(curl -sf -H "Authorization: Bearer ${VERCEL_TOKEN}" "https://api.vercel.com/v2/teams/${VERCEL_ORG_ID}" || true)"
+
+          if [[ -z "${response}" ]]; then
+            echo "scope=${VERCEL_ORG_ID}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          slug="$(echo "${response}" | jq -r '.slug // empty')"
+
+          if [[ -z "${slug}" || "${slug}" == "null" ]]; then
+            echo "scope=${VERCEL_ORG_ID}" >> "$GITHUB_OUTPUT"
+          else
+            echo "scope=${slug}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to Vercel Staging
         uses: amondnet/vercel-action@v25
         with:
@@ -155,6 +189,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: apps/web
+          scope: ${{ steps.vercel_scope.outputs.scope }}
           alias-domains: staging.your-domain.com
 
       - name: Run smoke tests on staging
@@ -218,6 +253,40 @@ jobs:
           echo "Commit: ${{ github.sha }}" >> deployment.txt
           echo "Deployed at: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> deployment.txt
 
+      - name: Resolve Vercel scope
+        id: vercel_scope
+        shell: bash
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${VERCEL_ORG_ID:-}" ]]; then
+            echo "scope=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "${VERCEL_ORG_ID}" != team_* ]]; then
+            echo "scope=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          response="$(curl -sf -H "Authorization: Bearer ${VERCEL_TOKEN}" "https://api.vercel.com/v2/teams/${VERCEL_ORG_ID}" || true)"
+
+          if [[ -z "${response}" ]]; then
+            echo "scope=${VERCEL_ORG_ID}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          slug="$(echo "${response}" | jq -r '.slug // empty')"
+
+          if [[ -z "${slug}" || "${slug}" == "null" ]]; then
+            echo "scope=${VERCEL_ORG_ID}" >> "$GITHUB_OUTPUT"
+          else
+            echo "scope=${slug}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to Vercel Production
         uses: amondnet/vercel-action@v25
         with:
@@ -225,6 +294,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: apps/web
+          scope: ${{ steps.vercel_scope.outputs.scope }}
           vercel-args: '--prod'
 
       - name: Update database schema
