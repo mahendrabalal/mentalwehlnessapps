@@ -227,7 +227,6 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: apps/web
           vercel-args: '--prod'
-          scope: ${{ secrets.VERCEL_ORG_ID }}
 
       - name: Update database schema
         run: |
