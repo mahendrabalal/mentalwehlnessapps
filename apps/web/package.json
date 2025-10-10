@@ -46,6 +46,7 @@
     "@jest/globals": "^29.7.0",
     "@mental-wellness/eslint-config": "file:../../packages/config/eslint-config",
     "@mental-wellness/typescript-config": "file:../../packages/config/typescript-config",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
