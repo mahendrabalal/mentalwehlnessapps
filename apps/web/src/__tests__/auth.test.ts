@@ -45,7 +45,6 @@ const createMockSession = (overrides: Partial<Session> = {}): Session => {
     refresh_token: 'refresh-token',
     expires_in: overrides.expires_in ?? 3600,
     token_type: 'bearer',
-    user,
     expires_at: overrides.expires_at,
     provider_token: null,
     provider_refresh_token: null,
@@ -212,7 +211,7 @@ describe('Healthcare Authentication System', () => {
       }
 
       // Test high-risk scenario
-      const highRiskAssessment = {
+      const highRiskAssessment: CrisisAssessment = {
         thoughts_of_harm: true,
         specific_plan: true,
         means_available: true,
@@ -222,7 +221,7 @@ describe('Healthcare Authentication System', () => {
       expect(calculateCrisisLevel(highRiskAssessment)).toBe('imminent')
 
       // Test low-risk scenario
-      const lowRiskAssessment = {
+      const lowRiskAssessment: CrisisAssessment = {
         thoughts_of_harm: false,
         specific_plan: false,
         means_available: false,
