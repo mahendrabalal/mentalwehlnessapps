@@ -5,7 +5,8 @@ import { createClient } from '@/lib/supabase'
 import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
-import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
+import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
+import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
@@ -63,6 +64,11 @@ export default function Home() {
 
   // Show modern landing page for non-authenticated users OR authenticated users who want to view it
   const structuredData = [
+    softwareApplicationStructuredData({
+      name: 'Mental Wellness App',
+      description: SEO_CONFIG.home.description,
+      price: 5.99,
+    }),
     medicalWebPageStructuredData({
       name: 'Mental Wellness App - AI-Powered Mental Health Support',
       description: SEO_CONFIG.home.description,
@@ -548,37 +554,28 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Crisis Resources */}
+            {/* International Crisis Resources */}
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Immediate Crisis Support</h3>
-                <p className="text-gray-600">If you're experiencing a mental health crisis, help is available immediately:</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Immediate Crisis Support Worldwide</h3>
+                <p className="text-gray-600">If you're experiencing a mental health crisis, help is available immediately in your country:</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-6 bg-red-50 rounded-lg border border-red-200">
-                  <div className="text-3xl mb-3">🚨</div>
-                  <h4 className="font-semibold text-red-900 mb-2">Emergency</h4>
-                  <p className="text-red-800 font-bold text-lg">Call 911</p>
-                  <p className="text-sm text-red-700 mt-2">For immediate danger or medical emergencies</p>
-                </div>
-
-                <div className="text-center p-6 bg-blue-50 rounded-lg border border-blue-200">
-                  <div className="text-3xl mb-3">📞</div>
-                  <h4 className="font-semibold text-blue-900 mb-2">Crisis Lifeline</h4>
-                  <p className="text-blue-800 font-bold text-lg">Call or Text 988</p>
-                  <p className="text-sm text-blue-700 mt-2">24/7 free and confidential support</p>
-                </div>
-
-                <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
-                  <div className="text-3xl mb-3">💬</div>
-                  <h4 className="font-semibold text-green-900 mb-2">Crisis Text Line</h4>
-                  <p className="text-green-800 font-bold text-lg">Text HOME to 741741</p>
-                  <p className="text-sm text-green-700 mt-2">24/7 crisis support via text</p>
-                </div>
-              </div>
+              <InternationalCrisisSupport variant="compact" showCountrySelector={true} />
 
               <div className="mt-8 text-center">
+                <Link
+                  href="/crisis-support"
+                  className="inline-flex items-center text-therapy-600 hover:text-therapy-700 font-medium"
+                >
+                  View all crisis resources
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+
+              <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
                   <strong>Medical Disclaimer:</strong> This app is not a substitute for professional medical advice.
                   Always consult qualified mental health professionals for proper diagnosis and treatment.

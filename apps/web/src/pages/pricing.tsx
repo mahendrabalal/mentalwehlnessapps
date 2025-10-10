@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
-import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData, productStructuredData } from '@/lib/seo'
 
 export default function PricingPage() {
   const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
@@ -80,6 +80,23 @@ export default function PricingPage() {
       name: 'Mental Wellness App Pricing',
       description: SEO_CONFIG.pricing.description,
       slug: '/pricing',
+    }),
+    productStructuredData({
+      name: 'Mental Wellness Premium Subscription',
+      description: 'Premium mental health features including unlimited AI therapy companion, crisis support, mood analytics, and personalized wellness plans.',
+      price: 5.99,
+      currency: 'USD',
+      features: [
+        'Unlimited AI therapy companion',
+        'Smart analytics & predictions',
+        'Daily wellness briefings',
+        'Premium content library',
+        'Crisis prevention system',
+        'Personalized recommendations',
+        'Advanced mood insights',
+        'Priority support',
+        'Data export capabilities',
+      ],
     }),
     buildBreadcrumbList([
       { name: 'Mental Wellness App', url: '/' },

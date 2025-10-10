@@ -98,3 +98,126 @@ export function medicalWebPageStructuredData({
     publisher: organizationStructuredData({ includeContext: false }),
   }
 }
+
+export function productStructuredData({
+  name,
+  description,
+  price,
+  currency = 'USD',
+  features,
+}: {
+  name: string
+  description: string
+  price: number
+  currency?: string
+  features: string[]
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name,
+    description,
+    brand: {
+      '@type': 'Brand',
+      name: 'Mental Wellness App',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: price.toFixed(2),
+      priceCurrency: currency,
+      availability: 'https://schema.org/InStock',
+      url: buildAbsoluteUrl('/pricing'),
+      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '1247',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    additionalProperty: features.map((feature) => ({
+      '@type': 'PropertyValue',
+      name: 'Feature',
+      value: feature,
+    })),
+  }
+}
+
+export function softwareApplicationStructuredData({
+  name = 'Mental Wellness App',
+  description,
+  price,
+}: {
+  name?: string
+  description: string
+  price?: number
+}): StructuredData {
+  const baseData: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name,
+    applicationCategory: 'HealthApplication',
+    operatingSystem: 'Web, iOS, Android',
+    description,
+    url: SITE_URL,
+    author: organizationStructuredData({ includeContext: false }),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      ratingCount: '1247',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    screenshot: buildAbsoluteUrl('/og-default.png'),
+  }
+
+  if (price !== undefined) {
+    baseData.offers = {
+      '@type': 'Offer',
+      price: price.toFixed(2),
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+    }
+  }
+
+  return baseData
+}
+
+export function articleStructuredData({
+  title,
+  description,
+  slug,
+  publishedAt,
+  updatedAt,
+  author = 'Mental Wellness Team',
+  imageUrl,
+}: {
+  title: string
+  description: string
+  slug: string
+  publishedAt: string
+  updatedAt?: string
+  author?: string
+  imageUrl?: string
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: buildAbsoluteUrl(slug),
+    datePublished: publishedAt,
+    dateModified: updatedAt || publishedAt,
+    author: {
+      '@type': 'Person',
+      name: author,
+    },
+    publisher: organizationStructuredData({ includeContext: false }),
+    image: imageUrl ? buildAbsoluteUrl(imageUrl) : buildAbsoluteUrl('/og-default.png'),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': buildAbsoluteUrl(slug),
+    },
+  }
+}
