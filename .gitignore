@@ -144,8 +144,9 @@ test-results/
 playwright-report/
 playwright/.cache/
 
-# Vercel
-.vercel
+# Vercel (keep project.json, ignore env files)
+.vercel/.env*
+**/.vercel/.env*
 
 # Turbo
 .turbo
