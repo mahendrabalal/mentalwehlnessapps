@@ -1,0 +1,12 @@
+# Don't deploy everything - only apps/web
+apps/cms
+packages
+scripts
+.github
+docs
+.bmad-core
+.bmad-creative-writing
+.claude
+.cursor
+database
+node_modules
