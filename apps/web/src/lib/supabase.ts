@@ -22,6 +22,14 @@ export const createClient = () => {
         hasKey: !!supabaseAnonKey
       })
     }
+    // Return a mock client during build time to prevent errors
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      console.warn('Using mock Supabase client during build phase')
+      return createSupabaseClient(
+        'https://placeholder.supabase.co',
+        'placeholder-key'
+      )
+    }
     throw new Error('Supabase environment variables are not configured')
   }
 
