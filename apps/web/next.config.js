@@ -16,10 +16,6 @@ const nextConfig = {
   // Optimize production builds
   swcMinify: true,
 
-  // Disable static optimization to fix router errors
-  // Pages will use server-side rendering instead
-  output: 'standalone',
-
   // Transpile packages
   transpilePackages: ['@mental-wellness/shared', '@mental-wellness/ui'],
 
