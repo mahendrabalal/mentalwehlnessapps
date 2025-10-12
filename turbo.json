@@ -12,7 +12,8 @@
         ".next/**",
         "!.next/cache/**",
         "dist/**"
-      ]
+      ],
+      "outputLogs": "new-only"
     },
     "dev": {
       "cache": false,
