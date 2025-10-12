@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run linting
+echo "Running linter..."
+npm run lint
+
+# Run type checking
+echo "Running type checker..."
+npm run type-check
+
+# Run tests
+echo "Running tests..."
+npm run test
+
+# Check for large files
+echo "Checking for large files..."
+npx --no -- lfs-staged 1000000
+
+# Check package.json for security vulnerabilities
+echo "Checking for security vulnerabilities..."
+npm audit --audit-level moderate
+
+echo "✅ All pre-commit checks passed!"

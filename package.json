@@ -8,6 +8,7 @@
     "packages/*"
   ],
   "scripts": {
+    "prepare": "husky install",
     "build": "npx --yes turbo run build",
     "dev": "npx --yes turbo run dev",
     "lint": "npx --yes turbo run lint",
@@ -36,7 +37,8 @@
     "monitor:start": "node scripts/start-monitoring.js",
     "monitor:alerts": "node scripts/check-alerts.js",
     "crisis:test": "node scripts/test-crisis-systems.js",
-    "hipaa:audit": "node scripts/hipaa-audit.js"
+    "hipaa:audit": "node scripts/hipaa-audit.js",
+    "check:env": "node scripts/check-env-vars.js"
   },
   "devDependencies": {
     "@mental-wellness/eslint-config": "file:./packages/config/eslint-config",
@@ -47,7 +49,18 @@
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.57.1",
     "eslint-plugin-security": "^3.0.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "turbo": "^2.5.8"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": ">=18.0.0",

@@ -4,13 +4,32 @@
 
 This project uses **Vercel** for deployment with a simple, industry-standard workflow.
 
+## 🚨 **IMPORTANT - Fix Deployment Failures**
+
+If you're experiencing deployment failures, see: [`SIMPLE_DEPLOYMENT_FIX.md`](SIMPLE_DEPLOYMENT_FIX.md)
+
+The #1 issue is missing environment variables in Vercel dashboard.
+
 ## Prerequisites
 
 - Vercel account connected to your GitHub
 - Environment variables configured in Vercel dashboard:
-  - `NEXT_PUBLIC_SUPABASE_URL`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY`
+
+### **Quick Setup (Recommended)**
+```bash
+# Auto-configure all environment variables
+./scripts/setup-vercel-env.sh
+```
+
+### **Manual Setup**
+Add these variables in Vercel Dashboard → Settings → Environment Variables:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`
+- `NEXT_PUBLIC_SANITY_DATASET`
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- Plus all other variables from [`apps/web/.env.local`](apps/web/.env.local)
 
 ## Deployment Methods
 
