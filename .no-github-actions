@@ -1,0 +1,10 @@
+# Simple Deployment - No GitHub Actions
+
+This project uses Vercel for simple deployment without GitHub Actions.
+
+Workflow:
+1. git add .
+2. git commit -m "your changes"
+3. git push
+
+That's it! Vercel automatically deploys.
