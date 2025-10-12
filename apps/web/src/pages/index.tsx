@@ -9,6 +9,7 @@ import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import type { User } from '@supabase/supabase-js'
+import logo from '../../public/logo.png'
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
@@ -593,7 +594,7 @@ export default function Home() {
               {/* Brand */}
               <div className="space-y-4">
                 <Image
-                  src="/logo.png"
+                  src={logo}
                   alt="MentalWellnessApps"
                   width={180}
                   height={48}

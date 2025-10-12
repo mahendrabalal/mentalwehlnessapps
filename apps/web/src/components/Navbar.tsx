@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import logo from '../../public/logo.png'
 
 type NavbarVariant = 'default' | 'marketing'
 
@@ -90,7 +91,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             onClick={() => setMobileMenuOpen(false)}
           >
             <Image
-              src="/logo.png"
+              src={logo}
               alt="MentalWellnessApps"
               width={180}
               height={48}

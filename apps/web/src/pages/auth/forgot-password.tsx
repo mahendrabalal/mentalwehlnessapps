@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
 import { SEOHead } from '@/components/SEOHead'
+import logo from '../../../public/logo.png'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -46,7 +47,7 @@ export default function ForgotPassword() {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex flex-col items-center">
             <Image
-              src="/logo.png"
+              src={logo}
               alt="MentalWellnessApps"
               width={200}
               height={54}

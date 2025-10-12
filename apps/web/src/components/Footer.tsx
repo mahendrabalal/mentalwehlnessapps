@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import logo from '../../public/logo.png'
 
 export function Footer() {
   return (
@@ -9,7 +10,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Image
-              src="/logo.png"
+              src={logo}
               alt="MentalWellnessApps"
               width={180}
               height={48}
