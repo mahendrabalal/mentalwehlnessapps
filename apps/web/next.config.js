@@ -203,9 +203,6 @@ const nextConfig = {
     CUSTOM_KEY: process.env.NODE_ENV || 'development',
   },
 
-  // Output options for production
-  output: 'standalone',
-
   // Disable X-Powered-By header
   poweredByHeader: false,
 }
