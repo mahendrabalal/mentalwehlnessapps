@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "echo \"Skipping build - UI package uses TypeScript source directly\"",
     "dev": "tsc --watch",
     "lint": "echo \"@mental-wellness/ui lint is validated via apps/web and Storybook pipeline\"",
     "type-check": "tsc --noEmit"
