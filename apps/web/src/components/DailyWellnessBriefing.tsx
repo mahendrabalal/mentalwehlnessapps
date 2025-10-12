@@ -365,26 +365,26 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
 
   if (!isPremium) {
     return (
-      <div className="bg-gradient-to-r from-therapy-50 to-therapy-100 border border-therapy-200 rounded-lg p-6 mb-6">
+      <div className="bg-gradient-to-r from-therapy-50 to-therapy-100 border border-therapy-200 rounded-lg p-6 sm:p-8 mb-6">
         <div className="text-center">
           <div className="text-4xl mb-3">🌅</div>
-          <h3 className="text-xl font-bold text-therapy-900 mb-2">Daily Wellness Briefing</h3>
-          <p className="text-therapy-700 mb-4">
+          <h3 className="text-xl sm:text-2xl font-bold text-therapy-900 mb-2">Daily Wellness Briefing</h3>
+          <p className="text-base sm:text-lg text-therapy-700 mb-4">
             Get personalized morning insights, mood predictions, and daily recommendations
             based on your unique wellness patterns.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-            <div className="bg-white rounded-lg p-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
+            <div className="bg-white rounded-lg p-4">
               <div className="text-2xl mb-1">🔮</div>
               <p className="text-sm font-medium text-gray-900">Smart Predictions</p>
               <p className="text-xs text-gray-600">Today&apos;s mood & energy forecast</p>
             </div>
-            <div className="bg-white rounded-lg p-3">
+            <div className="bg-white rounded-lg p-4">
               <div className="text-2xl mb-1">💡</div>
               <p className="text-sm font-medium text-gray-900">Personal Insights</p>
               <p className="text-xs text-gray-600">Pattern recognition & correlations</p>
             </div>
-            <div className="bg-white rounded-lg p-3">
+            <div className="bg-white rounded-lg p-4">
               <div className="text-2xl mb-1">🎯</div>
               <p className="text-sm font-medium text-gray-900">Daily Focus</p>
               <p className="text-xs text-gray-600">Targeted recommendations</p>
@@ -392,9 +392,10 @@ export const DailyWellnessBriefing: React.FC<DailyWellnessBriefingProps> = ({
           </div>
           <button
             onClick={onUpgradeClick}
-            className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+            className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-3 rounded-lg font-medium transition-colors min-h-[48px] text-sm sm:text-base w-full sm:w-auto"
           >
-            Unlock Daily Briefings - $5.99/month
+            <span className="hidden sm:inline">Unlock Daily Briefings - $5.99/month</span>
+            <span className="sm:hidden">Get Premium - $5.99/mo</span>
           </button>
         </div>
       </div>

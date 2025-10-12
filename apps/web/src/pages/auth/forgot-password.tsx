@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
 import { SEOHead } from '@/components/SEOHead'
 
@@ -43,11 +44,16 @@ export default function ForgotPassword() {
       />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold wellness-gradient bg-clip-text text-transparent">
-              Mental Wellness App
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
+          <div className="flex flex-col items-center">
+            <Image
+              src="/logo.png"
+              alt="MentalWellnessApps"
+              width={200}
+              height={54}
+              className="h-14 w-auto object-contain"
+              priority
+            />
+            <p className="mt-4 text-sm text-gray-600">
               Reset your password
             </p>
           </div>

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 
@@ -80,20 +81,22 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2 sm:py-3">
           {/* Brand */}
           <Link
             href={user ? '/dashboard' : '/?landing=true'}
-            className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
             title={user ? 'Go to Dashboard' : 'Go to Home'}
             onClick={() => setMobileMenuOpen(false)}
           >
-            <div className="w-8 h-8 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-gray-900">MentalWellnessApps</span>
+            <Image
+              src="/logo.png"
+              alt="MentalWellnessApps"
+              width={180}
+              height={48}
+              className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Navigation Links */}
@@ -118,16 +121,16 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+              className="p-2 text-gray-600 hover:text-gray-900 transition-colors rounded-lg hover:bg-gray-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}

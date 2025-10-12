@@ -258,7 +258,7 @@ function DashboardContent() {
 
           {/* Time Range Selector */}
           <div className="mb-6">
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
+            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-full sm:w-fit">
               {[
                 { key: '7days', label: '7 Days' },
                 { key: '30days', label: '30 Days' },
@@ -267,7 +267,7 @@ function DashboardContent() {
                 <button
                   key={option.key}
                   onClick={() => setTimeRange(option.key as typeof timeRange)}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-md transition-colors min-h-[44px] ${
                     timeRange === option.key
                       ? 'bg-white text-therapy-700 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
@@ -282,22 +282,22 @@ function DashboardContent() {
           {stats ? (
             <>
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow p-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                <div className="bg-white rounded-lg shadow p-4 sm:p-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Current Streak</p>
-                      <p className="text-2xl font-semibold text-gray-900">{stats.currentStreak} days</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Current Streak</p>
+                      <p className="text-xl sm:text-2xl font-semibold text-gray-900">{stats.currentStreak} days</p>
                     </div>
-                    <div className="text-2xl">🔥</div>
+                    <div className="text-xl sm:text-2xl">🔥</div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-lg shadow p-4 sm:p-6">
                   <div className="flex items-center">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-600">Avg Mood</p>
-                      <p className="text-2xl font-semibold text-gray-900">{stats.avgMoodRating}/10</p>
+                      <p className="text-xs sm:text-sm font-medium text-gray-600">Avg Mood</p>
+                      <p className="text-xl sm:text-2xl font-semibold text-gray-900">{stats.avgMoodRating}/10</p>
                       <p className="text-xs text-gray-500 flex items-center mt-1">
                         {moodTrend === 'up' && <span className="text-green-500">↑ Improving</span>}
                         {moodTrend === 'down' && <span className="text-red-500">↓ Declining</span>}

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
@@ -117,11 +118,11 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-8">
                 <div className="space-y-4">
-                  <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
                     Intelligence
                     <br />
                     <span className="bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
@@ -132,7 +133,7 @@ export default function Home() {
                     <br />
                     wellness forward
                   </h1>
-                  <p className="text-xl lg:text-2xl text-gray-600 max-w-xl">
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-xl">
                     AI-powered insights, clinical-grade assessments, and 24/7 support for your mental health journey.
                   </p>
                 </div>
@@ -140,33 +141,33 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => setShowUpgradeFlow(true)}
-                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
+                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-all hover:scale-105 shadow-lg min-h-[56px]"
                   >
                     Subscribe to Premium
                   </button>
                   <Link
                     href="#features"
-                    className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold transition-colors text-center"
+                    className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-colors text-center min-h-[56px] flex items-center justify-center"
                   >
                     See How It Works
                   </Link>
                 </div>
 
-                <div className="flex items-center space-x-8 text-sm text-gray-500">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-8 space-y-3 sm:space-y-0 text-sm text-gray-500">
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>Instant access</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>HIPAA compliant</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>Cancel anytime</span>
@@ -254,7 +255,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {/* AI Companion */}
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="p-8">
@@ -512,7 +513,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-16">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -591,14 +592,13 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Brand */}
               <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <span className="text-xl font-bold">MentalWellnessApps</span>
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt="MentalWellnessApps"
+                  width={180}
+                  height={48}
+                  className="h-12 w-auto object-contain brightness-0 invert"
+                />
                 <p className="text-gray-400 text-sm">
                   Intelligence that moves your mental wellness forward.
                 </p>
