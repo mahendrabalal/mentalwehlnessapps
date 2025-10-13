@@ -89,27 +89,20 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             title={user ? 'Go to Dashboard' : 'Go to Home'}
             onClick={() => setMobileMenuOpen(false)}
           >
-            <img
-              src={process.env.NODE_ENV === 'production' ? '/api/logo' : '/logo.png'}
-              alt="MentalWellnessApps"
-              className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
-              onError={(e) => {
-                console.error('Logo failed to load:', e);
-                console.error('Environment:', process.env.NODE_ENV);
-                // Try the alternative method if the first one fails
-                const currentSrc = (e.target as HTMLImageElement).src;
-                if (currentSrc.includes('/api/logo')) {
-                  // If API route failed, try direct path
-                  (e.target as HTMLImageElement).src = '/logo.png';
-                } else {
-                  // If direct path failed, try API route
-                  (e.target as HTMLImageElement).src = '/api/logo';
-                }
-              }}
-              onLoad={() => {
-                console.log('Logo loaded successfully');
-              }}
-            />
+            <div className="h-8 sm:h-10 lg:h-12 w-auto flex items-center">
+              <svg
+                width="180"
+                height="48"
+                viewBox="0 0 180 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-full w-auto object-contain"
+              >
+                <text x="10" y="35" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="bold" fill="#1F2937">
+                  MentalWellnessApps
+                </text>
+              </svg>
+            </div>
           </Link>
 
           {/* Navigation Links */}

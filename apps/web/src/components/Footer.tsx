@@ -8,27 +8,20 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <img
-              src={process.env.NODE_ENV === 'production' ? '/api/logo' : '/logo.png'}
-              alt="MentalWellnessApps"
-              className="h-12 w-auto object-contain brightness-0 invert"
-              onError={(e) => {
-                console.error('Footer logo failed to load:', e);
-                console.error('Environment:', process.env.NODE_ENV);
-                // Try the alternative method if the first one fails
-                const currentSrc = (e.target as HTMLImageElement).src;
-                if (currentSrc.includes('/api/logo')) {
-                  // If API route failed, try direct path
-                  (e.target as HTMLImageElement).src = '/logo.png';
-                } else {
-                  // If direct path failed, try API route
-                  (e.target as HTMLImageElement).src = '/api/logo';
-                }
-              }}
-              onLoad={() => {
-                console.log('Footer logo loaded successfully');
-              }}
-            />
+            <div className="h-12 w-auto flex items-center">
+              <svg
+                width="180"
+                height="48"
+                viewBox="0 0 180 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-full w-auto object-contain brightness-0 invert"
+              >
+                <text x="10" y="35" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="bold" fill="#FFFFFF">
+                  MentalWellnessApps
+                </text>
+              </svg>
+            </div>
             <p className="text-gray-400 text-sm">
               Intelligence that moves your mental wellness forward.
             </p>
