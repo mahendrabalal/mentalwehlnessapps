@@ -21,7 +21,7 @@ const nextConfig = {
 
   // Security-focused image configuration
   images: {
-    domains: ['images.unsplash.com', 'cdn.sanity.io'],
+    domains: ['images.unsplash.com', 'cdn.sanity.io', 'www.mentalwellnessapps.com'],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: false,
