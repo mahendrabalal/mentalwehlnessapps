@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <img
-              src="https://mentalwellnessapps.com/logo.png"
+              src="/api/logo"
               alt="MentalWellnessApps"
               className="h-12 w-auto object-contain brightness-0 invert"
               onError={(e) => {

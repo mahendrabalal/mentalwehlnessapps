@@ -90,7 +90,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             onClick={() => setMobileMenuOpen(false)}
           >
             <img
-              src="https://mentalwellnessapps.com/logo.png"
+              src="/api/logo"
               alt="MentalWellnessApps"
               className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
               onError={(e) => {
