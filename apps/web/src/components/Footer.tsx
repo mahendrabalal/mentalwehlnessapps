@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Image
-              src="/logo.png"
+              src={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/logo.png`}
               alt="MentalWellnessApps"
               width={180}
               height={48}
@@ -19,6 +19,8 @@ export function Footer() {
                 console.error('Footer logo src:', (e.target as HTMLImageElement).src);
                 console.error('Current hostname:', window.location.hostname);
                 console.error('Current pathname:', window.location.pathname);
+                // Fallback to relative path if absolute URL fails
+                (e.target as HTMLImageElement).src = '/logo.png';
               }}
               onLoad={() => {
                 console.log('Footer logo loaded successfully');
