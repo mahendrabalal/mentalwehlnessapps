@@ -90,16 +90,20 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             onClick={() => setMobileMenuOpen(false)}
           >
             <img
-              src="/api/logo"
+              src={process.env.NODE_ENV === 'production' ? '/api/logo' : '/logo.png'}
               alt="MentalWellnessApps"
               className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
               onError={(e) => {
                 console.error('Logo failed to load:', e);
-                // Fallback to a text logo if image fails
-                (e.target as HTMLImageElement).style.display = 'none';
-                const parent = (e.target as HTMLImageElement).parentElement;
-                if (parent) {
-                  parent.innerHTML = '<span class="text-xl font-bold">MentalWellnessApps</span>';
+                console.error('Environment:', process.env.NODE_ENV);
+                // Try the alternative method if the first one fails
+                const currentSrc = (e.target as HTMLImageElement).src;
+                if (currentSrc.includes('/api/logo')) {
+                  // If API route failed, try direct path
+                  (e.target as HTMLImageElement).src = '/logo.png';
+                } else {
+                  // If direct path failed, try API route
+                  (e.target as HTMLImageElement).src = '/api/logo';
                 }
               }}
               onLoad={() => {
