@@ -14,6 +14,15 @@ export function Footer() {
               width={180}
               height={48}
               className="h-12 w-auto object-contain brightness-0 invert"
+              onError={(e) => {
+                console.error('Footer logo failed to load:', e);
+                console.error('Footer logo src:', (e.target as HTMLImageElement).src);
+                console.error('Current hostname:', window.location.hostname);
+                console.error('Current pathname:', window.location.pathname);
+              }}
+              onLoad={() => {
+                console.log('Footer logo loaded successfully');
+              }}
             />
             <p className="text-gray-400 text-sm">
               Intelligence that moves your mental wellness forward.

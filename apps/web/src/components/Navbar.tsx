@@ -96,6 +96,16 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
               height={48}
               className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
               priority
+              onError={(e) => {
+                console.error('Logo failed to load:', e);
+                console.error('Logo src:', (e.target as HTMLImageElement).src);
+                console.error('Current hostname:', window.location.hostname);
+                console.error('Current pathname:', window.location.pathname);
+                console.error('Public URL detection:', process.env.NEXT_PUBLIC_SITE_URL);
+              }}
+              onLoad={() => {
+                console.log('Logo loaded successfully');
+              }}
             />
           </Link>
 
