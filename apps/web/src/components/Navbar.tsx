@@ -89,21 +89,16 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             title={user ? 'Go to Dashboard' : 'Go to Home'}
             onClick={() => setMobileMenuOpen(false)}
           >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/logo.png`}
+            <img
+              src="/logo.png"
               alt="MentalWellnessApps"
-              width={180}
-              height={48}
               className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
-              priority
               onError={(e) => {
                 console.error('Logo failed to load:', e);
                 console.error('Logo src:', (e.target as HTMLImageElement).src);
                 console.error('Current hostname:', window.location.hostname);
                 console.error('Current pathname:', window.location.pathname);
                 console.error('Public URL detection:', process.env.NEXT_PUBLIC_SITE_URL);
-                // Fallback to relative path if absolute URL fails
-                (e.target as HTMLImageElement).src = '/logo.png';
               }}
               onLoad={() => {
                 console.log('Logo loaded successfully');

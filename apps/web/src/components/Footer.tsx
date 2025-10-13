@@ -8,19 +8,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/logo.png`}
+            <img
+              src="/logo.png"
               alt="MentalWellnessApps"
-              width={180}
-              height={48}
               className="h-12 w-auto object-contain brightness-0 invert"
               onError={(e) => {
                 console.error('Footer logo failed to load:', e);
                 console.error('Footer logo src:', (e.target as HTMLImageElement).src);
                 console.error('Current hostname:', window.location.hostname);
                 console.error('Current pathname:', window.location.pathname);
-                // Fallback to relative path if absolute URL fails
-                (e.target as HTMLImageElement).src = '/logo.png';
               }}
               onLoad={() => {
                 console.log('Footer logo loaded successfully');
