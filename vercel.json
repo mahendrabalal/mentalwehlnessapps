@@ -1,12 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rootDirectory": "apps/web",
-  "buildCommand": "cd ../.. && npx turbo run build --filter=mental-wellness-web",
-  "outputDirectory": ".next",
-  "installCommand": "cd ../.. && npm install",
+  "buildCommand": "npx turbo run build --filter=mental-wellness-web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
   "framework": "nextjs",
   "functions": {
-    "pages/api/**/*.js": {
+    "apps/web/pages/api/**/*.js": {
       "runtime": "nodejs18.x"
     }
   }
