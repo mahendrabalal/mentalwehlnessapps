@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
@@ -8,6 +7,7 @@ import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
+import { BrandLogo } from '@/components/BrandLogo'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
@@ -592,13 +592,9 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               {/* Brand */}
               <div className="space-y-4">
-                <Image
-                  src="/logo.png"
-                  alt="MentalWellnessApps"
-                  width={180}
-                  height={48}
-                  className="h-12 w-auto object-contain brightness-0 invert"
-                />
+                <div className="w-full max-w-[220px]">
+                  <BrandLogo variant="onDark" className="w-full h-auto" />
+                </div>
                 <p className="text-gray-400 text-sm">
                   Intelligence that moves your mental wellness forward.
                 </p>

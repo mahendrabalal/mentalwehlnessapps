@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { BrandLogo } from '@/components/BrandLogo'
 
 type NavbarVariant = 'default' | 'marketing'
 
@@ -90,18 +90,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
             onClick={() => setMobileMenuOpen(false)}
           >
             <div className="h-8 sm:h-10 lg:h-12 w-auto flex items-center">
-              <svg
-                width="180"
-                height="48"
-                viewBox="0 0 180 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-full w-auto object-contain"
-              >
-                <text x="10" y="35" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="bold" fill="#1F2937">
-                  MentalWellnessApps
-                </text>
-              </svg>
+              <BrandLogo className="h-full w-auto" />
             </div>
           </Link>
 

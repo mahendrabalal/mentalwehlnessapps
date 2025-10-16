@@ -44,6 +44,7 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
   defaultPlan = 'monthly'
 }) => {
   const { user } = useAuth()
+  const router = useRouter()
   const [selectedPlan, setSelectedPlan] = useState<string>(defaultPlan === 'yearly' ? 'yearly' : 'monthly')
   const [currentStep, setCurrentStep] = useState<'pricing' | 'payment' | 'processing' | 'success'>('pricing')
   const [clientSecret, setClientSecret] = useState<string>('')
@@ -92,7 +93,9 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
 
   const handlePlanSelection = async (planId: string) => {
     if (!user) {
-      setError('Please log in to continue')
+      // Redirect to login with return URL to come back to pricing after login
+      const returnUrl = encodeURIComponent('/pricing')
+      router.push(`/auth/login?redirect=${returnUrl}&plan=${planId}`)
       return
     }
 

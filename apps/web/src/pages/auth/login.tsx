@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase'
 import { SEOHead } from '@/components/SEOHead'
+import { BrandLogo } from '@/components/BrandLogo'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -27,7 +27,17 @@ export default function Login() {
       if (error) {
         setError(error.message)
       } else if (data?.user) {
-        router.push('/')
+        // Check if there's a redirect parameter in the URL
+        const redirect = router.query.redirect as string
+        const plan = router.query.plan as string
+
+        if (redirect) {
+          // If there's a plan parameter, add it to the redirect URL
+          const redirectUrl = plan ? `${redirect}?plan=${plan}` : redirect
+          router.push(redirectUrl)
+        } else {
+          router.push('/')
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred')
@@ -63,14 +73,7 @@ export default function Login() {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex flex-col items-center">
-            <Image
-              src="/logo.png"
-              alt="MentalWellnessApps"
-              width={200}
-              height={54}
-              className="h-14 w-auto object-contain"
-              priority
-            />
+            <BrandLogo className="h-14 w-auto object-contain" />
             <p className="mt-4 text-sm text-gray-600">
               Sign in to continue your wellness journey
             </p>
