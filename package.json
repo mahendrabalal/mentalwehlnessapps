@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "node scripts/install-husky.js",
     "build": "npx --yes turbo run build",
     "dev": "npx --yes turbo run dev",
     "lint": "npx --yes turbo run lint",
@@ -47,10 +47,12 @@
     "@supabase/supabase-js": "^2.58.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
     "eslint-plugin-security": "^3.0.1",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
+    "postcss": "^8.5.6",
     "turbo": "^2.5.8"
   },
   "lint-staged": {
