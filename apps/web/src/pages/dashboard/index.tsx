@@ -10,6 +10,11 @@ import { AITherapyCompanion } from '@/components/AITherapyCompanion'
 import { DailyWellnessBriefing } from '@/components/DailyWellnessBriefing'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
+import { QuickAnxietyRelief } from '@/components/QuickAnxietyRelief'
+import { BurnoutRiskIndicator } from '@/components/BurnoutRiskIndicator'
+import { MindfulnessForBeginners } from '@/components/MindfulnessForBeginners'
+import { EmotionalRegulationToolkit } from '@/components/EmotionalRegulationToolkit'
+import { AffordableCareDirectory } from '@/components/AffordableCareDirectory'
 import type { User } from '@supabase/supabase-js'
 
 interface MoodEntry {
@@ -249,6 +254,24 @@ function DashboardContent() {
             moodEntries={moodEntries}
             isPremium={isPremium}
           />
+
+          {/* Pain-Point Focused Tools */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Quick Anxiety Relief - Always show for immediate support */}
+            <QuickAnxietyRelief />
+
+            {/* Burnout Risk Indicator - Automatically checks user data */}
+            <BurnoutRiskIndicator />
+          </div>
+
+          {/* Mindfulness for Beginners - Full width */}
+          <MindfulnessForBeginners className="mb-8" />
+
+          {/* Emotional Regulation & Care Directory */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <EmotionalRegulationToolkit />
+            <AffordableCareDirectory />
+          </div>
 
           {/* Time Range Selector */}
           <div className="mb-6">
