@@ -30,6 +30,19 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
 ]
 
+const SUPPORT_PAGES = [
+  { label: 'Emotional Burnout Recovery', href: '/support/emotional-exhaustion-burnout', icon: '🔥' },
+  { label: 'Affordable Therapy Options', href: '/support/affordable-mental-health-care', icon: '💰' },
+  { label: 'Combat Loneliness', href: '/support/combat-loneliness-isolation', icon: '💙' },
+  { label: 'Anxiety Relief Techniques', href: '/support/managing-anxiety-naturally', icon: '😌' },
+  { label: 'Mindfulness for Beginners', href: '/support/mindfulness-for-beginners', icon: '🧘' },
+  { label: 'Overcome Mental Health Stigma', href: '/support/overcome-mental-health-stigma', icon: '💪' },
+  { label: 'Emotional Regulation Skills', href: '/support/emotional-regulation-skills', icon: '🎯' },
+  { label: 'Build Meditation Consistency', href: '/support/meditation-consistency', icon: '✅' },
+  { label: 'Manage Meditation Anxiety', href: '/support/emotional-resistance-meditation', icon: '🧠' },
+  { label: 'Realistic Recovery Expectations', href: '/support/realistic-mental-health-expectations', icon: '📊' },
+]
+
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
   {
     label: 'Home',
@@ -50,6 +63,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
   const { isPremium } = useSubscription()
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [supportDropdownOpen, setSupportDropdownOpen] = useState(false)
 
   const isMarketing = variant === 'marketing'
   const publicNavItems = isMarketing ? MARKETING_PUBLIC_NAV : DEFAULT_PUBLIC_NAV
@@ -243,8 +257,58 @@ function PublicNav({
   routerPathname,
   onNavigate,
 }: PublicNavProps) {
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useState<HTMLDivElement | null>(null)[0]
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [dropdownRef])
+
   return (
     <>
+      {/* Find Support Dropdown */}
+      <div className="relative" ref={dropdownRef as any}>
+        <button
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          onMouseEnter={() => setDropdownOpen(true)}
+          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
+        >
+          Find Support
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {dropdownOpen && (
+          <div
+            onMouseLeave={() => setDropdownOpen(false)}
+            className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+          >
+            {SUPPORT_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                onClick={() => {
+                  setDropdownOpen(false)
+                  onNavigate()
+                }}
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">{page.icon}</span>
+                <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
       {items.map((item) =>
         item.variant === 'cta' ? (
           <Link
@@ -302,8 +366,44 @@ interface PublicMobileNavProps {
 }
 
 function PublicMobileNav({ items, closeMenu }: PublicMobileNavProps) {
+  const [supportExpanded, setSupportExpanded] = useState(false)
+
   return (
     <>
+      {/* Find Support Accordion */}
+      <div className="border-b border-gray-200 pb-2 mb-2">
+        <button
+          onClick={() => setSupportExpanded(!supportExpanded)}
+          className="flex items-center justify-between w-full px-3 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+        >
+          <span>Find Support</span>
+          <svg
+            className={`w-5 h-5 transition-transform ${supportExpanded ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {supportExpanded && (
+          <div className="mt-1 space-y-1">
+            {SUPPORT_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                onClick={closeMenu}
+                className="flex items-center gap-2 px-6 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                <span>{page.icon}</span>
+                <span>{page.label}</span>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
       {items.map((item) =>
         item.href.startsWith('#') ? (
           <AnchorMobileNavLink
