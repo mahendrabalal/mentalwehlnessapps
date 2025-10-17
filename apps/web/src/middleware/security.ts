@@ -25,7 +25,15 @@ export class SecurityMiddleware {
     'X-XSS-Protection': '1; mode=block',
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co",
+    'Content-Security-Policy': [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://www.googletagmanager.com https://www.google-analytics.com",
+      "style-src 'self' 'unsafe-inline' https://js.stripe.com https://m.stripe.network https://fonts.googleapis.com",
+      "img-src 'self' data: https: https://q.stripe.com https://m.stripe.network https://www.googletagmanager.com https://www.google-analytics.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://www.google-analytics.com https://ipapi.co",
+      "font-src 'self' https://fonts.gstatic.com",
+      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network"
+    ].join('; '),
     'Cache-Control': 'no-store, no-cache, must-revalidate, private',
     'Pragma': 'no-cache',
     'X-HIPAA-Compliant': 'true'

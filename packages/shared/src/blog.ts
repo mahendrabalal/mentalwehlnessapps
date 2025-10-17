@@ -35,6 +35,9 @@ export const cmsArticleSchema = z.object({
   publishedAt: z.string().nullable().optional(),
   readingTime: z.number().nullable().optional(),
   topics: z.array(z.string()).optional(),
+  contentType: z.enum(['article', 'faq', 'howto']).optional(),
+  focusKeyword: z.string().nullable().optional(),
+  relatedKeywords: z.array(z.string()).optional(),
   heroImage: cmsImageSchema.optional(),
   authors: z.array(cmsAuthorSchema).optional(),
   clinicalReview: z
@@ -50,6 +53,7 @@ export const cmsArticleSchema = z.object({
     .object({
       metaTitle: z.string().optional(),
       metaDescription: z.string().optional(),
+      keywords: z.array(z.string()).optional(),
     })
     .optional(),
   body: z.array(z.unknown()).optional(),

@@ -7,7 +7,6 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { AuthGuard } from '@/components/AuthGuard'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { AITherapyCompanion } from '@/components/AITherapyCompanion'
-import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { DailyWellnessBriefing } from '@/components/DailyWellnessBriefing'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
@@ -54,7 +53,6 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [timeRange, setTimeRange] = useState<'7days' | '30days' | '90days'>('30days')
-  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -193,9 +191,6 @@ function DashboardContent() {
     return 'stable'
   }
 
-  const handleUpgradeClick = () => {
-    setShowUpgradeFlow(true)
-  }
 
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
@@ -253,7 +248,6 @@ function DashboardContent() {
             } : undefined}
             moodEntries={moodEntries}
             isPremium={isPremium}
-            onUpgradeClick={handleUpgradeClick}
           />
 
           {/* Time Range Selector */}
@@ -448,107 +442,54 @@ function DashboardContent() {
             </div>
           )}
 
-          {/* Premium Features Preview / Status */}
-          <div className={`rounded-lg shadow-lg p-8 mb-8 text-white ${
-            isPremium
-              ? 'bg-gradient-to-r from-green-500 to-green-600'
-              : 'bg-gradient-to-r from-therapy-500 to-therapy-600'
-          }`}>
+          {/* All Features Free Banner */}
+          <div className="rounded-lg shadow-lg p-8 mb-8 text-white bg-gradient-to-r from-green-500 to-green-600">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-6">
-                {isPremium ? (
-                  <>
-                    <h2 className="text-2xl font-bold mb-2">
-                      {subscription.status === 'trialing' ? '🎉 Premium Trial Active' : '✨ Premium Member'}
-                    </h2>
-                    <p className="text-green-100">
-                      {subscription.status === 'trialing'
-                        ? `Your free trial is active${subscription.trialEndsAt ? ` until ${new Date(subscription.trialEndsAt).toLocaleDateString()}` : ''}`
-                        : 'You have access to all premium wellness features'
-                      }
-                    </p>
-                    {subscription.planType !== 'free' && (
-                      <p className="text-sm text-green-100 mt-1">
-                        {subscription.planType === 'premium_monthly' ? 'Monthly Plan' : 'Yearly Plan'}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <h2 className="text-2xl font-bold mb-2">Unlock Premium Wellness Features</h2>
-                    <p className="text-therapy-100">Get personalized AI support and advanced insights for your mental wellness journey</p>
-                  </>
-                )}
+                <h2 className="text-2xl font-bold mb-2">
+                  ✨ All Features Unlocked - 100% Free
+                </h2>
+                <p className="text-green-100">
+                  You have full access to all wellness features at no cost. Mental health support should be accessible to everyone.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div className="text-center">
                   <div className="text-3xl mb-2">🤖</div>
                   <h3 className="font-semibold mb-2">24/7 AI Companion</h3>
-                  <p className="text-sm text-therapy-100">Personalized wellness support anytime you need it</p>
+                  <p className="text-sm text-green-100">Unlimited personalized wellness support anytime you need it</p>
                 </div>
 
                 <div className="text-center">
                   <div className="text-3xl mb-2">📊</div>
                   <h3 className="font-semibold mb-2">Smart Analytics</h3>
-                  <p className="text-sm text-therapy-100">Advanced mood insights and trend predictions</p>
+                  <p className="text-sm text-green-100">Advanced mood insights and trend predictions</p>
                 </div>
 
                 <div className="text-center">
                   <div className="text-3xl mb-2">🎵</div>
                   <h3 className="font-semibold mb-2">Premium Content</h3>
-                  <p className="text-sm text-therapy-100">Unlimited guided meditations and sleep stories</p>
+                  <p className="text-sm text-green-100">Unlimited guided meditations and sleep stories</p>
                 </div>
               </div>
 
               <div className="text-center">
-                {isPremium ? (
-                  <div className="bg-white rounded-lg p-4 inline-block">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm text-gray-600">Premium Status</p>
-                        <p className="text-lg font-semibold text-green-600">
-                          {subscription.status === 'trialing' ? 'Trial Active' : 'Active'}
-                        </p>
-                      </div>
-                      <div className="border-l border-gray-300 pl-4">
-                        <Link
-                          href="/profile"
-                          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-block"
-                        >
-                          Manage Subscription
-                        </Link>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {subscription.status === 'trialing' ? 'Trial period' : 'Active subscription'}
-                        </p>
-                      </div>
+                <div className="bg-white rounded-lg p-4 inline-block">
+                  <div className="flex items-center justify-center space-x-2">
+                    <svg className="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <p className="text-lg font-semibold text-green-600">All Features Active</p>
+                      <p className="text-xs text-gray-500">No subscriptions • No hidden costs</p>
                     </div>
                   </div>
-                ) : (
-                  <div className="bg-white rounded-lg p-4 inline-block">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <p className="text-sm text-gray-600">Starting at</p>
-                        <p className="text-2xl font-bold text-gray-900">$5.99<span className="text-sm font-normal">/month</span></p>
-                      </div>
-                      <div className="border-l border-gray-300 pl-4">
-                        <button
-                          onClick={() => handleUpgradeClick()}
-                          className="bg-therapy-600 hover:bg-therapy-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-                        >
-                          Subscribe Now
-                        </button>
-                        <p className="text-xs text-gray-500 mt-1">$5.99/month • Instant access</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
 
-              <div className="mt-4 text-center">
-                <p className="text-xs text-therapy-100">
-                  <strong>Disclaimer:</strong> Premium AI features provide general wellness support and are not a substitute for professional therapy or medical advice.
-                </p>
+              <div className="mt-6 text-center text-sm text-green-100">
+                <p>Disclaimer: AI wellness features provide general support and are not a substitute for professional therapy or medical advice.</p>
               </div>
             </div>
           </div>
@@ -594,14 +535,6 @@ function DashboardContent() {
           } : undefined}
           moodEntries={moodEntries}
           isPremium={isPremium}
-          onUpgradeClick={handleUpgradeClick}
-        />
-
-        {/* Premium Upgrade Flow Modal */}
-        <PremiumUpgradeFlow
-          isOpen={showUpgradeFlow}
-          onClose={() => setShowUpgradeFlow(false)}
-          defaultPlan="monthly"
         />
       </div>
     </>

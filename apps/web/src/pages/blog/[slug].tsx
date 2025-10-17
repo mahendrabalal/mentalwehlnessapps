@@ -47,6 +47,14 @@ export default function BlogArticlePage({
   const pageTitle = article.seo?.metaTitle ?? article.title
   const pageDescription = article.seo?.metaDescription ?? article.excerpt
 
+  // Internal keywords for analytics and content tracking (not rendered as meta tag)
+  const articleKeywords = [
+    ...(article.focusKeyword ? [article.focusKeyword] : []),
+    ...(article.relatedKeywords ?? []),
+    ...(article.seo?.keywords ?? []),
+    ...(article.topics ?? []),
+  ]
+
   const heroImageUrl = useMemo(() => {
     if (!article.heroImage) return null
     return urlFor(article.heroImage).width(1600).auto('format').url()
@@ -55,6 +63,10 @@ export default function BlogArticlePage({
   const articleUrl = `https://mentalwellnessapp.com/blog/${article.slug.current}`
   const updatedDate = article.updatedAt ?? article._updatedAt ?? publishedDate ?? undefined
 
+  // TODO: Add conditional FAQ/HowTo schema based on article.contentType
+  // - If contentType === 'faq', use buildFaqStructuredData()
+  // - If contentType === 'howto', use buildHowToStructuredData()
+  // - If contentType === 'article', use MedicalScholarlyArticle (current behavior)
   const structuredData = [
     {
       '@context': 'https://schema.org',
@@ -93,6 +105,7 @@ export default function BlogArticlePage({
         publishedTime={publishedDate ?? undefined}
         modifiedTime={updatedDate}
         author={authors.length ? authors.map((author) => author.name).join(', ') : undefined}
+        keywords={articleKeywords}
         structuredData={structuredData}
       />
       <Navbar />

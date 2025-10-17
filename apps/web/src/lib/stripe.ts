@@ -11,7 +11,7 @@ function getStripe(): Stripe {
     }
 
     stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2025-08-27.basil',
+      apiVersion: '2024-06-20',
       typescript: true,
       // Healthcare compliance: Ensure PCI DSS Level 1 compliance
       telemetry: false // Disable telemetry for healthcare privacy
@@ -63,9 +63,163 @@ export interface SubscriptionResponse {
   subscriptionId: string
   clientSecret: string | null
   status: string
+  customerId?: string
 }
 
-// BMad Method: HIPAA-compliant subscription creation
+export interface SetupIntentResponse {
+  setupIntentId: string
+  clientSecret: string
+  customerId: string
+}
+
+// BMad Method: Create Setup Intent to collect payment method first
+export async function createSetupIntent({
+  userId,
+  email,
+  name,
+  metadata = {}
+}: {
+  userId: string
+  email: string
+  name?: string
+  metadata?: Record<string, string>
+}): Promise<SetupIntentResponse> {
+  try {
+    const stripeInstance = getStripe()
+
+    // Create or retrieve customer
+    let customer = await findCustomerByEmail(email)
+
+    if (!customer) {
+      customer = await stripeInstance.customers.create({
+        email,
+        name,
+        metadata: {
+          userId,
+          hipaaCompliant: 'true',
+          dataProcessingConsent: 'true',
+          createdAt: new Date().toISOString(),
+          ...metadata
+        }
+      })
+    }
+
+    // Create Setup Intent for payment method collection
+    const setupIntent = await stripeInstance.setupIntents.create({
+      customer: customer.id,
+      payment_method_types: ['card'],
+      usage: 'off_session', // Allow charging when customer is not present
+      metadata: {
+        userId,
+        purpose: 'subscription_payment_method',
+        ...metadata
+      }
+    })
+
+    console.log('BMad Method: Setup Intent created', {
+      setupIntentId: setupIntent.id,
+      customerId: customer.id,
+      status: setupIntent.status
+    })
+
+    if (!setupIntent.client_secret) {
+      throw new Error('Setup Intent created without client secret')
+    }
+
+    return {
+      setupIntentId: setupIntent.id,
+      clientSecret: setupIntent.client_secret,
+      customerId: customer.id
+    }
+  } catch (error) {
+    console.error('BMad Method: Setup Intent creation error:', error)
+    throw new Error(`Failed to create setup intent: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+// BMad Method: Create subscription with existing payment method
+export async function createSubscriptionWithPaymentMethod({
+  userId,
+  priceId,
+  customerId,
+  paymentMethodId,
+  trialPeriodDays = 0,
+  metadata = {}
+}: {
+  userId: string
+  priceId: string
+  customerId: string
+  paymentMethodId: string
+  trialPeriodDays?: number
+  metadata?: Record<string, string>
+}): Promise<SubscriptionResponse> {
+  try {
+    const stripeInstance = getStripe()
+
+    // Validate price ID is not a placeholder
+    if (priceId.includes('placeholder')) {
+      throw new Error('Stripe products not yet configured. Please create Mental Wellness products in Stripe Dashboard and update environment variables. See STRIPE_SETUP_GUIDE.md for instructions.')
+    }
+
+    // Attach payment method to customer as default
+    await stripeInstance.paymentMethods.attach(paymentMethodId, {
+      customer: customerId
+    })
+
+    await stripeInstance.customers.update(customerId, {
+      invoice_settings: {
+        default_payment_method: paymentMethodId
+      }
+    })
+
+    // Create subscription with payment method
+    const subscriptionParams: any = {
+      customer: customerId,
+      items: [{ price: priceId }],
+      default_payment_method: paymentMethodId,
+      payment_behavior: 'default_incomplete',
+      payment_settings: {
+        payment_method_types: ['card'],
+        save_default_payment_method: 'on_subscription'
+      },
+      expand: ['latest_invoice.payment_intent', 'pending_setup_intent'],
+      metadata: {
+        userId,
+        planType: getPlanTypeFromPriceId(priceId),
+        clinicalFeaturesEnabled: 'true',
+        aiCompanionAccess: 'unlimited',
+        analyticsAccess: 'premium',
+        contentLibraryAccess: 'full',
+        ...metadata
+      }
+    }
+
+    // Only add trial period if specified
+    if (trialPeriodDays > 0) {
+      subscriptionParams.trial_period_days = trialPeriodDays
+    }
+
+    const subscription = await stripeInstance.subscriptions.create(subscriptionParams)
+
+    console.log('BMad Method: Subscription created with payment method', {
+      subscriptionId: subscription.id,
+      status: subscription.status,
+      customerId: customerId
+    })
+
+    return {
+      subscriptionId: subscription.id,
+      clientSecret: null, // No client secret needed when payment method is already attached
+      status: subscription.status,
+      customerId: customerId
+    }
+  } catch (error) {
+    console.error('BMad Method: Subscription with payment method creation error:', error)
+    throw new Error(`Failed to create subscription: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+// BMad Method: HIPAA-compliant subscription creation (legacy method - creates subscription with inline payment)
 export async function createSubscription({
   userId,
   priceId,

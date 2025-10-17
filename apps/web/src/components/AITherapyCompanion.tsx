@@ -299,12 +299,7 @@ You don't have to go through this alone. These services are free, confidential, 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return
 
-    // Check premium limits
-    if (!isPremium && messages.length >= 6) { // Allow 3 exchanges for free users
-      onUpgradeClick?.()
-      return
-    }
-
+    // Free access for all users - no premium limits
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -364,7 +359,7 @@ You don't have to go through this alone. These services are free, confidential, 
         <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-64 border">
           <p className="text-sm text-gray-700 font-medium">AI Wellness Companion</p>
           <p className="text-xs text-gray-500 mt-1">
-            {isPremium ? "Unlimited chat available" : "3 free messages • Upgrade for unlimited"}
+            Free unlimited chat for all users
           </p>
         </div>
       </div>
@@ -378,7 +373,7 @@ You don't have to go through this alone. These services are free, confidential, 
         <div>
           <h3 className="font-semibold">AI Wellness Companion</h3>
           <p className="text-xs text-therapy-100">
-            {isPremium ? "Premium • Unlimited" : `Free • ${Math.max(0, 3 - Math.floor(messages.length / 2))} messages left`}
+            Free unlimited support
           </p>
         </div>
         <button
@@ -436,13 +431,12 @@ You don't have to go through this alone. These services are free, confidential, 
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder={isPremium || messages.length < 6 ? "Type your message..." : "Upgrade for unlimited chat..."}
-            disabled={!isPremium && messages.length >= 6}
-            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-therapy-500 focus:border-transparent disabled:bg-gray-100"
+            placeholder="Type your message..."
+            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-therapy-500 focus:border-transparent"
           />
           <button
             onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading || (!isPremium && messages.length >= 6)}
+            disabled={!inputValue.trim() || isLoading}
             className="bg-therapy-600 hover:bg-therapy-700 disabled:bg-gray-300 text-white p-2 rounded-lg transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -450,17 +444,6 @@ You don't have to go through this alone. These services are free, confidential, 
             </svg>
           </button>
         </div>
-
-        {!isPremium && messages.length >= 4 && (
-          <div className="mt-2 text-center">
-            <button
-              onClick={onUpgradeClick}
-              className="text-xs text-therapy-600 hover:text-therapy-700 underline"
-            >
-              Upgrade to Premium for unlimited AI chat
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )

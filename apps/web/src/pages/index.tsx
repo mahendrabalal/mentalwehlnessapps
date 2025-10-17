@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Navbar } from '@/components/Navbar'
-import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
@@ -13,7 +12,6 @@ import type { User } from '@supabase/supabase-js'
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
   const supabase = createClient()
   const router = useRouter()
 
@@ -67,12 +65,12 @@ export default function Home() {
   const structuredData = [
     softwareApplicationStructuredData({
       name: 'Mental Wellness App',
-      description: SEO_CONFIG.home.description,
-      price: 5.99,
+      description: 'Free AI-powered mental health support with unlimited therapy companion, crisis support, and mood analytics.',
+      price: 0,
     }),
     medicalWebPageStructuredData({
-      name: 'Mental Wellness App - AI-Powered Mental Health Support',
-      description: SEO_CONFIG.home.description,
+      name: 'Mental Wellness App - Free AI-Powered Mental Health Support',
+      description: '100% free mental health support - no subscriptions, no paywalls. Get unlimited access to AI therapy companion, crisis support, and wellness tools.',
       slug: '/',
     }),
     buildBreadcrumbList([{ name: 'Mental Wellness App', url: '/' }]),
@@ -123,28 +121,28 @@ export default function Home() {
               <div className="space-y-8">
                 <div className="space-y-4">
                   <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                    Intelligence
+                    Free Mental
                     <br />
                     <span className="bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
-                      that moves
+                      Health Support
                     </span>
                     <br />
-                    your mental
+                    When You Need
                     <br />
-                    wellness forward
+                    It Most
                   </h1>
                   <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-xl">
-                    AI-powered insights, clinical-grade assessments, and 24/7 support for your mental health journey.
+                    No cost. No barriers. No judgment. Get evidence-based support for anxiety, burnout, loneliness, and emotional exhaustion—100% free, forever.
                   </p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={() => setShowUpgradeFlow(true)}
-                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-all hover:scale-105 shadow-lg min-h-[56px]"
+                  <Link
+                    href="/auth/signup"
+                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-all hover:scale-105 shadow-lg min-h-[56px] flex items-center justify-center"
                   >
-                    Subscribe to Premium
-                  </button>
+                    Get Started Free
+                  </Link>
                   <Link
                     href="#features"
                     className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-colors text-center min-h-[56px] flex items-center justify-center"
@@ -153,24 +151,30 @@ export default function Home() {
                   </Link>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-8 space-y-3 sm:space-y-0 text-sm text-gray-500">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700">
                   <div className="flex items-center space-x-2">
                     <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Instant access</span>
+                    <span>Overcome stigma with private support</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>HIPAA compliant</span>
+                    <span>Combat loneliness 24/7</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Cancel anytime</span>
+                    <span>Manage anxiety naturally</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>No cost barriers—completely free</span>
                   </div>
                 </div>
               </div>
@@ -189,7 +193,7 @@ export default function Home() {
                   <div className="p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-gray-900">Good morning! 🌅</h3>
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Premium Active</span>
+                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">All Features Free</span>
                     </div>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p className="text-sm text-blue-900 font-medium mb-1">🎯 Today's Focus: Stress management and relaxation</p>
@@ -244,19 +248,19 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Intelligence that
+                Support for Your
                 <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
-                  understands you
+                  Real Struggles
                 </span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our AI doesn't just track data—it learns your patterns, predicts your needs,
-                and provides personalized insights that actually improve your mental wellness.
+                Whether you're battling burnout, fighting loneliness, managing anxiety, or overcoming stigma—
+                get personalized support that addresses your specific mental health challenges.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {/* AI Companion */}
+              {/* Combat Loneliness */}
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="p-8">
                   <div className="w-16 h-16 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-2xl flex items-center justify-center mb-6">
@@ -264,8 +268,8 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">24/7 AI Therapy Companion</h3>
-                  <p className="text-gray-600 mb-6">Conversations that understand your unique mental health journey</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Combat Loneliness & Isolation</h3>
+                  <p className="text-gray-600 mb-6">24/7 AI companion provides judgment-free support when you feel alone</p>
 
                   {/* Mock conversation */}
                   <div className="bg-gray-50 rounded-lg p-4 space-y-3">
@@ -285,12 +289,12 @@ export default function Home() {
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Crisis intervention built-in</span>
+                    <span>Available 24/7, completely free</span>
                   </div>
                 </div>
               </div>
 
-              {/* Smart Analytics */}
+              {/* Understand Burnout */}
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="p-8">
                   <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
@@ -298,25 +302,22 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Smart Analytics</h3>
-                  <p className="text-gray-600 mb-6">Patterns that guide your progress and predict your needs</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Understand Your Burnout Patterns</h3>
+                  <p className="text-gray-600 mb-6">Track emotional exhaustion and identify early warning signs before crisis</p>
 
                   {/* Mock analytics */}
                   <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">7-Day Mood Forecast</span>
-                      <span className="text-sm text-green-600 flex items-center">
-                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                        </svg>
-                        Improving
+                      <span className="text-sm font-medium text-gray-700">Burnout Risk Level</span>
+                      <span className="text-sm text-yellow-600 flex items-center">
+                        ⚠️ Medium
                       </span>
                     </div>
                     <div className="text-xs text-gray-600">
-                      "You feel 40% better when you exercise before 2PM"
+                      "Your stress levels have increased 40% this week"
                     </div>
                     <div className="text-xs text-gray-600">
-                      "Sleep quality correlates 78% with next-day mood"
+                      "Sleep quality down 2 points—may affect mood"
                     </div>
                   </div>
 
@@ -324,12 +325,12 @@ export default function Home() {
                     <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Clinical-grade predictions</span>
+                    <span>Early warning system</span>
                   </div>
                 </div>
               </div>
 
-              {/* Daily Intelligence */}
+              {/* Manage Anxiety */}
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="p-8">
                   <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
@@ -337,20 +338,20 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Daily Intelligence</h3>
-                  <p className="text-gray-600 mb-6">Insights that start your day with intention and awareness</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Manage Anxiety Naturally</h3>
+                  <p className="text-gray-600 mb-6">Evidence-based techniques for quick anxiety relief and long-term management</p>
 
-                  {/* Mock daily briefing */}
+                  {/* Mock anxiety tools */}
                   <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-lg p-4 space-y-3">
                     <div className="flex items-center space-x-2">
-                      <span className="text-2xl">🌅</span>
-                      <span className="text-sm font-medium text-gray-700">Morning Briefing</span>
+                      <span className="text-2xl">😰➡️😌</span>
+                      <span className="text-sm font-medium text-gray-700">Quick Relief</span>
                     </div>
                     <div className="text-xs text-gray-600">
-                      "Based on your sleep score (6/10) and yesterday's stress (7/10), focus on gentle activities today."
+                      "Try the 5-4-3-2-1 grounding exercise"
                     </div>
                     <div className="text-xs text-gray-600">
-                      "Your mood typically improves 2-3 hours after morning exercise."
+                      "Box breathing: 4 counts in, hold 4, out 6"
                     </div>
                   </div>
 
@@ -358,7 +359,7 @@ export default function Home() {
                     <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Personalized daily guidance</span>
+                    <span>Instant relief techniques</span>
                   </div>
                 </div>
               </div>
@@ -371,126 +372,85 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Choose the plan that
+                100% Free
                 <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
-                  fits your journey
+                  Mental Health Support
                 </span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Start with our free tier to explore basic features, then upgrade to premium
-                for AI-powered insights and personalized mental wellness intelligence.
+                All features unlocked. No subscriptions. No paywalls. Mental wellness support accessible to everyone.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Free Plan */}
-              <div className="border border-gray-200 rounded-2xl p-8">
+            <div className="max-w-2xl mx-auto">
+              {/* All Features Free */}
+              <div className="border border-therapy-500 rounded-2xl p-8 bg-gradient-to-b from-therapy-50 to-white">
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Free</h3>
-                  <div className="text-4xl font-bold text-gray-900 mb-2">$0</div>
-                  <p className="text-gray-600">Perfect for getting started</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">All Features Included</h3>
+                  <div className="text-5xl font-bold text-gray-900 mb-2">$0</div>
+                  <p className="text-gray-600">Forever free - no credit card required</p>
                 </div>
 
-                <ul className="space-y-4 mb-8">
+                <ul className="space-y-4 mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Basic mood tracking</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">3 AI chat messages</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Crisis resources</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Basic content library</span>
-                  </li>
-                </ul>
-
-                <Link
-                  href="/auth/signup"
-                  className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-3 px-6 rounded-lg font-semibold transition-colors"
-                >
-                  Get Started Free
-                </Link>
-              </div>
-
-              {/* Premium Plan */}
-              <div className="border border-therapy-500 rounded-2xl p-8 relative bg-gradient-to-b from-therapy-50 to-white">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-therapy-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                    Most Popular
-                  </span>
-                </div>
-
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium</h3>
-                  <div className="text-4xl font-bold text-gray-900 mb-2">
-                    $5.99
-                    <span className="text-lg font-normal text-gray-600">/month</span>
-                  </div>
-                  <p className="text-gray-600">Advanced AI-powered wellness intelligence</p>
-                </div>
-
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700"><strong>Everything in Free</strong>, plus:</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span className="text-gray-700">Unlimited AI therapy companion</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Advanced mood tracking</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span className="text-gray-700">Smart analytics & predictions</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span className="text-gray-700">Daily wellness briefings</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span className="text-gray-700">Premium content library</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span className="text-gray-700">Crisis prevention system</span>
                   </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">24/7 Crisis resources</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-700">Data export capabilities</span>
+                  </li>
                 </ul>
 
-                <button
-                  onClick={() => setShowUpgradeFlow(true)}
+                <Link
+                  href="/auth/signup"
                   className="block w-full bg-therapy-600 hover:bg-therapy-700 text-white text-center py-3 px-6 rounded-lg font-semibold transition-colors"
                 >
-                  Subscribe Now
-                </button>
+                  Get Started Free
+                </Link>
 
                 <p className="text-xs text-gray-500 text-center mt-3">
-                  Instant access • Cancel anytime
+                  No credit card • No subscriptions • No hidden costs
                 </p>
               </div>
             </div>
@@ -658,13 +618,6 @@ export default function Home() {
             </div>
           </div>
         </footer>
-
-        {/* Premium Upgrade Flow Modal */}
-        <PremiumUpgradeFlow
-          isOpen={showUpgradeFlow}
-          onClose={() => setShowUpgradeFlow(false)}
-          defaultPlan="monthly"
-        />
       </div>
     </>
   )

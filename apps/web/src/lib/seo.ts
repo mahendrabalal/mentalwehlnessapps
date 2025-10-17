@@ -38,6 +38,89 @@ export function buildFaqStructuredData(faqs: Array<{ question: string; answer: s
   }
 }
 
+export function buildHowToStructuredData({
+  name,
+  description,
+  steps,
+  totalTime,
+  image,
+}: {
+  name: string
+  description: string
+  steps: Array<{ name: string; text: string; image?: string }>
+  totalTime?: string // ISO 8601 duration format (e.g., "PT30M" for 30 minutes)
+  image?: string
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    image: image ? buildAbsoluteUrl(image) : undefined,
+    totalTime,
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      image: step.image ? buildAbsoluteUrl(step.image) : undefined,
+    })),
+  }
+}
+
+export function buildMedicalConditionSchema({
+  name,
+  description,
+  symptoms,
+  causes,
+  riskFactors,
+  treatments,
+}: {
+  name: string
+  description: string
+  symptoms?: string[]
+  causes?: string[]
+  riskFactors?: string[]
+  treatments?: string[]
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name,
+    description,
+  }
+
+  if (symptoms && symptoms.length > 0) {
+    schema.signOrSymptom = symptoms.map((symptom) => ({
+      '@type': 'MedicalSymptom',
+      name: symptom,
+    }))
+  }
+
+  if (causes && causes.length > 0) {
+    schema.cause = causes.map((cause) => ({
+      '@type': 'MedicalCause',
+      name: cause,
+    }))
+  }
+
+  if (riskFactors && riskFactors.length > 0) {
+    schema.riskFactor = riskFactors.map((factor) => ({
+      '@type': 'MedicalRiskFactor',
+      name: factor,
+    }))
+  }
+
+  if (treatments && treatments.length > 0) {
+    schema.possibleTreatment = treatments.map((treatment) => ({
+      '@type': 'MedicalTherapy',
+      name: treatment,
+    }))
+  }
+
+  return schema
+}
+
 export function websiteStructuredData(): StructuredData {
   return {
     '@context': 'https://schema.org',

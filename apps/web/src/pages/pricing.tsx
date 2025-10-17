@@ -1,52 +1,31 @@
 /* eslint-disable react/no-unescaped-entities -- Pricing copy preserves conversational tone with contractions */
 import Link from 'next/link'
-import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
-import { PremiumUpgradeFlow } from '@/components/PremiumUpgradeFlow'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
-import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData, productStructuredData } from '@/lib/seo'
+import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function PricingPage() {
-  const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
-
   const plans = [
     {
-      name: 'Free',
+      name: 'Free for Everyone',
       price: '$0',
       period: 'forever',
-      description: 'Perfect for getting started with mental wellness tracking',
+      description: 'All premium features included at no cost',
       features: [
-        'Basic mood tracking',
-        'Safety plan creation',
-        '3 AI chat messages per day',
-        'Crisis resources access',
-        'Basic content library',
-        'Community support'
-      ],
-      cta: 'Get Started Free',
-      ctaLink: '/auth/signup',
-      popular: false,
-      color: 'gray'
-    },
-    {
-      name: 'Premium',
-      price: '$5.99',
-      period: 'per month',
-      description: 'Advanced AI-powered wellness intelligence and unlimited support',
-      features: [
-        'Everything in Free, plus:',
         'Unlimited AI therapy companion',
-        'Smart analytics & predictions',
+        'Advanced mood tracking & analytics',
+        'Smart predictions & insights',
         'Daily wellness briefings',
         'Premium content library',
         'Crisis prevention system',
         'Personalized recommendations',
-        'Advanced mood insights',
+        'Safety plan creation',
+        'Crisis resources access',
         'Priority support',
         'Data export capabilities'
       ],
-      cta: 'Subscribe Now',
-      ctaAction: () => setShowUpgradeFlow(true),
+      cta: 'Get Started Free',
+      ctaLink: '/auth/signup',
       popular: true,
       color: 'therapy'
     }
@@ -54,12 +33,12 @@ export default function PricingPage() {
 
   const faqs = [
     {
-      question: 'Can I cancel my subscription anytime?',
-      answer: 'Yes, absolutely. You can cancel your premium subscription at any time from your profile settings. Your premium features will remain active until the end of your current billing period.'
+      question: 'Is this really completely free?',
+      answer: 'Yes! All features are 100% free with no hidden costs, premium tiers, or paywalls. We believe mental health support should be accessible to everyone.'
     },
     {
-      question: 'How does billing work?',
-      answer: 'You will be charged immediately when you subscribe to the premium plan. Your subscription will automatically renew each month unless you cancel.'
+      question: 'Why is it free?',
+      answer: 'We are committed to making mental health support accessible to all. Mental wellness should never be limited by financial barriers.'
     },
     {
       question: 'Is my data secure and private?',
@@ -72,31 +51,18 @@ export default function PricingPage() {
     {
       question: 'Can I use this as a replacement for therapy?',
       answer: 'No, our app is designed to supplement, not replace, professional mental health care. For serious mental health concerns, please consult with a licensed mental health professional.'
+    },
+    {
+      question: 'Will this always be free?',
+      answer: 'Yes. We are committed to keeping all core mental wellness features completely free. Our mission is to provide accessible mental health support to everyone who needs it.'
     }
   ]
 
   const structuredData = [
     medicalWebPageStructuredData({
-      name: 'Mental Wellness App Pricing',
-      description: SEO_CONFIG.pricing.description,
+      name: 'Mental Wellness App - Free for Everyone',
+      description: 'Free mental health support with unlimited AI therapy companion, crisis support, mood analytics, and personalized wellness plans. No cost, no subscriptions.',
       slug: '/pricing',
-    }),
-    productStructuredData({
-      name: 'Mental Wellness Premium Subscription',
-      description: 'Premium mental health features including unlimited AI therapy companion, crisis support, mood analytics, and personalized wellness plans.',
-      price: 5.99,
-      currency: 'USD',
-      features: [
-        'Unlimited AI therapy companion',
-        'Smart analytics & predictions',
-        'Daily wellness briefings',
-        'Premium content library',
-        'Crisis prevention system',
-        'Personalized recommendations',
-        'Advanced mood insights',
-        'Priority support',
-        'Data export capabilities',
-      ],
     }),
     buildBreadcrumbList([
       { name: 'Mental Wellness App', url: '/' },
@@ -123,13 +89,13 @@ export default function PricingPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Simple, Transparent
+                100% Free
                 <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
-                  Pricing
+                  Mental Health Support
                 </span>
               </h1>
               <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
-                Start free and upgrade to premium when you're ready for advanced AI-powered insights
+                All features unlocked. No subscriptions. No paywalls. Just mental wellness support for everyone.
               </p>
             </div>
           </div>
@@ -137,8 +103,8 @@ export default function PricingPage() {
 
         {/* Pricing Plans */}
         <div className="py-16">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 gap-8">
               {plans.map((plan, index) => (
                 <div
                   key={index}
@@ -207,11 +173,9 @@ export default function PricingPage() {
                       </Link>
                     )}
 
-                    {plan.name === 'Premium' && (
-                      <p className="text-xs text-gray-500 text-center mt-3">
-                        Instant access • Cancel anytime
-                      </p>
-                    )}
+                    <p className="text-xs text-gray-500 text-center mt-3">
+                      Instant access • No credit card required
+                    </p>
                   </div>
                 </div>
               ))}
@@ -279,13 +243,6 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
-
-      {/* Premium Upgrade Flow Modal */}
-      <PremiumUpgradeFlow
-        isOpen={showUpgradeFlow}
-        onClose={() => setShowUpgradeFlow(false)}
-        defaultPlan="monthly"
-      />
     </>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import type { StripePaymentElementOptions } from '@stripe/stripe-js'
 import { LegalDisclaimer } from './LegalDisclaimer'
 import { useAuth } from '@/hooks/useAuth'
 import { createClient } from '@/lib/supabase'
@@ -48,8 +49,9 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
   const [selectedPlan, setSelectedPlan] = useState<string>(defaultPlan === 'yearly' ? 'yearly' : 'monthly')
   const [currentStep, setCurrentStep] = useState<'pricing' | 'payment' | 'processing' | 'success'>('pricing')
   const [clientSecret, setClientSecret] = useState<string>('')
+  const [customerId, setCustomerId] = useState<string>('')
   const [error, setError] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null)
 
   // BMad Method: Healthcare-focused pricing plans
   const pricingPlans: PricingPlan[] = [
@@ -100,7 +102,7 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
     }
 
     setSelectedPlan(planId)
-    setIsLoading(true)
+    setLoadingPlanId(planId)
     setError('')
 
     try {
@@ -122,15 +124,15 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
         throw new Error('Authentication session expired. Please log in again.')
       }
 
-      // Create subscription with BMad Method healthcare metadata
-      const response = await fetch('/api/subscriptions/create', {
+      // BMad Method: Step 1 - Create Setup Intent for payment method collection
+      // This is the industry best practice: collect payment method first, then create subscription
+      const response = await fetch('/api/subscriptions/setup-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
-          priceId: selectedPlanData.priceId,
           userId: user.id,
           email: user.email,
           name: user.user_metadata?.full_name || user.email
@@ -139,23 +141,23 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to create subscription')
+        throw new Error(errorData.message || 'Failed to initialize payment setup')
       }
 
-      const { clientSecret: cs, status } = await response.json()
+      const { clientSecret: cs, customerId: cid } = await response.json()
 
-      // Payment is always required for non-trial subscriptions
-      if (!cs) {
-        throw new Error('Payment setup required. Please try again.')
+      if (!cs || !cid) {
+        throw new Error('Payment setup initialization failed. Please try again.')
       }
 
       setClientSecret(cs)
+      setCustomerId(cid)
       setCurrentStep('payment')
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
-      setIsLoading(false)
+      setLoadingPlanId(null)
     }
   }
 
@@ -178,7 +180,7 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
             selectedPlan={selectedPlan}
             onPlanSelect={handlePlanSelection}
             onClose={onClose}
-            isLoading={isLoading}
+            loadingPlanId={loadingPlanId}
             error={error}
           />
         )}
@@ -198,6 +200,7 @@ export const PremiumUpgradeFlow: React.FC<PremiumUpgradeFlowProps> = ({
           >
             <PaymentStep
               selectedPlan={pricingPlans.find(plan => plan.id === selectedPlan)!}
+              customerId={customerId}
               onSuccess={handlePaymentSuccess}
               onBack={() => setCurrentStep('pricing')}
               onClose={onClose}
@@ -221,7 +224,7 @@ interface PricingStepProps {
   selectedPlan: string
   onPlanSelect: (planId: string) => void
   onClose: () => void
-  isLoading: boolean
+  loadingPlanId: string | null
   error: string
 }
 
@@ -230,7 +233,7 @@ const PricingStep: React.FC<PricingStepProps> = ({
   selectedPlan,
   onPlanSelect,
   onClose,
-  isLoading,
+  loadingPlanId,
   error
 }) => {
   return (
@@ -275,7 +278,7 @@ const PricingStep: React.FC<PricingStepProps> = ({
                 ? 'border-therapy-300'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => !isLoading && onPlanSelect(plan.id)}
+            onClick={() => !loadingPlanId && onPlanSelect(plan.id)}
           >
             {plan.recommended && (
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -319,14 +322,14 @@ const PricingStep: React.FC<PricingStepProps> = ({
             </ul>
 
             <button
-              disabled={isLoading}
+              disabled={loadingPlanId === plan.id}
               className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                 plan.recommended || selectedPlan === plan.id
                   ? 'bg-therapy-600 hover:bg-therapy-700 text-white'
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
               } disabled:opacity-50`}
             >
-              {isLoading ? 'Processing...' : 'Subscribe Now'}
+              {loadingPlanId === plan.id ? 'Processing...' : 'Subscribe Now'}
             </button>
           </div>
         ))}
@@ -369,6 +372,7 @@ const PricingStep: React.FC<PricingStepProps> = ({
 
 interface PaymentStepProps {
   selectedPlan: PricingPlan
+  customerId: string
   onSuccess: () => void
   onBack: () => void
   onClose: () => void
@@ -376,6 +380,7 @@ interface PaymentStepProps {
 
 const PaymentStep: React.FC<PaymentStepProps> = ({
   selectedPlan,
+  customerId,
   onSuccess,
   onBack,
   onClose
@@ -384,11 +389,12 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
   const elements = useElements()
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState('')
+  const { user } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !user) {
       return
     }
 
@@ -396,12 +402,14 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
     setError('')
 
     try {
+      // BMad Method: Step 2 - Confirm Setup Intent with payment method details
+      // This handles 3D Secure/SCA authentication automatically
       const { error: submitError } = await elements.submit()
       if (submitError) {
         throw new Error(submitError.message)
       }
 
-      const { error: confirmError } = await stripe.confirmPayment({
+      const { error: confirmError, setupIntent } = await stripe.confirmSetup({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/dashboard?subscription=success`,
@@ -413,9 +421,54 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
         throw new Error(confirmError.message)
       }
 
+      if (!setupIntent || setupIntent.status !== 'succeeded') {
+        throw new Error('Payment method verification failed. Please try again.')
+      }
+
+      // BMad Method: Step 3 - Create subscription with confirmed payment method
+      const paymentMethodId = setupIntent.payment_method as string
+
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session?.access_token) {
+        throw new Error('Authentication session expired. Please log in again.')
+      }
+
+      const subscriptionResponse = await fetch('/api/subscriptions/create-with-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          priceId: selectedPlan.priceId,
+          userId: user.id,
+          customerId: customerId,
+          paymentMethodId: paymentMethodId
+        })
+      })
+
+      if (!subscriptionResponse.ok) {
+        const errorData = await subscriptionResponse.json()
+        throw new Error(errorData.message || 'Failed to create subscription')
+      }
+
+      const { subscriptionId } = await subscriptionResponse.json()
+
+      if (!subscriptionId) {
+        throw new Error('Subscription creation failed. Please contact support.')
+      }
+
+      console.log('BMad Method: Subscription created successfully', {
+        subscriptionId,
+        planName: selectedPlan.name
+      })
+
       onSuccess()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Payment failed')
+      console.error('BMad Method: Payment/Subscription error:', err)
+      setError(err instanceof Error ? err.message : 'Payment failed. Please try again.')
     } finally {
       setIsProcessing(false)
     }
@@ -444,14 +497,32 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
 
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
-          <PaymentElement />
+          <PaymentElement
+            options={{
+              layout: 'tabs',
+              paymentMethodOrder: ['card']
+            }}
+          />
+        </div>
+
+        {/* BMad Method: Healthcare Payment Info */}
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start">
+            <svg className="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            <div className="text-sm text-blue-800">
+              <p className="font-medium">Secure Payment Processing</p>
+              <p className="mt-1">Your payment information is encrypted and securely processed. You will be charged ${selectedPlan.price} {selectedPlan.interval === 'month' ? 'monthly' : 'annually'}.</p>
+            </div>
+          </div>
         </div>
 
         <div className="flex space-x-4">
           <button
             type="button"
             onClick={onBack}
-            className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            className="flex-1 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
             disabled={isProcessing}
           >
             Back
@@ -459,16 +530,40 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
           <button
             type="submit"
             disabled={!stripe || isProcessing}
-            className="flex-1 py-3 px-4 bg-therapy-600 hover:bg-therapy-700 text-white rounded-lg disabled:opacity-50"
+            className="flex-1 py-3 px-4 bg-therapy-600 hover:bg-therapy-700 text-white rounded-lg disabled:opacity-50 font-medium"
           >
-            {isProcessing ? 'Processing...' : 'Subscribe Now'}
+            {isProcessing ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing Payment...
+              </span>
+            ) : (
+              'Confirm & Subscribe'
+            )}
           </button>
         </div>
       </form>
 
-      <div className="mt-6 text-xs text-gray-500 text-center">
-        <p>You will be charged immediately upon subscription.</p>
-        <p className="mt-1">By subscribing, you agree to our Terms of Service and Privacy Policy.</p>
+      <div className="mt-6 text-xs text-gray-500 text-center space-y-2">
+        <div className="flex justify-center items-center space-x-4">
+          <span className="flex items-center">
+            <svg className="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+            Secure & Encrypted
+          </span>
+          <span className="flex items-center">
+            <svg className="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Cancel Anytime
+          </span>
+        </div>
+        <p>By subscribing, you agree to our Terms of Service and Privacy Policy.</p>
+        <p className="text-xs">Powered by Stripe • PCI DSS Level 1 Certified</p>
       </div>
     </div>
   )

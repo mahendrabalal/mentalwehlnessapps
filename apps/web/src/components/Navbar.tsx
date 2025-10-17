@@ -20,7 +20,6 @@ type PublicNavItem = {
 
 const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
   { label: 'Features', href: '#features' },
-  { label: 'Pricing', href: '#pricing' },
   {
     label: 'Blog',
     href: '/blog',
@@ -28,7 +27,7 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
   },
   { label: 'About', href: '#about' },
   { label: 'Sign In', href: '/auth/login' },
-  { label: 'Start Free Trial', href: '/auth/signup', variant: 'cta' }
+  { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
 ]
 
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
@@ -43,7 +42,7 @@ const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
     isActive: (pathname) => pathname.startsWith('/blog')
   },
   { label: 'Sign In', href: '/auth/login' },
-  { label: 'Start Free Trial', href: '/auth/signup', variant: 'cta' }
+  { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
 ]
 
 export function Navbar({ variant = 'default' }: NavbarProps) {
@@ -193,19 +192,6 @@ function AuthenticatedNav({
         isActive={routerPathname === '/profile'}
         label="Profile"
       />
-      {!isPremium && (
-        <Link
-          href="/premium/features"
-          className="bg-therapy-600 hover:bg-therapy-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
-        >
-          Upgrade to Premium
-        </Link>
-      )}
-      {isPremium && (
-        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-          Premium
-        </span>
-      )}
       <button
         onClick={onSignOut}
         className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -300,19 +286,6 @@ function AuthenticatedMobileNav({
       <MobileNavLink href="/safety/plan" label="Safety Plan" onClick={closeMenu} />
       <MobileNavLink href="/blog" label="Resource Library" onClick={closeMenu} />
       <MobileNavLink href="/profile" label="Profile" onClick={closeMenu} />
-      {!isPremium && (
-        <MobileNavLink
-          href="/premium/features"
-          label="Upgrade to Premium"
-          highlight
-          onClick={closeMenu}
-        />
-      )}
-      {isPremium && (
-        <span className="block px-3 py-3 rounded-lg text-sm font-medium text-green-800 bg-green-100">
-          Premium Member
-        </span>
-      )}
       <button
         onClick={onSignOut}
         className="block w-full text-left px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors"

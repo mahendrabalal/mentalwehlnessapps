@@ -14,26 +14,34 @@ export interface SubscriptionStatus {
 
 export function useSubscription() {
   const { user } = useAuth()
+  // All features are now free - always return premium access
   const [subscription, setSubscription] = useState<SubscriptionStatus>({
-    isActive: false,
-    isPremium: false,
+    isActive: true,
+    isPremium: true,
     planType: 'free',
-    status: 'free'
+    status: 'active'
   })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const supabase = createClient()
 
   useEffect(() => {
     if (user) {
-      fetchSubscriptionStatus()
+      // All users get full access - no subscription checks needed
+      setSubscription({
+        isActive: true,
+        isPremium: true,
+        planType: 'free',
+        status: 'active'
+      })
+      setLoading(false)
     } else {
       setSubscription({
-        isActive: false,
-        isPremium: false,
+        isActive: true,
+        isPremium: true,
         planType: 'free',
-        status: 'free'
+        status: 'active'
       })
       setLoading(false)
     }
@@ -133,21 +141,19 @@ export function useSubscription() {
   }
 
   const refreshSubscriptionStatus = () => {
-    if (user) {
-      fetchSubscriptionStatus()
-    }
+    // No-op - all users always have full access
   }
 
   return {
     subscription,
-    loading,
-    error,
+    loading: false,
+    error: null,
     refreshSubscriptionStatus,
-    // Convenience computed properties
-    isPremium: subscription.isPremium,
-    isTrialing: subscription.status === 'trialing',
-    isActive: subscription.isActive,
-    planType: subscription.planType
+    // Convenience computed properties - all users have premium access
+    isPremium: true,
+    isTrialing: false,
+    isActive: true,
+    planType: 'free' as const
   }
 }
 

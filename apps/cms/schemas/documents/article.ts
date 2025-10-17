@@ -183,6 +183,42 @@ export default defineType({
       validation: (rule) => rule.unique().max(8),
     }),
     defineField({
+      name: "contentType",
+      type: "string",
+      title: "Content Type",
+      group: "metadata",
+      description: "Select the content type to generate appropriate structured data for SEO",
+      options: {
+        list: [
+          { title: "Article", value: "article" },
+          { title: "FAQ / Q&A", value: "faq" },
+          { title: "How-To Guide", value: "howto" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "article",
+    }),
+    defineField({
+      name: "focusKeyword",
+      type: "string",
+      title: "Focus Keyword (Primary Long-Tail Keyword)",
+      group: "metadata",
+      description: "The main long-tail keyword phrase this article targets (e.g., 'how to cope with emotional exhaustion and burnout naturally')",
+      validation: (rule) => rule.max(150),
+    }),
+    defineField({
+      name: "relatedKeywords",
+      type: "array",
+      title: "Related Keywords",
+      group: "metadata",
+      description: "Additional long-tail keywords and semantic variations to target in this article",
+      of: [{ type: "string" }],
+      options: {
+        layout: "tags",
+      },
+      validation: (rule) => rule.unique().max(10),
+    }),
+    defineField({
       name: "heroImage",
       type: "image",
       title: "Hero Image",
