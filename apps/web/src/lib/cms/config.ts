@@ -1,15 +1,34 @@
-export const SANITY_API_VERSION =
-  process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? '2023-10-25'
+const DEFAULT_SANITY_PROJECT_ID = '4t9s1x2a'
+const DEFAULT_SANITY_DATASET = 'production'
+const DEFAULT_SANITY_API_VERSION = '2023-10-25'
 
-export const SANITY_DATASET =
+export const SANITY_API_VERSION =
+  process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? DEFAULT_SANITY_API_VERSION
+
+const resolvedSanityDataset =
   process.env.NEXT_PUBLIC_SANITY_DATASET ||
   process.env.SANITY_DATASET ||
-  'production'
+  DEFAULT_SANITY_DATASET
 
-export const SANITY_PROJECT_ID =
+const resolvedSanityProjectId =
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
   process.env.SANITY_PROJECT_ID ||
-  ''
+  (process.env.NODE_ENV === 'production' ? DEFAULT_SANITY_PROJECT_ID : '')
+
+const isUsingFallbackProjectId =
+  resolvedSanityProjectId === DEFAULT_SANITY_PROJECT_ID &&
+  !process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+  !process.env.SANITY_PROJECT_ID
+
+if (isUsingFallbackProjectId && typeof window === 'undefined') {
+  console.warn(
+    '[cms] Falling back to default Sanity project id. Configure NEXT_PUBLIC_SANITY_PROJECT_ID for environment-specific data.'
+  )
+}
+
+export const SANITY_DATASET = resolvedSanityDataset
+
+export const SANITY_PROJECT_ID = resolvedSanityProjectId
 
 export const SANITY_PREVIEW_TOKEN = process.env.SANITY_PREVIEW_TOKEN
 
