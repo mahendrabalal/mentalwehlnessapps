@@ -36,7 +36,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://js.stripe.com https://m.stripe.network",
       "img-src 'self' data: https: https://www.googletagmanager.com https://www.google-analytics.com https://q.stripe.com https://m.stripe.network",
       "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://ipapi.co",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://region1.google-analytics.com https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://ipapi.co",
       "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network",
       "frame-ancestors 'none'",
       "base-uri 'self'",

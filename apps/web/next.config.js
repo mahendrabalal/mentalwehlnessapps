@@ -91,7 +91,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: https: https://www.googletagmanager.com https://www.google-analytics.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://npiregistry.cms.hhs.gov https://*.sanity.io https://www.google-analytics.com",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://npiregistry.cms.hhs.gov https://*.sanity.io https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://google-analytics.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'"
@@ -105,6 +105,20 @@ const nextConfig = {
           {
             key: 'X-Healthcare-Platform',
             value: 'mental-wellness-app'
+          }
+        ]
+      },
+      {
+        // Web manifest headers
+        source: '/site.webmanifest',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json'
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
           }
         ]
       },

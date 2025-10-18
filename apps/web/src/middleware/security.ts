@@ -30,7 +30,7 @@ export class SecurityMiddleware {
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline' https://js.stripe.com https://m.stripe.network https://fonts.googleapis.com",
       "img-src 'self' data: https: https://q.stripe.com https://m.stripe.network https://www.googletagmanager.com https://www.google-analytics.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://www.google-analytics.com https://ipapi.co",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://www.google-analytics.com https://region1.google-analytics.com https://ipapi.co",
       "font-src 'self' https://fonts.gstatic.com",
       "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network"
     ].join('; '),
