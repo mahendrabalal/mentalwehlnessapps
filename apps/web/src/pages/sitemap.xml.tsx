@@ -17,7 +17,6 @@ const STATIC_PAGES: StaticPageEntry[] = [
   { url: '/about', changefreq: 'monthly', priority: 0.7 },
   { url: '/contact', changefreq: 'monthly', priority: 0.6 },
   { url: '/help', changefreq: 'monthly', priority: 0.7 },
-  { url: '/free-trial', changefreq: 'weekly', priority: 0.7 },
   { url: '/privacy', changefreq: 'monthly', priority: 0.5 },
   { url: '/terms', changefreq: 'monthly', priority: 0.5 },
   { url: '/medical-disclaimer', changefreq: 'monthly', priority: 0.5 },
