@@ -74,7 +74,7 @@ export default function OvercomeMentalHealthStigmaPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/stigma-assessment"
                   className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
                   Get Private Support Now
@@ -142,7 +142,7 @@ export default function OvercomeMentalHealthStigmaPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/auth/signup"
+                href="/tools/stigma-assessment"
                 className="inline-flex items-center text-indigo-600 hover:text-indigo-700 font-semibold text-lg"
               >
                 Start your judgment-free journey
@@ -499,7 +499,7 @@ export default function OvercomeMentalHealthStigmaPage() {
               No judgment. No insurance records. No real name required. Get the support you deserve in complete privacy.
             </p>
             <Link
-              href="/auth/signup"
+              href="/tools/stigma-assessment"
               className="inline-block bg-white text-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Get Started Free

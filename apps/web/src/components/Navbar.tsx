@@ -48,6 +48,12 @@ const TOOL_PAGES = [
   { label: 'Burnout Assessment', href: '/tools/burnout-assessment', icon: '🔥' },
   { label: 'Mindfulness Exercises', href: '/tools/mindfulness', icon: '🧘' },
   { label: 'Emotional Regulation', href: '/tools/emotional-regulation', icon: '🎯' },
+  { label: 'Loneliness Assessment', href: '/tools/loneliness-assessment', icon: '💙' },
+  { label: 'Therapy Cost Calculator', href: '/tools/therapy-cost-calculator', icon: '💰' },
+  { label: 'Stigma Assessment', href: '/tools/stigma-assessment', icon: '💪' },
+  { label: 'Meditation Habit Tracker', href: '/tools/meditation-tracker', icon: '✅' },
+  { label: 'Recovery Timeline', href: '/tools/recovery-timeline', icon: '📊' },
+  { label: 'Substance Use Resources', href: '/tools/substance-screening', icon: '🆘' },
 ]
 
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
