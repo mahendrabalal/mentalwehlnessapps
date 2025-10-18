@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
-import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
+import { buildAbsoluteUrl, buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ export default function ContactPage() {
       '@context': 'https://schema.org',
       '@type': 'ContactPage',
       name: 'Mental Wellness App Support',
-      url: 'https://mentalwellnessapp.com/contact',
+      url: buildAbsoluteUrl('/contact'),
       contactType: 'customer support',
       contactOption: categories.map((category) => category.label),
       availableLanguage: ['English'],

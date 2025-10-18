@@ -387,7 +387,8 @@ function generateAssessmentEmailTemplate(
     [key: string]: any
   }
 ): { html: string; text: string } {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mentalwellnessapp.com'
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || 'https://www.mentalwellnessapps.com'
   const signupUrl = `${appUrl}/auth/signup`
 
   // HTML version

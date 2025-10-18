@@ -48,8 +48,6 @@ class MyDocument extends Document {
 
         {/* Global Site Metadata */}
         <meta name="author" content="Mental Wellness App" />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="googlebot" content="index, follow" />
 
         {/* Healthcare & HIPAA Compliance Meta */}
         <meta name="healthcare-platform" content="mental-wellness" />

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
-import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
+import { buildAbsoluteUrl, buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 
 export default function DocumentationPage() {
   const [activeSection, setActiveSection] = useState('getting-started')
@@ -326,7 +326,7 @@ POST /api/v1/assessments</code></pre>
         '@type': 'ListItem',
         position: index + 1,
         name: section.title,
-        url: `https://mentalwellnessapp.com/documentation#${section.id}`,
+        url: buildAbsoluteUrl(`/documentation#${section.id}`),
       })),
     },
   ]

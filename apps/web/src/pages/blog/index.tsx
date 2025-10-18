@@ -6,7 +6,7 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { fetchArticles, fetchSiteSettings } from '@/lib/cms/articleService'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
-import { buildBreadcrumbList } from '@/lib/seo'
+import { buildAbsoluteUrl, buildBreadcrumbList } from '@/lib/seo'
 
 interface BlogIndexProps {
   articles: CmsArticle[]
@@ -29,14 +29,14 @@ export default function BlogIndexPage({
     {
       '@context': 'https://schema.org',
       '@type': 'Blog',
-      url: 'https://mentalwellnessapp.com/blog',
+      url: buildAbsoluteUrl('/blog'),
       name: title,
       description,
       blogPost: articles.slice(0, 10).map((article) => ({
         '@type': 'BlogPosting',
         headline: article.seo?.metaTitle ?? article.title,
         description: article.seo?.metaDescription ?? article.excerpt,
-        url: `https://mentalwellnessapp.com/blog/${article.slug.current}`,
+        url: buildAbsoluteUrl(`/blog/${article.slug.current}`),
         datePublished: article.publishedAt ?? article._createdAt,
         dateModified: article.updatedAt ?? article._updatedAt ?? article.publishedAt ?? article._createdAt,
       })),

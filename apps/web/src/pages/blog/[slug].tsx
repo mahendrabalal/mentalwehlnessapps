@@ -18,7 +18,11 @@ import {
   fetchSiteSettings,
 } from '@/lib/cms/articleService'
 import { urlFor } from '@/lib/cms/image'
-import { buildBreadcrumbList, organizationStructuredData } from '@/lib/seo'
+import {
+  buildAbsoluteUrl,
+  buildBreadcrumbList,
+  organizationStructuredData,
+} from '@/lib/seo'
 
 interface BlogArticlePageProps {
   article: CmsArticle
@@ -60,7 +64,7 @@ export default function BlogArticlePage({
     return urlFor(article.heroImage).width(1600).auto('format').url()
   }, [article.heroImage])
 
-  const articleUrl = `https://mentalwellnessapp.com/blog/${article.slug.current}`
+  const articleUrl = buildAbsoluteUrl(`/blog/${article.slug.current}`)
   const updatedDate = article.updatedAt ?? article._updatedAt ?? publishedDate ?? undefined
 
   // TODO: Add conditional FAQ/HowTo schema based on article.contentType
@@ -76,7 +80,7 @@ export default function BlogArticlePage({
       url: articleUrl,
       datePublished: publishedDate,
       dateModified: updatedDate ?? publishedDate,
-      image: ogImage ?? heroImageUrl ?? 'https://mentalwellnessapp.com/og-default.png',
+      image: ogImage ?? heroImageUrl ?? buildAbsoluteUrl('/og-default.png'),
       author: authors.length
         ? authors.map((author) => ({
             '@type': 'Person',

@@ -1,6 +1,7 @@
 type StructuredData = Record<string, unknown>
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mentalwellnessapp.com'
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mentalwellnessapps.com'
 
 export function buildAbsoluteUrl(path: string): string {
   if (path.startsWith('http')) {
@@ -212,13 +213,6 @@ export function productStructuredData({
       url: buildAbsoluteUrl('/pricing'),
       priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '1247',
-      bestRating: '5',
-      worstRating: '1',
-    },
     additionalProperty: features.map((feature) => ({
       '@type': 'PropertyValue',
       name: 'Feature',
@@ -245,13 +239,6 @@ export function softwareApplicationStructuredData({
     description,
     url: SITE_URL,
     author: organizationStructuredData({ includeContext: false }),
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '1247',
-      bestRating: '5',
-      worstRating: '1',
-    },
     screenshot: buildAbsoluteUrl('/og-default.png'),
   }
 

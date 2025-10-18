@@ -142,13 +142,6 @@ export function SEOHead({
         </>
       )}
 
-      {/* Additional Meta Tags for Healthcare/Wellness */}
-      <meta name="category" content="Health & Wellness" />
-      <meta name="coverage" content="Worldwide" />
-      <meta name="distribution" content="Global" />
-      <meta name="rating" content="General" />
-      <meta name="revisit-after" content="7 days" />
-
       {/* Structured Data (JSON-LD) */}
       {serializedStructuredData ? (
         <script
