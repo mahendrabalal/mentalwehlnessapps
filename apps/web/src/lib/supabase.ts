@@ -66,3 +66,19 @@ export const createMiddlewareClient = (req: NextRequest) => {
     },
   })
 }
+
+// Create Supabase admin client for server-side operations (bypasses RLS)
+export const createServerClient = () => {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error('Supabase server environment variables are not configured')
+  }
+
+  return createSupabaseClient(supabaseUrl, serviceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    }
+  })
+}

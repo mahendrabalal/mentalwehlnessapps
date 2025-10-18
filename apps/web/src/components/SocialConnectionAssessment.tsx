@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
+import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface SocialConnectionAssessmentProps {
   className?: string
@@ -236,6 +237,19 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
             </p>
           </div>
         )}
+
+        {/* Save Results Prompt - Shows only for unauthenticated users */}
+        <SaveResultsPrompt
+          toolName="Loneliness Assessment"
+          assessmentType="ucla-loneliness"
+          assessmentResults={{
+            score,
+            maxScore: 9,
+            level,
+            recommendations: config.tips
+          }}
+          className="mb-6"
+        />
 
         {/* Retake Button */}
         <button

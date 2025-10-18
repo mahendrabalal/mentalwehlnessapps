@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface AssessmentQuestion {
   id: string
@@ -250,31 +251,24 @@ export function GuestBurnoutAssessment({ onComplete, className = '' }: GuestBurn
           </div>
         </div>
 
-        {/* Sign Up CTA */}
-        <div className="bg-gradient-to-r from-therapy-600 to-blue-600 rounded-xl p-6 text-white mb-6">
-          <h3 className="text-xl font-bold mb-2">Track Your Progress Over Time</h3>
-          <p className="mb-4 text-white/90">
-            Sign up free to save your results, track your burnout risk daily, and get personalized insights based on patterns over time.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href={signupUrl}
-              className="bg-white text-therapy-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors text-center shadow-md"
-            >
-              Sign Up Free - Track Your Progress
-            </Link>
-            <button
-              onClick={() => {
-                setShowResults(false)
-                setCurrentQuestion(0)
-                setAnswers({})
-              }}
-              className="bg-white/10 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/30"
-            >
-              Retake Assessment
-            </button>
-          </div>
-        </div>
+        {/* Save Results Prompt - Shows only for unauthenticated users */}
+        <SaveResultsPrompt
+          toolName="Burnout Assessment"
+          assessmentType="burnout-risk"
+          className="mb-6"
+        />
+
+        {/* Retake Button */}
+        <button
+          onClick={() => {
+            setShowResults(false)
+            setCurrentQuestion(0)
+            setAnswers({})
+          }}
+          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors mb-6"
+        >
+          Retake Assessment
+        </button>
 
         {/* Recovery Resources */}
         <div className="bg-gray-50 rounded-lg p-4">

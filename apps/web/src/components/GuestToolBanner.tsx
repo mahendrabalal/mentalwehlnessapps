@@ -35,31 +35,30 @@ export function GuestToolBanner({ toolName, className = '' }: GuestToolBannerPro
   }
 
   return (
-    <div className={`sticky top-0 z-50 bg-gradient-to-r from-therapy-600 to-blue-600 shadow-lg ${className}`}>
+    <div className={`bg-blue-50 border-l-4 border-blue-400 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="text-white font-semibold text-sm sm:text-base">
-              Try {toolName} free! Sign up to save your progress and track patterns over time.
-            </p>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            <Link
-              href={signupUrl}
-              className="bg-white text-therapy-600 px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition-colors shadow-md text-sm sm:text-base whitespace-nowrap"
-            >
-              Sign Up Free
-            </Link>
-            <button
-              onClick={handleDismiss}
-              className="text-white hover:text-gray-200 transition-colors p-2 rounded-lg hover:bg-white/10"
-              aria-label="Dismiss banner"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="flex-shrink-0">
+              <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
-            </button>
+            </div>
+            <div className="flex-1">
+              <p className="text-blue-800 text-sm">
+                <strong>Guest Mode:</strong> Your results won't be saved. Sign up after completing the {toolName.toLowerCase()} to track your progress over time.
+              </p>
+            </div>
           </div>
+          <button
+            onClick={handleDismiss}
+            className="text-blue-600 hover:text-blue-800 transition-colors flex-shrink-0"
+            aria-label="Dismiss banner"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

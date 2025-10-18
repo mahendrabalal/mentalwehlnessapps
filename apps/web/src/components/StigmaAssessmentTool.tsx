@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
+import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface StigmaAssessmentToolProps {
   className?: string
@@ -331,6 +332,13 @@ export function StigmaAssessmentTool({ className = '' }: StigmaAssessmentToolPro
             </p>
           </div>
         )}
+
+        {/* Save Results Prompt - Shows only for unauthenticated users */}
+        <SaveResultsPrompt
+          toolName="Stigma Assessment"
+          assessmentType="mental-health-stigma"
+          className="mb-6"
+        />
 
         {/* Retake Button */}
         <button
