@@ -44,7 +44,7 @@ export function SEOHead({
   children,
 }: SEOProps) {
   const router = useRouter()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mentalwellnessapp.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mentalwellnessapps.com'
   const pathFromRouter = router.asPath.split('?')[0].split('#')[0]
   const canonicalTarget = canonical ?? `${baseUrl}${pathFromRouter}`
   const fullUrl = canonicalTarget.startsWith('http') ? canonicalTarget : `${baseUrl}${canonicalTarget}`
@@ -61,15 +61,16 @@ export function SEOHead({
 
   // Internal keywords for content planning (not rendered as meta tag - deprecated since 2009)
   const defaultKeywords = [
-    'mental health',
-    'mental wellness',
-    'therapy',
-    'anxiety support',
-    'depression help',
-    'crisis support',
-    'mental health app',
-    'online therapy',
-    'wellness tracking'
+    'free mental health app',
+    'free therapy support',
+    'free anxiety help',
+    'free depression support',
+    'free crisis support',
+    'free mood tracker',
+    'burnout prevention',
+    'combat loneliness',
+    'overcome mental health stigma',
+    'emotional wellness support'
   ]
 
   const allKeywords = Array.from(new Set([...keywords, ...defaultKeywords]))
@@ -166,28 +167,83 @@ export function SEOHead({
 // Predefined SEO configurations for common pages
 export const SEO_CONFIG = {
   home: {
-    title: 'Free Mental Health Support - 100% Free AI Therapy & Crisis Support',
-    description: 'Completely free mental health support for anxiety, depression, burnout, and loneliness. No subscriptions, no paywalls. Get unlimited AI therapy companion, crisis support, and mood tracking—forever free.',
-    keywords: ['free mental health app', 'free therapy', 'free anxiety support', 'free depression help', 'mental health support no cost', 'free crisis support', 'free mood tracker', 'overcome mental health stigma', 'combat loneliness', 'emotional burnout recovery'],
+    title: 'Free Mental Health Support - 100% Free Therapy & Crisis Support',
+    description: 'Completely free mental health support for anxiety, depression, burnout, and loneliness. No subscriptions, no paywalls. Get unlimited therapy companion, crisis support, and mood tracking—forever free.',
+    keywords: [
+      'free mental health app',
+      'free therapy',
+      'free anxiety support',
+      'free depression help',
+      'mental health support no cost',
+      'free crisis support',
+      'free mood tracker',
+      'overcome mental health stigma',
+      'combat loneliness',
+      'emotional burnout recovery'
+    ],
   },
   pricing: {
     title: '100% Free Mental Health Support - No Subscriptions | Mental Wellness App',
-    description: 'All features completely free forever. Unlimited AI therapy companion, crisis support, mood analytics, and personalized wellness plans. No credit card, no subscriptions, no hidden costs.',
-    keywords: ['free mental health support', 'free therapy app', 'no cost mental health', 'free anxiety help', 'free depression support'],
+    description: 'All features completely free forever. Unlimited therapy companion, crisis support, mood analytics, and personalized wellness plans. No credit card, no subscriptions, no hidden costs.',
+    keywords: [
+      'free mental health support',
+      'free therapy app',
+      'no cost mental health',
+      'free anxiety help',
+      'free depression support',
+      'free wellness app',
+      'mental health no subscription',
+      'completely free therapy',
+      'free mental wellness tools',
+      'no cost crisis support'
+    ],
   },
   crisisSupport: {
     title: 'Crisis Support Resources - Immediate Mental Health Help Available 24/7',
     description: 'Get immediate help now. Access crisis hotlines, suicide prevention resources, and emergency mental health support worldwide. Free, confidential, available 24/7.',
-    keywords: ['crisis support', 'suicide prevention', 'mental health emergency', 'crisis hotline', '988 lifeline', 'emergency mental health'],
+    keywords: [
+      'crisis support',
+      'suicide prevention',
+      'mental health emergency',
+      'crisis hotline',
+      '988 lifeline',
+      'emergency mental health',
+      'immediate help',
+      'crisis intervention',
+      'mental health crisis',
+      'suicide prevention resources'
+    ],
   },
   blog: {
     title: 'Free Mental Health Resources - Expert Coping Strategies & Support',
-    description: 'Clinically-reviewed mental health education for burnout, anxiety, loneliness, and stigma. Evidence-based coping strategies, mindfulness techniques, and affordable therapy guides. 100% free resources.',
-    keywords: ['mental health coping strategies', 'burnout recovery', 'anxiety relief techniques', 'combat loneliness', 'overcome mental health stigma', 'affordable therapy options', 'mindfulness for beginners', 'emotional regulation skills'],
+    description: 'Clinically-reviewed mental health education for burnout, anxiety, loneliness, and stigma. Evidence-based coping strategies, mindfulness techniques, and free therapy guides.',
+    keywords: [
+      'mental health coping strategies',
+      'burnout recovery',
+      'anxiety relief techniques',
+      'combat loneliness',
+      'overcome mental health stigma',
+      'free therapy guides',
+      'mindfulness for beginners',
+      'emotional regulation skills',
+      'stress management techniques',
+      'mental wellness tips'
+    ],
   },
   features: {
     title: 'Free Mental Health Tools - Combat Burnout, Anxiety & Loneliness',
-    description: 'Free tools for emotional burnout recovery, anxiety management, loneliness support, and crisis intervention. AI therapy companion, mood tracking, safety plans, and 24/7 crisis support—all 100% free.',
-    keywords: ['free mental health tools', 'burnout recovery tools', 'anxiety management app', 'loneliness support', 'free mood tracker', 'crisis intervention', 'free therapy resources'],
+    description: 'Free tools for emotional burnout recovery, anxiety management, loneliness support, and crisis intervention. Therapy companion, mood tracking, safety plans, and 24/7 crisis support—all 100% free.',
+    keywords: [
+      'free mental health tools',
+      'burnout recovery tools',
+      'anxiety management app',
+      'loneliness support',
+      'free mood tracker',
+      'crisis intervention',
+      'free therapy resources',
+      'mental wellness features',
+      'free anxiety tools',
+      'depression support free'
+    ],
   },
 }

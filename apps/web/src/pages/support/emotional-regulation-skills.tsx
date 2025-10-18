@@ -75,10 +75,10 @@ export default function EmotionalRegulationSkillsPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/emotional-regulation"
                   className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
-                  Learn DBT Skills Free
+                  Try Free DBT Skills Tools →
                 </Link>
                 <Link
                   href="#skills"
@@ -143,7 +143,7 @@ export default function EmotionalRegulationSkillsPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/auth/signup"
+                href="/dashboard"
                 className="inline-flex items-center text-red-600 hover:text-red-700 font-semibold text-lg"
               >
                 Start practicing DBT skills now
@@ -477,7 +477,7 @@ export default function EmotionalRegulationSkillsPage() {
               Get guided DBT practice, in-the-moment crisis tools, and track your emotional patterns with our free app.
             </p>
             <Link
-              href="/auth/signup"
+              href="/dashboard"
               className="inline-block bg-white text-red-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Get Started Free

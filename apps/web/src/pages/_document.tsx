@@ -10,6 +10,12 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+        {/* Character Encoding */}
+        <meta charSet="UTF-8" />
+
+        {/* Viewport for responsive design */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover" />
+
         {/* DNS Prefetch for faster loading */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

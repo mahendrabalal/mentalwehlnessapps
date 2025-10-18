@@ -43,6 +43,13 @@ const SUPPORT_PAGES = [
   { label: 'Realistic Recovery Expectations', href: '/support/realistic-mental-health-expectations', icon: '📊' },
 ]
 
+const TOOL_PAGES = [
+  { label: 'Anxiety Relief Tool', href: '/tools/anxiety-relief', icon: '😌' },
+  { label: 'Burnout Assessment', href: '/tools/burnout-assessment', icon: '🔥' },
+  { label: 'Mindfulness Exercises', href: '/tools/mindfulness', icon: '🧘' },
+  { label: 'Emotional Regulation', href: '/tools/emotional-regulation', icon: '🎯' },
+]
+
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
   {
     label: 'Home',
@@ -257,27 +264,32 @@ function PublicNav({
   routerPathname,
   onNavigate,
 }: PublicNavProps) {
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useState<HTMLDivElement | null>(null)[0]
+  const [supportDropdownOpen, setSupportDropdownOpen] = useState(false)
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false)
+  const supportDropdownRef = useState<HTMLDivElement | null>(null)[0]
+  const toolsDropdownRef = useState<HTMLDivElement | null>(null)[0]
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef && !dropdownRef.contains(event.target as Node)) {
-        setDropdownOpen(false)
+      if (supportDropdownRef && !supportDropdownRef.contains(event.target as Node)) {
+        setSupportDropdownOpen(false)
+      }
+      if (toolsDropdownRef && !toolsDropdownRef.contains(event.target as Node)) {
+        setToolsDropdownOpen(false)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [dropdownRef])
+  }, [supportDropdownRef, toolsDropdownRef])
 
   return (
     <>
       {/* Find Support Dropdown */}
-      <div className="relative" ref={dropdownRef as any}>
+      <div className="relative" ref={supportDropdownRef as any}>
         <button
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          onMouseEnter={() => setDropdownOpen(true)}
+          onClick={() => setSupportDropdownOpen(!supportDropdownOpen)}
+          onMouseEnter={() => setSupportDropdownOpen(true)}
           className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
         >
           Find Support
@@ -286,9 +298,9 @@ function PublicNav({
           </svg>
         </button>
 
-        {dropdownOpen && (
+        {supportDropdownOpen && (
           <div
-            onMouseLeave={() => setDropdownOpen(false)}
+            onMouseLeave={() => setSupportDropdownOpen(false)}
             className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
           >
             {SUPPORT_PAGES.map((page) => (
@@ -296,7 +308,7 @@ function PublicNav({
                 key={page.href}
                 href={page.href}
                 onClick={() => {
-                  setDropdownOpen(false)
+                  setSupportDropdownOpen(false)
                   onNavigate()
                 }}
                 className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
@@ -305,6 +317,54 @@ function PublicNav({
                 <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
               </Link>
             ))}
+          </div>
+        )}
+      </div>
+
+      {/* Tools Dropdown */}
+      <div className="relative" ref={toolsDropdownRef as any}>
+        <button
+          onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
+          onMouseEnter={() => setToolsDropdownOpen(true)}
+          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
+        >
+          Tools
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {toolsDropdownOpen && (
+          <div
+            onMouseLeave={() => setToolsDropdownOpen(false)}
+            className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+          >
+            {TOOL_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                onClick={() => {
+                  setToolsDropdownOpen(false)
+                  onNavigate()
+                }}
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">{page.icon}</span>
+                <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
+              </Link>
+            ))}
+            <div className="border-t border-gray-200 my-2"></div>
+            <Link
+              href="/dashboard"
+              onClick={() => {
+                setToolsDropdownOpen(false)
+                onNavigate()
+              }}
+              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+            >
+              <span className="text-xl">📊</span>
+              <span className="text-sm font-semibold text-gray-900">View All Tools</span>
+            </Link>
           </div>
         )}
       </div>
@@ -367,6 +427,7 @@ interface PublicMobileNavProps {
 
 function PublicMobileNav({ items, closeMenu }: PublicMobileNavProps) {
   const [supportExpanded, setSupportExpanded] = useState(false)
+  const [toolsExpanded, setToolsExpanded] = useState(false)
 
   return (
     <>
@@ -400,6 +461,48 @@ function PublicMobileNav({ items, closeMenu }: PublicMobileNavProps) {
                 <span>{page.label}</span>
               </Link>
             ))}
+          </div>
+        )}
+      </div>
+
+      {/* Tools Accordion */}
+      <div className="border-b border-gray-200 pb-2 mb-2">
+        <button
+          onClick={() => setToolsExpanded(!toolsExpanded)}
+          className="flex items-center justify-between w-full px-3 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+        >
+          <span>Tools</span>
+          <svg
+            className={`w-5 h-5 transition-transform ${toolsExpanded ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {toolsExpanded && (
+          <div className="mt-1 space-y-1">
+            {TOOL_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                onClick={closeMenu}
+                className="flex items-center gap-2 px-6 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                <span>{page.icon}</span>
+                <span>{page.label}</span>
+              </Link>
+            ))}
+            <Link
+              href="/dashboard"
+              onClick={closeMenu}
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
+            >
+              <span>📊</span>
+              <span>View All Tools</span>
+            </Link>
           </div>
         )}
       </div>

@@ -65,12 +65,12 @@ export default function Home() {
   const structuredData = [
     softwareApplicationStructuredData({
       name: 'Mental Wellness App',
-      description: 'Free AI-powered mental health support with unlimited therapy companion, crisis support, and mood analytics.',
+      description: 'Free mental health support with unlimited therapy companion, crisis support, and mood analytics. 100% free forever.',
       price: 0,
     }),
     medicalWebPageStructuredData({
-      name: 'Mental Wellness App - Free AI-Powered Mental Health Support',
-      description: '100% free mental health support - no subscriptions, no paywalls. Get unlimited access to AI therapy companion, crisis support, and wellness tools.',
+      name: 'Mental Wellness App - Free Mental Health Support',
+      description: '100% free mental health support - no subscriptions, no paywalls. Get unlimited access to therapy companion, crisis support, and wellness tools.',
       slug: '/',
     }),
     buildBreadcrumbList([{ name: 'Mental Wellness App', url: '/' }]),
@@ -291,6 +291,12 @@ export default function Home() {
                     </svg>
                     <span>Available 24/7, completely free</span>
                   </div>
+                  <Link
+                    href="/support/combat-loneliness-isolation"
+                    className="mt-4 block text-center bg-therapy-50 hover:bg-therapy-100 text-therapy-700 px-4 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Learn More →
+                  </Link>
                 </div>
               </div>
 
@@ -327,6 +333,12 @@ export default function Home() {
                     </svg>
                     <span>Early warning system</span>
                   </div>
+                  <Link
+                    href="/tools/burnout-assessment"
+                    className="mt-4 block text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
+                  >
+                    Try Burnout Assessment →
+                  </Link>
                 </div>
               </div>
 
@@ -361,6 +373,12 @@ export default function Home() {
                     </svg>
                     <span>Instant relief techniques</span>
                   </div>
+                  <Link
+                    href="/tools/anxiety-relief"
+                    className="mt-4 block text-center bg-orange-600 hover:bg-orange-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
+                  >
+                    Get Free Anxiety Tools →
+                  </Link>
                 </div>
               </div>
             </div>

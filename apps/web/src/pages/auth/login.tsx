@@ -48,10 +48,16 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     try {
+      // Check for redirect parameter
+      const redirect = router.query.redirect as string
+      const redirectTo = redirect
+        ? `${window.location.origin}${redirect}`
+        : `${window.location.origin}/`
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo
         }
       })
       if (error) {

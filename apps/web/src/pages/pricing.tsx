@@ -61,7 +61,7 @@ export default function PricingPage() {
   const structuredData = [
     medicalWebPageStructuredData({
       name: 'Mental Wellness App - Free for Everyone',
-      description: 'Free mental health support with unlimited AI therapy companion, crisis support, mood analytics, and personalized wellness plans. No cost, no subscriptions.',
+      description: 'Free mental health support with unlimited therapy companion, crisis support, mood analytics, and personalized wellness plans. No cost, no subscriptions.',
       slug: '/pricing',
     }),
     buildBreadcrumbList([

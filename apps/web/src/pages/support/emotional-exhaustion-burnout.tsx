@@ -80,10 +80,10 @@ export default function EmotionalExhaustionBurnoutPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/burnout-assessment"
                   className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
-                  Start Tracking Your Recovery
+                  Try Free Burnout Assessment →
                 </Link>
                 <Link
                   href="#symptoms"
@@ -148,7 +148,7 @@ export default function EmotionalExhaustionBurnoutPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/auth/signup"
+                href="/dashboard"
                 className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold text-lg"
               >
                 Start your burnout recovery journey
@@ -448,7 +448,7 @@ export default function EmotionalExhaustionBurnoutPage() {
               Track your emotional exhaustion, identify patterns, and get personalized recovery recommendations—all completely free.
             </p>
             <Link
-              href="/auth/signup"
+              href="/dashboard"
               className="inline-block bg-white text-orange-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Get Started Free

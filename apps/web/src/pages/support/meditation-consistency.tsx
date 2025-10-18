@@ -116,7 +116,7 @@ export default function MeditationConsistencyPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/mindfulness"
                   className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
                   Start Tracking Your Streak
@@ -184,7 +184,7 @@ export default function MeditationConsistencyPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/auth/signup"
+                href="/tools/mindfulness"
                 className="inline-flex items-center text-green-600 hover:text-green-700 font-semibold text-lg"
               >
                 Start building your habit today
@@ -397,7 +397,7 @@ export default function MeditationConsistencyPage() {
                   for initial habit formation. Our app will track your progress and celebrate every milestone.
                 </p>
                 <Link
-                  href="/auth/signup"
+                  href="/tools/mindfulness"
                   className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg"
                 >
                   Start Your 21-Day Challenge
@@ -469,7 +469,7 @@ export default function MeditationConsistencyPage() {
               Track your streak, get smart reminders, and see your progress—all the tools you need to stay consistent, completely free.
             </p>
             <Link
-              href="/auth/signup"
+              href="/tools/mindfulness"
               className="inline-block bg-white text-green-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Start Your Habit Today

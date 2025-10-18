@@ -75,7 +75,7 @@ export default function CombatLonelinessIsolationPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/anxiety-relief"
                   className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
                   Get Free 24/7 Support
@@ -245,7 +245,7 @@ export default function CombatLonelinessIsolationPage() {
               Get 24/7 support from our AI companion, mindfulness exercises, and connection resources—completely free.
             </p>
             <Link
-              href="/auth/signup"
+              href="/tools/anxiety-relief"
               className="inline-block bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Start Free Today

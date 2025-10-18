@@ -16,10 +16,15 @@ const STATIC_PAGES = [
   { url: '/medical-disclaimer', changefreq: 'monthly', priority: 0.5 },
   { url: '/hipaa-notice', changefreq: 'monthly', priority: 0.5 },
   { url: '/documentation', changefreq: 'monthly', priority: 0.6 },
+  // Interactive Tool Pages
+  { url: '/tools/anxiety-relief', changefreq: 'weekly', priority: 0.9 },
+  { url: '/tools/burnout-assessment', changefreq: 'weekly', priority: 0.9 },
+  { url: '/tools/mindfulness', changefreq: 'weekly', priority: 0.9 },
+  { url: '/tools/emotional-regulation', changefreq: 'weekly', priority: 0.9 },
 ]
 
 function generateSiteMap(pages: typeof STATIC_PAGES, blogPosts: Array<{ slug: string; updatedAt: string }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mentalwellnessapp.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mentalwellnessapps.com'
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

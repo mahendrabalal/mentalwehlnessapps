@@ -73,10 +73,10 @@ export default function MindfulnessForBeginnersPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/mindfulness"
                   className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
-                  Try Free 2-Minute Practice
+                  Try Free Mindfulness Exercises →
                 </Link>
                 <Link
                   href="#techniques"
@@ -270,7 +270,7 @@ export default function MindfulnessForBeginnersPage() {
               2-minute guided practices, ADHD-friendly techniques, and progress tracking—all completely free.
             </p>
             <Link
-              href="/auth/signup"
+              href="/dashboard"
               className="inline-block bg-white text-green-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
               Get Started Free

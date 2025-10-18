@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { GuestBurnoutAssessment } from './GuestBurnoutAssessment'
 
 interface BurnoutRiskIndicatorProps {
   className?: string
@@ -20,6 +21,7 @@ export function BurnoutRiskIndicator({ className = '' }: BurnoutRiskIndicatorPro
   const [riskScore, setRiskScore] = useState(0)
   const [insights, setInsights] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  const [isGuest, setIsGuest] = useState(false)
 
   useEffect(() => {
     calculateBurnoutRisk()
@@ -31,6 +33,7 @@ export function BurnoutRiskIndicator({ className = '' }: BurnoutRiskIndicatorPro
       const { data: { user } } = await supabase.auth.getUser()
 
       if (!user) {
+        setIsGuest(true)
         setLoading(false)
         return
       }
@@ -204,6 +207,11 @@ export function BurnoutRiskIndicator({ className = '' }: BurnoutRiskIndicatorPro
         </div>
       </div>
     )
+  }
+
+  // Show guest assessment for non-logged-in users
+  if (isGuest) {
+    return <GuestBurnoutAssessment className={className} />
   }
 
   return (

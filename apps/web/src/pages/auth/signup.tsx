@@ -37,7 +37,19 @@ export default function SignUp() {
       if (error) {
         setError(error.message)
       } else if (data?.user) {
-        setMessage('Please check your email for a confirmation link. After confirming, you\'ll be guided through a quick setup process.')
+        // Check if we have a redirect parameter
+        const redirectUrl = router.query.redirect as string
+
+        if (redirectUrl && data.user.confirmed_at) {
+          // User is auto-confirmed (email confirmation disabled), redirect immediately
+          router.push(redirectUrl)
+        } else if (redirectUrl) {
+          // Email confirmation required, store redirect URL for after confirmation
+          localStorage.setItem('postAuthRedirect', redirectUrl)
+          setMessage('Please check your email for a confirmation link. After confirming, you\'ll be redirected to continue.')
+        } else {
+          setMessage('Please check your email for a confirmation link. After confirming, you\'ll be guided through a quick setup process.')
+        }
       }
     } catch (err) {
       setError('An unexpected error occurred')

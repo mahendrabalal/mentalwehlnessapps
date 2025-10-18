@@ -64,6 +64,9 @@ function DashboardContent() {
   useEffect(() => {
     if (user && !authLoading) {
       fetchDashboardData()
+    } else if (!authLoading) {
+      // Guest user - show empty state but allow tool exploration
+      setLoading(false)
     }
   }, [user, timeRange, authLoading])
 
@@ -230,11 +233,44 @@ function DashboardContent() {
         nofollow
       />
       <Navbar />
+
+      {/* Guest User Banner - Industry Best Practice: Try Before Signup */}
+      {!user && (
+        <div className="sticky top-0 z-40 bg-gradient-to-r from-therapy-600 to-blue-600 shadow-lg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <h3 className="text-white font-semibold text-lg">
+                  Try our mental wellness tools - no signup required!
+                </h3>
+                <p className="text-therapy-50 text-sm">
+                  Create a free account to save your progress, track mood over time, and unlock personalized insights
+                </p>
+              </div>
+              <div className="flex gap-3 flex-shrink-0">
+                <Link
+                  href="/auth/signup"
+                  className="bg-white text-therapy-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors shadow-md whitespace-nowrap"
+                >
+                  Sign Up Free
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-therapy-600 transition-colors whitespace-nowrap"
+                >
+                  Log In
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Your Wellness Dashboard</h1>
-            <p className="text-gray-600 mt-2">Track your progress and discover insights</p>
+            <h1 className="text-3xl font-bold text-gray-900">{user ? 'Your' : 'Explore Our'} Wellness Dashboard</h1>
+            <p className="text-gray-600 mt-2">{user ? 'Track your progress and discover insights' : 'Try our tools and see how we can help'}</p>
           </div>
 
           {error && (
@@ -255,6 +291,48 @@ function DashboardContent() {
             isPremium={isPremium}
           />
 
+          {/* Quick Access to Tools */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Quick Access</h2>
+              <span className="text-sm text-gray-500">Jump to specific tools</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Link
+                href="/tools/anxiety-relief"
+                className="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group"
+              >
+                <span className="text-4xl mb-2">😌</span>
+                <span className="text-sm font-semibold text-gray-900 text-center">Anxiety Relief</span>
+                <span className="text-xs text-gray-600 mt-1">Instant techniques</span>
+              </Link>
+              <Link
+                href="/tools/burnout-assessment"
+                className="flex flex-col items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors group"
+              >
+                <span className="text-4xl mb-2">🔥</span>
+                <span className="text-sm font-semibold text-gray-900 text-center">Burnout Check</span>
+                <span className="text-xs text-gray-600 mt-1">Risk assessment</span>
+              </Link>
+              <Link
+                href="/tools/mindfulness"
+                className="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors group"
+              >
+                <span className="text-4xl mb-2">🧘</span>
+                <span className="text-sm font-semibold text-gray-900 text-center">Mindfulness</span>
+                <span className="text-xs text-gray-600 mt-1">Guided practice</span>
+              </Link>
+              <Link
+                href="/tools/emotional-regulation"
+                className="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors group"
+              >
+                <span className="text-4xl mb-2">🎯</span>
+                <span className="text-sm font-semibold text-gray-900 text-center">DBT Skills</span>
+                <span className="text-xs text-gray-600 mt-1">Emotion mastery</span>
+              </Link>
+            </div>
+          </div>
+
           {/* Pain-Point Focused Tools */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Quick Anxiety Relief - Always show for immediate support */}
@@ -273,30 +351,59 @@ function DashboardContent() {
             <AffordableCareDirectory />
           </div>
 
-          {/* Time Range Selector */}
-          <div className="mb-6">
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-full sm:w-fit">
-              {[
-                { key: '7days', label: '7 Days' },
-                { key: '30days', label: '30 Days' },
-                { key: '90days', label: '90 Days' }
-              ].map((option) => (
-                <button
-                  key={option.key}
-                  onClick={() => setTimeRange(option.key as typeof timeRange)}
-                  className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-md transition-colors min-h-[44px] ${
-                    timeRange === option.key
-                      ? 'bg-white text-therapy-700 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+          {/* Time Range Selector - Only show for authenticated users */}
+          {user && (
+            <div className="mb-6">
+              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-full sm:w-fit">
+                {[
+                  { key: '7days', label: '7 Days' },
+                  { key: '30days', label: '30 Days' },
+                  { key: '90days', label: '90 Days' }
+                ].map((option) => (
+                  <button
+                    key={option.key}
+                    onClick={() => setTimeRange(option.key as typeof timeRange)}
+                    className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-md transition-colors min-h-[44px] ${
+                      timeRange === option.key
+                        ? 'bg-white text-therapy-700 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {stats ? (
+          {/* Guest User CTA */}
+          {!user && (
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-8 mb-8 text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                Want to track your progress?
+              </h2>
+              <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+                Create a free account to log moods, track patterns over time, get personalized insights, and save your progress.
+                All features are 100% free, forever.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/auth/signup"
+                  className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors shadow-md"
+                >
+                  Sign Up Free - No Credit Card
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="border-2 border-therapy-600 text-therapy-600 px-8 py-3 rounded-lg font-semibold hover:bg-therapy-50 transition-colors"
+                >
+                  Already Have an Account?
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {stats && user ? (
             <>
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
@@ -565,9 +672,6 @@ function DashboardContent() {
 }
 
 export default function Dashboard() {
-  return (
-    <AuthGuard>
-      <DashboardContent />
-    </AuthGuard>
-  )
+  // Allow guest access - no AuthGuard to follow industry best practice
+  return <DashboardContent />
 }

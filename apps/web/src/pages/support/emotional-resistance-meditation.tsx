@@ -80,10 +80,10 @@ export default function EmotionalResistanceMeditationPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/auth/signup"
+                  href="/tools/mindfulness"
                   className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
                 >
-                  Try Anxiety-Adapted Meditation
+                  Try Anxiety-Adapted Meditation Free
                 </Link>
                 <Link
                   href="#why-uncomfortable"
@@ -148,7 +148,7 @@ export default function EmotionalResistanceMeditationPage() {
 
             <div className="mt-12 text-center">
               <Link
-                href="/auth/signup"
+                href="/tools/mindfulness"
                 className="inline-flex items-center text-purple-600 hover:text-purple-700 font-semibold text-lg"
               >
                 Start practicing with less resistance
@@ -473,10 +473,10 @@ export default function EmotionalResistanceMeditationPage() {
               Access ultra-short, guided practices that work with resistance instead of against it—completely free.
             </p>
             <Link
-              href="/auth/signup"
+              href="/tools/mindfulness"
               className="inline-block bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors shadow-lg"
             >
-              Start Practicing Today
+              Start Practicing Today - Free
             </Link>
             <p className="text-purple-100 mt-4 text-sm">
               No cost. No pressure. Just support when meditation feels hard.
