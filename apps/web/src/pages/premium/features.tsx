@@ -13,12 +13,12 @@ function PremiumFeaturesContent() {
   const [activeFeature, setActiveFeature] = useState<string>('ai-companion')
   const [showUpgradeFlow, setShowUpgradeFlow] = useState(false)
   const baseTitle = 'Premium Features - Mental Wellness App'
-  const baseDescription = 'Explore your premium mental wellness features and start your wellness journey with AI therapy, analytics, and crisis support.'
+  const baseDescription = 'Explore your premium mental wellness features and start your wellness journey with evidence-based support, analytics, and crisis prevention.'
 
   const features = [
     {
       id: 'ai-companion',
-      title: '🤖 24/7 AI Therapy Companion',
+      title: '💬 24/7 Digital Therapeutic Support',
       description: 'Your personal wellness companion available anytime',
       benefits: [
         'Unlimited conversations and support',
@@ -167,7 +167,7 @@ function PremiumFeaturesContent() {
             <div className="mb-8 rounded-lg border border-green-200 bg-green-50 p-6 text-green-800">
               <h2 className="text-xl font-semibold mb-2">Unlock Premium Wellness Support</h2>
               <p className="mb-4">
-                Upgrade now to access unlimited AI therapy support, advanced mood analytics, and the full premium content library.
+                Upgrade now to access unlimited digital therapeutic support, advanced mood analytics, and the full premium content library.
               </p>
               <button
                 type="button"
@@ -356,7 +356,7 @@ function PremiumFeaturesContent() {
                 <div className="text-center">
                   <div className="text-2xl mb-2">3️⃣</div>
                   <h4 className="font-medium text-blue-900">Explore Features</h4>
-                  <p className="text-sm text-blue-700">Use AI companion and content</p>
+                  <p className="text-sm text-blue-700">Use digital support tools and content</p>
                 </div>
               </div>
             </div>

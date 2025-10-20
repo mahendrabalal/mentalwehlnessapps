@@ -6,14 +6,14 @@ import { buildBreadcrumbList, medicalWebPageStructuredData } from '@/lib/seo'
 export default function FeaturesPage() {
   const features = [
     {
-      icon: '🤖',
-      title: '24/7 AI Therapy Companion',
-      description: 'Your personal wellness companion available anytime with intelligent, empathetic conversations.',
+      icon: '💬',
+      title: '24/7 Digital Therapeutic Support',
+      description: 'Your personal wellness companion available anytime with evidence-based therapeutic resources.',
       benefits: [
-        'Unlimited AI conversations',
+        'Unlimited access to therapeutic resources',
         'Crisis detection and intervention',
         'Personalized therapeutic techniques',
-        'Evidence-based responses'
+        'Evidence-based coping strategies'
       ],
       isPremium: true
     },
@@ -123,7 +123,7 @@ export default function FeaturesPage() {
                 <span className="block text-therapy-200">Mental Wellness Forward</span>
               </h1>
               <p className="text-xl lg:text-2xl text-therapy-100 max-w-3xl mx-auto mb-8">
-                Discover how our AI-powered platform provides comprehensive support for your mental health journey
+                Discover how our evidence-based platform provides comprehensive support for your mental health journey
               </p>
               <Link
                 href="/auth/signup"
@@ -190,7 +190,7 @@ export default function FeaturesPage() {
               Ready to Transform Your Mental Wellness?
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Start with our free features and upgrade to premium for the full AI-powered experience
+              Start with our free features and upgrade to premium for the full evidence-based experience
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

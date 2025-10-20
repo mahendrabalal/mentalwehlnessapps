@@ -22,7 +22,7 @@ export default function AboutPage() {
     <>
       <SEOHead
         title="About Mental Wellness App"
-        description="Mental Wellness App pairs AI-enabled insights with clinically guided care to deliver safe, compassionate support for every member."
+        description="Mental Wellness App delivers evidence-based assessments and clinically-guided care to provide safe, compassionate support for every member."
         structuredData={structuredData}
         ogImage="/og-default.png"
       />
@@ -53,14 +53,14 @@ export default function AboutPage() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">AI with Guardrails</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Clinical Oversight & Safety</h2>
               <p className="text-gray-600 leading-relaxed">
-                Our AI therapy companion runs on privacy-aware architecture. Every conversation is encrypted, session timeouts prevent drift, and automated detectors escalate risky language to human review when necessary.
+                Our digital therapeutic platform is designed with clinical oversight and evidence-based safeguards. Every assessment and intervention follows validated protocols, session documentation maintains privacy, and risk screening automatically escalates concerning patterns for professional review.
               </p>
               <ul className="mt-6 space-y-3 text-gray-600">
-                <li>• Anonymous mode for sensitive conversations</li>
-                <li>• Safety classifiers tuned on clinical datasets</li>
-                <li>• Human-in-the-loop audit workflows for ongoing quality</li>
+                <li>• Privacy-aware architecture with end-to-end encryption</li>
+                <li>• Clinical validation of all assessment tools and interventions</li>
+                <li>• Professional review workflows for high-risk indicators</li>
               </ul>
             </div>
           </div>

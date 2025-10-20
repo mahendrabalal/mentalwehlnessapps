@@ -62,7 +62,7 @@ export default function SignUp() {
     <>
       <SEOHead
         title="Sign Up - Mental Wellness App"
-        description="Create your Mental Wellness App account to access AI companion support, analytics, and crisis resources."
+        description="Create your Mental Wellness App account to access digital therapeutic support, analytics, and crisis resources."
         noindex
         nofollow
       />

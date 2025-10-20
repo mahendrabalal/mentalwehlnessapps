@@ -110,7 +110,7 @@ export default function HIPAANoticePage() {
 
               <h4>Treatment</h4>
               <ul>
-                <li>Providing AI-powered therapeutic support and recommendations</li>
+                <li>Providing evidence-based therapeutic support and recommendations</li>
                 <li>Coordinating care with your healthcare providers (with your consent)</li>
                 <li>Crisis intervention and safety planning</li>
                 <li>Generating personalized wellness insights</li>

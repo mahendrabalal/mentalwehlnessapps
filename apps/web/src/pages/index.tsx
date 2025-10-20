@@ -233,7 +233,7 @@ export default function Home() {
               </div>
               <div className="space-y-2">
                 <div className="text-4xl font-bold text-therapy-600">24/7</div>
-                <div className="text-gray-600">AI companion availability</div>
+                <div className="text-gray-600">Digital support availability</div>
               </div>
               <div className="space-y-2">
                 <div className="text-4xl font-bold text-therapy-600">89%</div>
@@ -269,7 +269,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">Combat Loneliness & Isolation</h3>
-                  <p className="text-gray-600 mb-6">24/7 AI companion provides judgment-free support when you feel alone</p>
+                  <p className="text-gray-600 mb-6">24/7 digital support provides judgment-free resources when you feel alone</p>
 
                   {/* Mock conversation */}
                   <div className="bg-gray-50 rounded-lg p-4 space-y-3">
@@ -414,7 +414,7 @@ export default function Home() {
                     <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Unlimited AI therapy companion</span>
+                    <span className="text-gray-700">Unlimited digital therapeutic support</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
               <ul>
                 <li>Mood tracking data and emotional state logs</li>
                 <li>Mental health assessment responses (PHQ-9, GAD-7, etc.)</li>
-                <li>AI companion conversation history</li>
+                <li>Digital therapeutic interaction history and support session data</li>
                 <li>Safety plan details and crisis intervention data</li>
                 <li>Wellness progress and analytics data</li>
               </ul>
@@ -69,10 +69,10 @@ export default function PrivacyPolicyPage() {
 
               <h3>3.1 Primary Uses</h3>
               <ul>
-                <li><strong>Providing Services:</strong> Deliver personalized mental wellness support and AI companion interactions</li>
+                <li><strong>Providing Services:</strong> Deliver personalized mental wellness support and evidence-based therapeutic tools</li>
                 <li><strong>Analytics:</strong> Generate insights about your wellness patterns and progress</li>
                 <li><strong>Safety:</strong> Monitor for crisis indicators and provide emergency resources</li>
-                <li><strong>Improvement:</strong> Enhance our AI algorithms and platform features</li>
+                <li><strong>Improvement:</strong> Enhance our platform features and therapeutic protocols</li>
               </ul>
 
               <h3>3.2 Communication</h3>

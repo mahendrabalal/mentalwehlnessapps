@@ -67,9 +67,12 @@ export function SEOHead({
     'free depression support',
     'free crisis support',
     'free mood tracker',
-    'burnout prevention',
-    'combat loneliness',
-    'overcome mental health stigma',
+    'burnout assessment',
+    'loneliness assessment',
+    'mental health stigma',
+    'evidence-based mental health tools',
+    'clinical-grade assessments',
+    'digital mental health',
     'emotional wellness support'
   ]
 

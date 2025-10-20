@@ -12,9 +12,9 @@ export default function PricingPage() {
       period: 'forever',
       description: 'All premium features included at no cost',
       features: [
-        'Unlimited AI therapy companion',
+        'Unlimited digital therapeutic support',
         'Advanced mood tracking & analytics',
-        'Smart predictions & insights',
+        'Evidence-based insights & predictions',
         'Daily wellness briefings',
         'Premium content library',
         'Crisis prevention system',
@@ -45,8 +45,8 @@ export default function PricingPage() {
       answer: 'Yes, we take your privacy seriously. We are HIPAA compliant and use enterprise-grade security to protect your data. Your personal information is never shared with third parties.'
     },
     {
-      question: 'How does the AI therapy companion work?',
-      answer: 'Our AI companion uses advanced natural language processing and evidence-based therapeutic techniques to provide personalized support. It learns from your interactions to offer increasingly relevant guidance.'
+      question: 'How does the digital therapeutic support work?',
+      answer: 'Our platform uses evidence-based therapeutic techniques and clinical-grade assessments to provide personalized support. Our digital tools learn from your interactions to offer increasingly relevant guidance based on validated mental health protocols.'
     },
     {
       question: 'Can I use this as a replacement for therapy?',

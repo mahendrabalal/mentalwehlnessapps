@@ -44,7 +44,7 @@ export default function MedicalDisclaimerPage() {
 
               <h2>Not Medical Advice</h2>
               <p>
-                The information provided by MentalWellnessApps, including our AI companion, content library, and analytics features, is for <strong>informational and educational purposes only</strong>. This information:
+                The information provided by MentalWellnessApps, including our digital therapeutic tools, content library, and analytics features, is for <strong>informational and educational purposes only</strong>. This information:
               </p>
               <ul>
                 <li>Is not intended to diagnose, treat, cure, or prevent any medical condition</li>
@@ -54,16 +54,16 @@ export default function MedicalDisclaimerPage() {
                 <li>Should not be used to make medical decisions</li>
               </ul>
 
-              <h2>AI Companion Limitations</h2>
+              <h2>Digital Therapeutic Tools Limitations</h2>
               <p>
-                Our AI therapy companion is designed to provide emotional support and general wellness guidance. However:
+                Our digital therapeutic tools are designed to provide emotional support and general wellness guidance. However:
               </p>
               <ul>
-                <li><strong>Not a Licensed Therapist:</strong> The AI is not a human therapist and cannot provide professional therapy</li>
-                <li><strong>Limited Scope:</strong> AI responses are based on algorithms, not clinical judgment</li>
-                <li><strong>Cannot Diagnose:</strong> The AI cannot diagnose mental health conditions</li>
-                <li><strong>Cannot Prescribe:</strong> The AI cannot recommend or prescribe medications</li>
-                <li><strong>Emergency Limitations:</strong> While trained to detect crisis indicators, it may not identify all emergency situations</li>
+                <li><strong>Not a Licensed Therapist:</strong> Digital tools are not a substitute for human therapy and cannot provide professional mental health treatment</li>
+                <li><strong>Limited Scope:</strong> Tool responses are based on evidence-based protocols, not individual clinical judgment</li>
+                <li><strong>Cannot Diagnose:</strong> The tools cannot diagnose mental health conditions</li>
+                <li><strong>Cannot Prescribe:</strong> The tools cannot recommend or prescribe medications</li>
+                <li><strong>Emergency Limitations:</strong> While designed to detect crisis indicators, they may not identify all emergency situations</li>
               </ul>
 
               <h2>When to Seek Professional Help</h2>

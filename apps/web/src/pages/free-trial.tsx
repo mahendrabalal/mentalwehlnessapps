@@ -10,9 +10,9 @@ export default function FreeTrialPage() {
 
   const trialFeatures = [
     {
-      icon: '🤖',
-      title: 'Unlimited AI Companion',
-      description: 'Full access to our 24/7 AI therapy companion with unlimited conversations'
+      icon: '💬',
+      title: 'Digital Therapeutic Support',
+      description: 'Full access to our 24/7 digital support tools with personalized therapeutic resources'
     },
     {
       icon: '📊',
@@ -67,7 +67,7 @@ export default function FreeTrialPage() {
   const structuredData = [
     medicalWebPageStructuredData({
       name: 'Mental Wellness App Free Trial',
-      description: 'Start a free 7-day trial of the Mental Wellness App to access premium AI therapy, analytics, and crisis prevention features.',
+      description: 'Start a free 7-day trial of the Mental Wellness App to access evidence-based tools, analytics, and crisis prevention features.',
       slug: '/free-trial',
     }),
     buildBreadcrumbList([
