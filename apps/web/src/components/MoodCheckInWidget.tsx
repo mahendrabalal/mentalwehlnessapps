@@ -37,13 +37,23 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
   }
 
   const handleSubmit = async () => {
-    if (!selectedMood || !user) return
+    if (!selectedMood || !user) {
+      console.warn('Cannot submit - missing selectedMood or user', { selectedMood, user: user?.id })
+      return
+    }
 
     try {
       setIsLoading(true)
 
+      // Debug logging
+      console.log('💾 Saving mood entry:', {
+        user_id: user.id,
+        mood_score: selectedMood,
+        email: user.email,
+      })
+
       // Create mood entry in database
-      const { error } = await supabase.from('mood_entries').insert({
+      const { data, error } = await supabase.from('mood_entries').insert({
         user_id: user.id,
         mood_score: selectedMood,
         anxiety_level: null,
@@ -52,10 +62,14 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
         stress_level: null,
         notes: note || null,
         created_at: new Date().toISOString(),
-      })
+      }).select()
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Supabase error:', error)
+        throw error
+      }
 
+      console.log('✅ Mood saved successfully:', data)
       setSubmitted(true)
 
       // Reset after 2 seconds
@@ -65,8 +79,14 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
         setShowNote(false)
         setSubmitted(false)
       }, 2000)
-    } catch (error) {
-      console.error('Error saving mood:', error)
+    } catch (error: any) {
+      console.error('❌ Error saving mood:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+        fullError: error,
+      })
     } finally {
       setIsLoading(false)
     }
