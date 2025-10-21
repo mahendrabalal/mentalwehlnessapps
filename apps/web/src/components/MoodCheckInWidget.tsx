@@ -29,6 +29,7 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
   const [showNote, setShowNote] = useState(false)
   const [note, setNote] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
 
   const handleMoodClick = (mood: number) => {
@@ -39,11 +40,13 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
   const handleSubmit = async () => {
     if (!selectedMood || !user) {
       console.warn('Cannot submit - missing selectedMood or user', { selectedMood, user: user?.id })
+      setError('User not authenticated. Please log in and try again.')
       return
     }
 
     try {
       setIsLoading(true)
+      setError(null)
 
       // Debug logging
       console.log('💾 Saving mood entry:', {
@@ -66,19 +69,22 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
 
       if (error) {
         console.error('❌ Supabase error:', error)
+        setError(`Error saving mood: ${error.message}. Please try again.`)
         throw error
       }
 
       console.log('✅ Mood saved successfully:', data)
       setSubmitted(true)
+      setError(null)
 
-      // Reset after 2 seconds
+      // Reset after 3 seconds
       setTimeout(() => {
         setSelectedMood(null)
         setNote('')
         setShowNote(false)
         setSubmitted(false)
-      }, 2000)
+        setError(null)
+      }, 3000)
     } catch (error: any) {
       console.error('❌ Error saving mood:', {
         message: error.message,
@@ -87,6 +93,7 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
         code: error.code,
         fullError: error,
       })
+      setError(`Failed to save: ${error.message || 'Unknown error'}`)
     } finally {
       setIsLoading(false)
     }
@@ -164,8 +171,17 @@ export function MoodCheckInWidget({ user, onMoodSelected, className = '' }: Mood
           </button>
         )}
 
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center animate-in fade-in">
+            <div className="text-2xl mb-2">⚠️</div>
+            <p className="text-red-800 font-medium">Error</p>
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         {/* Success Message */}
-        {submitted && (
+        {submitted && !error && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center animate-in fade-in">
             <div className="text-2xl mb-2">✨</div>
             <p className="text-green-800 font-medium">Check-in saved!</p>
