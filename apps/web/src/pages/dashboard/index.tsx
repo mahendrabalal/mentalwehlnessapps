@@ -18,6 +18,7 @@ import { AffordableCareDirectory } from '@/components/AffordableCareDirectory'
 import { MoodCheckInWidget } from '@/components/MoodCheckInWidget'
 import { SmartRecommendation } from '@/components/SmartRecommendation'
 import { ProgressSummaryCollapsible } from '@/components/ProgressSummaryCollapsible'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 import type { User } from '@supabase/supabase-js'
 
 interface MoodEntry {
@@ -455,32 +456,37 @@ function DashboardContent() {
             />
           )}
 
-          {/* TIER 2: Additional Tools & Resources */}
-          <div className="my-12">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Explore More Tools</p>
-              <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-            </div>
-          </div>
+          {/* TIER 2: Additional Tools & Resources - PROGRESSIVE DISCLOSURE (COLLAPSED BY DEFAULT) */}
+          {user && (
+            <CollapsibleSection
+              id="explore-more-tools"
+              title="Explore More Tools"
+              icon="🔍"
+              summary="Anxiety relief, burnout resources, mindfulness, and more"
+              defaultExpanded={false}
+              className="mb-8"
+            >
+              {/* Pain-Point Focused Tools */}
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Quick Anxiety Relief */}
+                  <QuickAnxietyRelief />
 
-          {/* Pain-Point Focused Tools */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Quick Anxiety Relief - Always show for immediate support */}
-            <QuickAnxietyRelief />
+                  {/* Burnout Risk Indicator */}
+                  <BurnoutRiskIndicator />
+                </div>
 
-            {/* Burnout Risk Indicator - Automatically checks user data */}
-            <BurnoutRiskIndicator />
-          </div>
+                {/* Mindfulness for Beginners - Full width */}
+                <MindfulnessForBeginners className="mb-0" />
 
-          {/* Mindfulness for Beginners - Full width */}
-          <MindfulnessForBeginners className="mb-8" />
-
-          {/* Emotional Regulation & Care Directory */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <EmotionalRegulationToolkit />
-            <AffordableCareDirectory />
-          </div>
+                {/* Emotional Regulation & Care Directory */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <EmotionalRegulationToolkit />
+                  <AffordableCareDirectory />
+                </div>
+              </div>
+            </CollapsibleSection>
+          )}
 
           {/* Time Range Selector - Only show for authenticated users */}
           {user && (
