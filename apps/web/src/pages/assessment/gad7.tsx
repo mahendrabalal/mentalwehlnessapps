@@ -73,6 +73,7 @@ export default function GAD7Assessment() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showResults, setShowResults] = useState(false)
+  const [scoreChange, setScoreChange] = useState<number | null>(null)
   const [results, setResults] = useState<{
     totalScore: number
     severity: string
@@ -116,33 +117,65 @@ export default function GAD7Assessment() {
       const severity = calculateSeverity(totalScore)
       const isCrisis = isCrisisScore(totalScore)
 
-      const { error } = await supabase
-        .from('assessments')
-        .insert({
-          user_id: user.id,
-          assessment_type: 'gad7',
-          responses,
-          total_score: totalScore,
-          severity_level: severity,
-          crisis_risk_level: isCrisis ? 'high' : 'low',
-          suicide_risk_indicated: false, // GAD-7 doesn't assess suicide risk directly
-          requires_immediate_attention: isCrisis,
-          interpretation: getSeverityDescription(severity),
-          completed_at: new Date().toISOString()
-        })
+      // Get auth session for API call
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
 
-      if (error) {
-        setError(error.message)
-      } else {
-        setResults({
-          totalScore,
-          severity,
-          isCrisis
-        })
-        setShowResults(true)
+      if (!token) {
+        setError('Authentication failed. Please log in again.')
+        return
       }
+
+      // Use new API endpoint for progress tracking
+      const response = await fetch('/api/assessments/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          assessmentType: 'gad7',
+          toolName: 'GAD-7 Anxiety Assessment',
+          score: totalScore,
+          maxScore: 21,
+          level: severity,
+          severityScore: totalScore,
+          crisisLevel: isCrisis ? 'severe' : 'none',
+          results: {
+            responses,
+            severity,
+            isCrisis,
+            questionCount: GAD7_QUESTIONS.length
+          },
+          recommendations: [
+            getSeverityDescription(severity),
+            isCrisis ? 'Please reach out to a mental health professional immediately' : 'Consider speaking with a healthcare provider',
+            'Regular relaxation techniques can help manage anxiety symptoms'
+          ]
+        })
+      })
+
+      const apiData = await response.json()
+
+      if (!apiData.success) {
+        setError(apiData.error || 'Failed to save assessment')
+        return
+      }
+
+      // Store score change for display
+      if (apiData.data?.scoreChange !== null && apiData.data?.scoreChange !== undefined) {
+        setScoreChange(apiData.data.scoreChange)
+      }
+
+      setResults({
+        totalScore,
+        severity,
+        isCrisis
+      })
+      setShowResults(true)
     } catch (err) {
-      setError('An unexpected error occurred')
+      console.error('Assessment submission error:', err)
+      setError('An unexpected error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -191,6 +224,33 @@ export default function GAD7Assessment() {
               <h1 className="text-2xl font-bold text-gray-900 mb-6">GAD-7 Assessment Results</h1>
 
               <div className="space-y-6">
+                {/* Score change indicator */}
+                {scoreChange !== null && scoreChange !== 0 && (
+                  <div className={`p-4 rounded-lg border-l-4 ${
+                    scoreChange < 0
+                      ? 'bg-green-50 border-green-500'
+                      : 'bg-orange-50 border-orange-500'
+                  }`}>
+                    <div className="flex items-center gap-2">
+                      {scoreChange < 0 ? (
+                        <>
+                          <span className="text-2xl">📈</span>
+                          <span className={`font-semibold ${scoreChange < 0 ? 'text-green-700' : 'text-orange-700'}`}>
+                            Great progress! Your anxiety score improved by {Math.abs(scoreChange)} points since your last assessment.
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-2xl">📉</span>
+                          <span className="font-semibold text-orange-700">
+                            Your anxiety score increased by {scoreChange} points. Consider reaching out for support.
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h3 className="text-lg font-semibold mb-2">Your Score: {results.totalScore}/21</h3>
                   <p className="text-gray-700 capitalize">

@@ -9,13 +9,13 @@ export default function DocumentationPage() {
 
   const sections = [
     { id: 'getting-started', title: 'Getting Started', icon: '🚀' },
-    { id: 'features', title: 'Features Guide', icon: '⚡' },
-    { id: 'ai-companion', title: 'AI Companion', icon: '🤖' },
-    { id: 'analytics', title: 'Analytics & Insights', icon: '📊' },
+    { id: 'dashboard', title: 'Dashboard & Daily Check-ins', icon: '🗓️' },
+    { id: 'tools', title: 'Interactive Wellness Tools', icon: '🛠️' },
+    { id: 'support-library', title: 'Find Support Guides', icon: '📚' },
     { id: 'safety-planning', title: 'Safety Planning', icon: '🛡️' },
     { id: 'data-privacy', title: 'Data & Privacy', icon: '🔒' },
-    { id: 'api', title: 'Developer API', icon: '⚙️' },
-    { id: 'troubleshooting', title: 'Troubleshooting', icon: '🛠️' }
+    { id: 'api', title: 'Developer Access', icon: '⚙️' },
+    { id: 'troubleshooting', title: 'Troubleshooting', icon: '🧰' }
   ]
 
   const content = {
@@ -32,7 +32,7 @@ export default function DocumentationPage() {
               <li><strong>Create Your Account:</strong> Sign up with your email or continue as a guest to explore basic features</li>
               <li><strong>Complete Your Profile:</strong> Add basic information to personalize your experience</li>
               <li><strong>Take Your First Assessment:</strong> Complete a brief wellness check to establish your baseline</li>
-              <li><strong>Explore Features:</strong> Try our mood tracking, AI companion, and safety planning tools</li>
+              <li><strong>Explore the Platform:</strong> Review your dashboard, launch the interactive tools, and bookmark support guides that match your needs</li>
             </ol>
 
             <h3>Understanding Your Dashboard</h3>
@@ -40,102 +40,98 @@ export default function DocumentationPage() {
             <ul>
               <li><strong>Daily Mood Check:</strong> Quick daily assessment of your mental state</li>
               <li><strong>Progress Overview:</strong> Visual representation of your wellness journey</li>
-              <li><strong>AI Companion Access:</strong> Chat with your personal wellness companion</li>
-              <li><strong>Quick Actions:</strong> Fast access to safety planning and crisis resources</li>
+              <li><strong>Action Shortcuts:</strong> Jump directly to assessments, tools, or support guides</li>
+              <li><strong>Quick Safety Actions:</strong> Fast access to safety planning and crisis resources</li>
             </ul>
           `
         }
       ]
     },
-    'features': {
-      title: 'Features Guide',
+    'dashboard': {
+      title: 'Dashboard & Daily Check-ins',
       sections: [
         {
-          title: 'Core Features Overview',
+          title: 'Stay on Track Every Day',
           content: `
-            <h3>Free Features</h3>
+            <p>The dashboard keeps your daily workflow simple and repeatable so you always know the next best step.</p>
+
+            <h3>Daily Check-in Routine</h3>
             <ul>
-              <li><strong>Mood Tracking:</strong> Log daily emotions, energy levels, and notes</li>
-              <li><strong>Basic AI Chat:</strong> 3 conversations per day with our AI companion</li>
-              <li><strong>Safety Planning:</strong> Create and manage your personal safety plan</li>
-              <li><strong>Crisis Resources:</strong> Immediate access to mental health emergency contacts</li>
-              <li><strong>Basic Content:</strong> Access to guided meditations and breathing exercises</li>
+              <li><strong>Mood & Energy:</strong> Rate how you feel and capture context with quick notes</li>
+              <li><strong>Stress & Sleep:</strong> Track the biggest drivers of your wellbeing with slider inputs</li>
+              <li><strong>Daily Intentions:</strong> Set a focus for the day to reinforce healthy habits</li>
+              <li><strong>Reflection:</strong> Wrap up the evening noting wins, challenges, and next steps</li>
             </ul>
 
-            <h3>Premium Features</h3>
+            <h3>Dashboard Highlights</h3>
             <ul>
-              <li><strong>Unlimited AI Companion:</strong> 24/7 access to personalized therapeutic conversations</li>
-              <li><strong>Smart Analytics:</strong> Advanced pattern recognition and mood forecasting</li>
-              <li><strong>Daily Briefings:</strong> Personalized morning wellness insights</li>
-              <li><strong>Premium Content:</strong> Complete library of therapeutic exercises</li>
-              <li><strong>Crisis Prevention:</strong> Advanced warning system and intervention protocols</li>
-              <li><strong>Data Export:</strong> Download your complete wellness data</li>
+              <li><strong>Burnout Risk Indicator:</strong> Real-time score based on your latest check-ins</li>
+              <li><strong>Progress Over Time:</strong> Charts that surface trends in mood, stress, and energy</li>
+              <li><strong>Quick Tool Launchers:</strong> Open breathing, grounding, or assessment tools in one click</li>
+              <li><strong>Support Shortcuts:</strong> Featured guides tied to your recent reflections</li>
             </ul>
           `
         }
       ]
     },
-    'ai-companion': {
-      title: 'AI Therapy Companion Guide',
+    'tools': {
+      title: 'Interactive Wellness Tools',
       sections: [
         {
-          title: 'Understanding Your AI Companion',
+          title: 'Evidence-Based Tools You Can Use Anytime',
           content: `
-            <p>Your AI therapy companion is designed to provide 24/7 emotional support using evidence-based therapeutic techniques.</p>
+            <p>The tools library delivers self-guided exercises, assessments, and planners that reinforce your routine.</p>
 
-            <h3>How It Works</h3>
+            <h3>Immediate Relief</h3>
             <ul>
-              <li><strong>Natural Conversations:</strong> Chat naturally about your feelings, thoughts, and experiences</li>
-              <li><strong>Therapeutic Techniques:</strong> Receives training in CBT, DBT, and mindfulness approaches</li>
-              <li><strong>Crisis Detection:</strong> Monitors conversations for signs of crisis and provides immediate resources</li>
-              <li><strong>Personalization:</strong> Learns your communication style and preferences over time</li>
+              <li><strong>Quick Anxiety Relief:</strong> 5-4-3-2-1 grounding, box breathing, progressive muscle relaxation, and panic plan checklists</li>
+              <li><strong>Mindfulness Timer:</strong> Guided breathing and focus timers for mid-day resets</li>
+              <li><strong>Meditation Habit Tracker:</strong> Set streak goals and celebrate practice consistency</li>
             </ul>
 
-            <h3>Best Practices</h3>
+            <h3>Assessments & Planning</h3>
             <ul>
-              <li>Be honest and open about your feelings</li>
-              <li>Ask specific questions about coping strategies</li>
-              <li>Use it as a supplement to, not replacement for, professional therapy</li>
-              <li>Regular check-ins help build better understanding</li>
+              <li><strong>Burnout Assessment:</strong> Seven-question check with next steps tailored to your score</li>
+              <li><strong>Loneliness & Stigma Assessments:</strong> Short evidence-backed scales with practical suggestions</li>
+              <li><strong>Therapy Cost Calculator:</strong> Compare in-person, telehealth, and community-based pricing</li>
+              <li><strong>Recovery Timeline:</strong> Map milestones for therapy, medication, and mindfulness habits</li>
             </ul>
 
-            <h3>Example Conversations</h3>
-            <p><strong>User:</strong> "I'm feeling overwhelmed with work stress"</p>
-            <p><strong>AI:</strong> "I understand work stress can feel overwhelming. Let's explore some strategies together. Can you tell me what specific aspects of work are causing the most stress right now?"</p>
+            <h3>Progress Builders</h3>
+            <ul>
+              <li><strong>Substance Use Resources:</strong> Plan safer coping strategies and emergency contacts</li>
+              <li><strong>Emotional Regulation Coach:</strong> Practice reframing thoughts and planning coping actions</li>
+              <li><strong>Guided Mindfulness Exercises:</strong> Build consistent practice with structured breathing and meditation sessions</li>
+            </ul>
           `
         }
       ]
     },
-    'analytics': {
-      title: 'Analytics & Insights',
+    'support-library': {
+      title: 'Find Support Guides',
       sections: [
         {
-          title: 'Understanding Your Data',
+          title: 'Find Support That Matches Your Situation',
           content: `
-            <p>Our analytics system transforms your daily inputs into meaningful insights about your mental wellness patterns.</p>
+            <p>The Find Support menu offers deep-dive guides for the most common mental health pain points.</p>
 
-            <h3>Mood Trends</h3>
+            <h3>Guided Paths</h3>
             <ul>
-              <li><strong>Daily Patterns:</strong> Identify times of day when mood is typically higher or lower</li>
-              <li><strong>Weekly Cycles:</strong> Understand how different days of the week affect your wellness</li>
-              <li><strong>Seasonal Changes:</strong> Track how seasons and weather impact your mental health</li>
+              <li><strong>Burnout & Work Stress:</strong> Emotional Burnout Recovery paired with burnout prevention checklists</li>
+              <li><strong>Financial & Access Barriers:</strong> Affordable Therapy Options with scholarships, clinics, and sliding-scale tips</li>
+              <li><strong>Loneliness & Connection:</strong> Combat Loneliness with step-by-step social reconnection plans</li>
+              <li><strong>Anxiety Management:</strong> Managing Anxiety Naturally covers grounding, exposure planning, and aftercare</li>
+              <li><strong>Mindfulness Foundations:</strong> Mindfulness for Beginners and Meditation Consistency guides to build realistic habits</li>
+              <li><strong>Stigma & Self-Advocacy:</strong> Overcome Mental Health Stigma and Realistic Recovery Expectations reset expectations and scripts</li>
+              <li><strong>Emotional Skills:</strong> Emotional Regulation Skills and Manage Meditation Anxiety rehearse healthier responses</li>
             </ul>
 
-            <h3>Correlation Analysis</h3>
-            <p>Premium users get advanced insights that identify connections between:</p>
+            <h3>How to Use Each Guide</h3>
             <ul>
-              <li>Sleep quality and next-day mood</li>
-              <li>Exercise frequency and energy levels</li>
-              <li>Social interactions and anxiety levels</li>
-              <li>Weather patterns and emotional state</li>
-            </ul>
-
-            <h3>Predictive Insights</h3>
-            <p>Our AI analyzes your patterns to provide:</p>
-            <ul>
-              <li><strong>Mood Forecasting:</strong> Predictions about upcoming emotional states</li>
-              <li><strong>Risk Assessment:</strong> Early warning signs for potential mental health challenges</li>
-              <li><strong>Optimization Suggestions:</strong> Personalized recommendations for improving wellness</li>
+              <li>Start with the overview to understand the topic and why it matters</li>
+              <li>Work through the step-by-step action plans and add tasks to your daily check-ins</li>
+              <li>Use printable worksheets to track progress or discuss with a clinician</li>
+              <li>Bookmark key sections so they appear in your dashboard shortcuts</li>
             </ul>
           `
         }
@@ -172,9 +168,9 @@ export default function DocumentationPage() {
             <p>Our app provides:</p>
             <ul>
               <li>One-tap access to your safety plan from any page</li>
-              <li>Quick dial buttons for emergency contacts</li>
-              <li>Crisis resources integration</li>
-              <li>Sharing capabilities with healthcare providers</li>
+              <li>Printable and shareable versions for trusted supporters</li>
+              <li>Direct crisis hotline links and international resources</li>
+              <li>Reminders to review your plan during weekly reflections</li>
             </ul>
           `
         }
@@ -199,10 +195,10 @@ export default function DocumentationPage() {
             <h3>Data Usage</h3>
             <p>Your data is used only for:</p>
             <ul>
-              <li>Providing personalized mental health insights</li>
-              <li>Improving AI companion responses</li>
-              <li>Generating analytics and trends</li>
-              <li>Crisis detection and prevention</li>
+              <li>Delivering personalized dashboards and recommendations</li>
+              <li>Improving interactive tools and educational guides</li>
+              <li>Aggregated, de-identified research to improve outcomes</li>
+              <li>Crisis detection and prevention features you enable</li>
             </ul>
 
             <h3>Data Control</h3>
@@ -218,12 +214,12 @@ export default function DocumentationPage() {
       ]
     },
     'api': {
-      title: 'Developer API',
+      title: 'Developer Access',
       sections: [
         {
-          title: 'API Documentation',
+          title: 'Partner API Overview',
           content: `
-            <p>Our API allows healthcare providers and developers to integrate with MentalWellnessApps.</p>
+            <p>Our API allows healthcare providers and developers to integrate MentalWellnessApps data into their care workflows.</p>
 
             <h3>Authentication</h3>
             <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
@@ -273,24 +269,33 @@ POST /api/v1/assessments</code></pre>
               <li>Try logging in from an incognito window</li>
             </ul>
 
-            <h3>AI Companion Not Responding</h3>
-            <p><strong>Problem:</strong> AI companion is slow or not responding</p>
+            <h3>Tools or Assessments Not Loading</h3>
+            <p><strong>Problem:</strong> A tool spinner never finishes or a page appears blank</p>
             <p><strong>Solutions:</strong></p>
             <ul>
               <li>Check your internet connection</li>
-              <li>Refresh the page</li>
-              <li>Try rephrasing your message</li>
+              <li>Refresh the page or reopen the tool from the dashboard shortcuts</li>
+              <li>Disable browser extensions that inject script blockers</li>
               <li>Contact support if issues persist</li>
             </ul>
 
-            <h3>Data Sync Issues</h3>
-            <p><strong>Problem:</strong> Mood entries not saving or syncing</p>
+            <h3>Daily Check-in Not Saving</h3>
+            <p><strong>Problem:</strong> Mood entries are not saving or syncing</p>
             <p><strong>Solutions:</strong></p>
             <ul>
               <li>Ensure stable internet connection</li>
               <li>Force refresh the dashboard</li>
               <li>Log out and log back in</li>
               <li>Check if storage quota is exceeded</li>
+            </ul>
+
+            <h3>Safety Plan Access</h3>
+            <p><strong>Problem:</strong> Unable to view or edit the saved safety plan</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+              <li>Verify you are signed in with the account that created the plan</li>
+              <li>Open the safety plan from the main navigation instead of a bookmarked link</li>
+              <li>Confirm pop-up blockers are not preventing download or print actions</li>
             </ul>
 
             <h3>Performance Issues</h3>
@@ -311,7 +316,7 @@ POST /api/v1/assessments</code></pre>
   const structuredData = [
     medicalWebPageStructuredData({
       name: 'Mental Wellness App Documentation',
-      description: 'Guides for onboarding, analytics, API usage, privacy controls, and crisis workflows within the Mental Wellness App.',
+      description: 'Guides for onboarding, daily check-ins, interactive tools, privacy controls, developer access, and crisis workflows within the Mental Wellness App.',
       slug: '/documentation',
     }),
     buildBreadcrumbList([
@@ -337,7 +342,7 @@ POST /api/v1/assessments</code></pre>
     <>
       <SEOHead
         title="Documentation - Mental Wellness App"
-        description="Explore detailed documentation to master onboarding, analytics, privacy controls, API usage, and crisis workflows within the Mental Wellness App."
+        description="Explore detailed documentation to master onboarding, daily check-ins, self-guided tools, privacy controls, developer access, and crisis workflows within the Mental Wellness App."
         structuredData={structuredData}
       />
 

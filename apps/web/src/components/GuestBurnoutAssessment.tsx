@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
 import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface AssessmentQuestion {
@@ -100,13 +101,77 @@ export function GuestBurnoutAssessment({ onComplete, className = '' }: GuestBurn
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [showResults, setShowResults] = useState(false)
   const [currentPath, setCurrentPath] = useState('')
+  const [user, setUser] = useState<any>(null)
+  const [scoreChange, setScoreChange] = useState<number | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const supabase = createClient()
 
   // Handle router on client-side only to avoid SSR issues
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setCurrentPath(window.location.pathname)
     }
+    checkUser()
   }, [])
+
+  const checkUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+    } catch (error) {
+      console.error('Error checking user:', error)
+    }
+  }
+
+  const saveAssessmentResult = async (assessmentAnswers: Record<string, number>) => {
+    if (!user) return
+
+    setIsSaving(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+
+      if (!token) {
+        console.log('No auth token available')
+        return
+      }
+
+      const { score, level } = calculateRiskScore()
+
+      const response = await fetch('/api/assessments/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          assessmentType: 'burnout',
+          toolName: 'Burnout Risk Assessment',
+          score: 100 - score, // Convert back to wellness score
+          maxScore: 100,
+          level: level,
+          severityScore: score,
+          results: {
+            burnoutScore: score,
+            riskLevel: level,
+            answers: assessmentAnswers,
+            questionCount: ASSESSMENT_QUESTIONS.length
+          },
+          recommendations: getRiskConfig(level).actions
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.success && data.assessment.scoreChange !== null && data.assessment.scoreChange !== undefined) {
+        setScoreChange(data.assessment.scoreChange)
+      }
+    } catch (error) {
+      console.error('Failed to save assessment:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const handleAnswer = (questionId: string, score: number) => {
     const newAnswers = { ...answers, [questionId]: score }
@@ -116,6 +181,10 @@ export function GuestBurnoutAssessment({ onComplete, className = '' }: GuestBurn
       setCurrentQuestion(currentQuestion + 1)
     } else {
       setShowResults(true)
+      // Auto-save for logged-in users
+      if (user) {
+        saveAssessmentResult(newAnswers)
+      }
       onComplete?.()
     }
   }
@@ -211,6 +280,33 @@ export function GuestBurnoutAssessment({ onComplete, className = '' }: GuestBurn
           <p className="text-gray-600 text-sm">Based on your responses</p>
         </div>
 
+        {/* Score change indicator for logged-in users */}
+        {user && scoreChange !== null && scoreChange !== 0 && (
+          <div className={`mb-6 p-4 rounded-lg border-l-4 ${
+            scoreChange > 0
+              ? 'bg-green-50 border-green-500'
+              : 'bg-orange-50 border-orange-500'
+          }`}>
+            <div className="flex items-center gap-2">
+              {scoreChange > 0 ? (
+                <>
+                  <span className="text-2xl">📈</span>
+                  <span className="font-semibold text-green-700">
+                    Great progress! Your wellness score improved by {scoreChange} points since your last assessment.
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-2xl">📉</span>
+                  <span className="font-semibold text-orange-700">
+                    Your wellness score declined by {Math.abs(scoreChange)} points. Consider prioritizing self-care.
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Risk Level Display */}
         <div className={`${config.bgColor} ${config.borderColor} border-2 rounded-xl p-6 mb-6`}>
           <div className="flex items-center justify-between mb-4">
@@ -252,11 +348,26 @@ export function GuestBurnoutAssessment({ onComplete, className = '' }: GuestBurn
         </div>
 
         {/* Save Results Prompt - Shows only for unauthenticated users */}
-        <SaveResultsPrompt
-          toolName="Burnout Assessment"
-          assessmentType="burnout-risk"
-          className="mb-6"
-        />
+        {!user && (
+          <SaveResultsPrompt
+            toolName="Burnout Assessment"
+            assessmentType="burnout-risk"
+            className="mb-6"
+          />
+        )}
+
+        {/* Logged-in user actions */}
+        {user && (
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">Your Assessment is Saved</h4>
+            <p className="text-sm text-blue-800 mb-3">
+              Your burnout assessment has been automatically saved to your dashboard. Track your progress over time to see improvements!
+            </p>
+            {isSaving && (
+              <p className="text-sm text-gray-600 italic">Saving your progress...</p>
+            )}
+          </div>
+        )}
 
         {/* Retake Button */}
         <button

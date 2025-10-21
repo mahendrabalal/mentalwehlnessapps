@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
 import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface SocialConnectionAssessmentProps {
@@ -34,6 +35,73 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<string, ResponseOption>>({})
   const [showResults, setShowResults] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [scoreChange, setScoreChange] = useState<number | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  const checkUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+    } catch (error) {
+      console.error('Error checking user:', error)
+    }
+  }
+
+  const saveAssessmentResult = async (assessmentResponses: Record<string, ResponseOption>) => {
+    if (!user) return
+
+    setIsSaving(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+
+      if (!token) {
+        console.log('No auth token available')
+        return
+      }
+
+      const totalScore = calculateScore()
+      const lonelinessLevel = getLonelinessLevel(totalScore)
+
+      const response = await fetch('/api/assessments/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          assessmentType: 'loneliness',
+          toolName: 'Social Connection Assessment (UCLA Loneliness Scale)',
+          score: totalScore,
+          maxScore: 9,
+          level: lonelinessLevel,
+          severityScore: totalScore,
+          results: {
+            totalScore: totalScore,
+            lonelinessLevel: lonelinessLevel,
+            responses: assessmentResponses
+          },
+          recommendations: getLevelConfig(lonelinessLevel).tips
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.success && data.assessment.scoreChange !== null && data.assessment.scoreChange !== undefined) {
+        setScoreChange(data.assessment.scoreChange)
+      }
+    } catch (error) {
+      console.error('Failed to save assessment:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const handleResponse = (score: ResponseOption) => {
     const questionId = UCLA_QUESTIONS[currentQuestion].id
@@ -45,6 +113,10 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
       setCurrentQuestion(currentQuestion + 1)
     } else {
       setShowResults(true)
+      // Auto-save for logged-in users
+      if (user) {
+        saveAssessmentResult(newResponses)
+      }
     }
   }
 
@@ -136,6 +208,33 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
             Based on the UCLA Loneliness Scale (ULS-3) - a clinically validated assessment
           </p>
         </div>
+
+        {/* Score change indicator for logged-in users */}
+        {user && scoreChange !== null && scoreChange !== 0 && (
+          <div className={`mb-6 p-4 rounded-lg border-l-4 ${
+            scoreChange < 0
+              ? 'bg-green-50 border-green-500'
+              : 'bg-orange-50 border-orange-500'
+          }`}>
+            <div className="flex items-center gap-2">
+              {scoreChange < 0 ? (
+                <>
+                  <span className="text-2xl">📈</span>
+                  <span className="font-semibold text-green-700">
+                    Excellent! Your social connection score improved by {Math.abs(scoreChange)} points. You're building stronger connections!
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-2xl">📉</span>
+                  <span className="font-semibold text-orange-700">
+                    Your loneliness score increased by {scoreChange} points. Consider reaching out to build new connections.
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Score Display */}
         <div className={`${config.bgColor} ${config.borderColor} border-2 rounded-xl p-6 mb-6`}>
@@ -239,17 +338,32 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
         )}
 
         {/* Save Results Prompt - Shows only for unauthenticated users */}
-        <SaveResultsPrompt
-          toolName="Loneliness Assessment"
-          assessmentType="ucla-loneliness"
-          assessmentResults={{
-            score,
-            maxScore: 9,
-            level,
-            recommendations: config.tips
-          }}
-          className="mb-6"
-        />
+        {!user && (
+          <SaveResultsPrompt
+            toolName="Loneliness Assessment"
+            assessmentType="ucla-loneliness"
+            assessmentResults={{
+              score,
+              maxScore: 9,
+              level,
+              recommendations: config.tips
+            }}
+            className="mb-6"
+          />
+        )}
+
+        {/* Logged-in user actions */}
+        {user && (
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">Your Assessment is Saved</h4>
+            <p className="text-sm text-blue-800 mb-3">
+              Your social connection assessment has been automatically saved to your dashboard. Track how your social wellness improves over time!
+            </p>
+            {isSaving && (
+              <p className="text-sm text-gray-600 italic">Saving your progress...</p>
+            )}
+          </div>
+        )}
 
         {/* Retake Button */}
         <button

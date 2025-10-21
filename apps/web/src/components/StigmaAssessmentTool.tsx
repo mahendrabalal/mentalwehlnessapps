@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase'
 import { SaveResultsPrompt } from '@/components/SaveResultsPrompt'
 
 interface StigmaAssessmentToolProps {
@@ -38,6 +39,76 @@ export function StigmaAssessmentTool({ className = '' }: StigmaAssessmentToolPro
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<string, ResponseValue>>({})
   const [showResults, setShowResults] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [scoreChange, setScoreChange] = useState<number | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+
+  const checkUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+    } catch (error) {
+      console.error('Error checking user:', error)
+    }
+  }
+
+  const saveAssessmentResult = async (assessmentResponses: Record<string, ResponseValue>) => {
+    if (!user) return
+
+    setIsSaving(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const token = session?.access_token
+
+      if (!token) {
+        console.log('No auth token available')
+        return
+      }
+
+      const scores = calculateScores()
+      const stigmaLevel = getStigmaLevel(scores.totalScore, scores.maxScore)
+
+      const response = await fetch('/api/assessments/save-result', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          assessmentType: 'stigma',
+          toolName: 'Mental Health Stigma Assessment',
+          score: scores.totalScore,
+          maxScore: scores.maxScore,
+          level: stigmaLevel,
+          severityScore: scores.totalScore,
+          results: {
+            totalScore: scores.totalScore,
+            stigmaLevel: stigmaLevel,
+            awarenessScore: scores.awarenessScore,
+            applicationScore: scores.applicationScore,
+            harmScore: scores.harmScore,
+            responses: assessmentResponses
+          },
+          recommendations: getLevelConfig(stigmaLevel).strategies
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.success && data.assessment.scoreChange !== null && data.assessment.scoreChange !== undefined) {
+        setScoreChange(data.assessment.scoreChange)
+      }
+    } catch (error) {
+      console.error('Failed to save assessment:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   const handleResponse = (score: ResponseValue) => {
     const questionId = STIGMA_QUESTIONS[currentQuestion].id
@@ -48,6 +119,10 @@ export function StigmaAssessmentTool({ className = '' }: StigmaAssessmentToolPro
       setCurrentQuestion(currentQuestion + 1)
     } else {
       setShowResults(true)
+      // Auto-save for logged-in users
+      if (user) {
+        saveAssessmentResult(newResponses)
+      }
     }
   }
 
@@ -184,6 +259,33 @@ export function StigmaAssessmentTool({ className = '' }: StigmaAssessmentToolPro
             Based on the Self-Stigma of Mental Illness Scale (SSMIS-SF) - adapted for accessibility
           </p>
         </div>
+
+        {/* Score change indicator for logged-in users */}
+        {user && scoreChange !== null && scoreChange !== 0 && (
+          <div className={`mb-6 p-4 rounded-lg border-l-4 ${
+            scoreChange < 0
+              ? 'bg-green-50 border-green-500'
+              : 'bg-orange-50 border-orange-500'
+          }`}>
+            <div className="flex items-center gap-2">
+              {scoreChange < 0 ? (
+                <>
+                  <span className="text-2xl">📈</span>
+                  <span className="font-semibold text-green-700">
+                    Great progress! Your stigma score improved by {Math.abs(scoreChange)} points since your last assessment.
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="text-2xl">📉</span>
+                  <span className="font-semibold text-orange-700">
+                    Your stigma score increased by {scoreChange} points. Consider working on self-compassion strategies.
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Overall Score */}
         <div className={`${config.bgColor} ${config.borderColor} border-2 rounded-xl p-6 mb-6`}>
@@ -334,11 +436,26 @@ export function StigmaAssessmentTool({ className = '' }: StigmaAssessmentToolPro
         )}
 
         {/* Save Results Prompt - Shows only for unauthenticated users */}
-        <SaveResultsPrompt
-          toolName="Stigma Assessment"
-          assessmentType="mental-health-stigma"
-          className="mb-6"
-        />
+        {!user && (
+          <SaveResultsPrompt
+            toolName="Stigma Assessment"
+            assessmentType="mental-health-stigma"
+            className="mb-6"
+          />
+        )}
+
+        {/* Logged-in user actions */}
+        {user && (
+          <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h4 className="font-semibold text-blue-900 mb-2">Your Assessment is Saved</h4>
+            <p className="text-sm text-blue-800 mb-3">
+              Your stigma assessment has been automatically saved to your dashboard. Track your progress as you work on self-compassion!
+            </p>
+            {isSaving && (
+              <p className="text-sm text-gray-600 italic">Saving your progress...</p>
+            )}
+          </div>
+        )}
 
         {/* Retake Button */}
         <button
