@@ -4,8 +4,21 @@ import { Navbar } from '@/components/Navbar'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
 
+interface PricingPlan {
+  name: string
+  price: string
+  period: string
+  description: string
+  features: string[]
+  cta: string
+  ctaLink?: string
+  ctaAction?: () => void
+  popular?: boolean
+  color: string
+}
+
 export default function PricingPage() {
-  const plans = [
+  const plans: PricingPlan[] = [
     {
       name: 'Free for Everyone',
       price: '$0',
@@ -160,9 +173,9 @@ export default function PricingPage() {
                       >
                         {plan.cta}
                       </button>
-                    ) : (
+                    ) : plan.ctaLink ? (
                       <Link
-                        href={plan.ctaLink!}
+                        href={plan.ctaLink}
                         className={`block w-full text-center py-3 px-6 rounded-lg font-semibold transition-colors ${
                           plan.popular
                             ? 'bg-therapy-600 hover:bg-therapy-700 text-white'
@@ -171,7 +184,7 @@ export default function PricingPage() {
                       >
                         {plan.cta}
                       </Link>
-                    )}
+                    ) : null}
 
                     <p className="text-xs text-gray-500 text-center mt-3">
                       Instant access • No credit card required

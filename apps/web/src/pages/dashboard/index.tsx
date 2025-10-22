@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
@@ -19,6 +18,8 @@ import { MoodCheckInWidget } from '@/components/MoodCheckInWidget'
 import { SmartRecommendation } from '@/components/SmartRecommendation'
 import { ProgressSummaryCollapsible } from '@/components/ProgressSummaryCollapsible'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { DashboardHero } from '@/components/DashboardHero'
+import { WellnessSnapshot } from '@/components/WellnessSnapshot'
 import type { User } from '@supabase/supabase-js'
 
 interface MoodEntry {
@@ -70,6 +71,36 @@ interface DashboardStats {
   currentStreak: number
 }
 
+const MOOD_LABELS: Record<number, string> = {
+  1: 'Terrible',
+  2: 'Anxious',
+  3: 'Down',
+  4: 'Okay',
+  5: 'Good'
+}
+
+const getUserFirstName = (user?: User | null): string => {
+  if (!user) return 'there'
+  const fullName = (user.user_metadata as Record<string, unknown>)?.full_name
+  if (typeof fullName === 'string' && fullName.trim().length > 0) {
+    return fullName.split(' ')[0]
+  }
+  if (user.email) return user.email.split('@')[0]
+  return 'there'
+}
+
+const getTimeGreeting = (): string => {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good morning'
+  if (hour < 18) return 'Good afternoon'
+  return 'Good evening'
+}
+
+const getMoodLabel = (score?: number | null): string => {
+  if (!score) return 'No data'
+  return MOOD_LABELS[score] || `${score}/10`
+}
+
 function DashboardContent() {
   const { user, loading: authLoading } = useAuth()
   const { subscription, loading: subscriptionLoading, isPremium } = useSubscription()
@@ -81,7 +112,6 @@ function DashboardContent() {
   const [error, setError] = useState('')
   const [timeRange, setTimeRange] = useState<'7days' | '30days' | '90days'>('30days')
   const supabase = createClient()
-  const router = useRouter()
 
   useEffect(() => {
     if (user && !authLoading) {
@@ -309,6 +339,32 @@ function DashboardContent() {
   }
 
   const moodTrend = getMoodTrendDirection(moodEntries)
+  const latestMoodEntry = moodEntries[0]
+  const greetingCopy = `${getTimeGreeting()}, ${getUserFirstName(user)}! 👋`
+  const heroHighlights = [
+    {
+      label: 'Current streak',
+      value: stats ? `${stats.currentStreak} days` : 'Start today',
+      helper: stats && stats.currentStreak > 0 ? 'Nice consistency—keep building the habit.' : 'Log a check-in to start your streak.',
+      icon: <span aria-hidden="true">🔥</span>
+    },
+    {
+      label: 'Latest mood',
+      value: getMoodLabel(latestMoodEntry?.mood_score),
+      helper: latestMoodEntry
+        ? `Recorded ${new Date(latestMoodEntry.created_at).toLocaleDateString()}`
+        : 'Complete a quick check-in to capture how you feel.',
+      icon: <span aria-hidden="true">😊</span>
+    },
+    {
+      label: 'Assessments',
+      value: stats ? `${stats.totalAssessments}` : '0',
+      helper: stats?.lastAssessmentDate
+        ? `Last submitted ${new Date(stats.lastAssessmentDate).toLocaleDateString()}`
+        : 'Complete PHQ-9 or GAD-7 when you need deeper insights.',
+      icon: <span aria-hidden="true">📋</span>
+    }
+  ]
 
   return (
     <>
@@ -368,77 +424,83 @@ function DashboardContent() {
           {/* TIER 1: Progressive Disclosure - Primary Experience */}
           {user ? (
             <>
-              {/* Personalized Greeting */}
-              <div className="mb-6">
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                  Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, {user.email?.split('@')[0]}! 👋
-                </h2>
-                <p className="text-gray-600 mt-1 text-sm">Check in with yourself right now</p>
-              </div>
+              <DashboardHero greeting={greetingCopy} highlights={heroHighlights} />
 
-              {/* Mood Check-In Widget */}
-              <MoodCheckInWidget user={user} className="mb-6" />
-
-              {/* Smart Contextual Recommendation */}
-              {!loading && assessments.length > 0 && (
-                <SmartRecommendation
-                  assessments={assessments}
-                  userFirstName={user.email?.split('@')[0]}
-                  className="mb-6"
+              <div className="space-y-6">
+                <WellnessSnapshot
+                  stats={stats}
+                  latestMoodEntry={latestMoodEntry}
+                  timeRange={timeRange}
+                  onTimeRangeChange={(value) => setTimeRange(value)}
+                  moodTrend={moodTrend}
                 />
-              )}
 
-              {/* Collapsed Progress Summary */}
-              {!loading && stats && (
-                <ProgressSummaryCollapsible
-                  moodEntries={moodEntries}
-                  assessments={assessments}
-                  currentStreak={stats.currentStreak}
-                  className="mb-8"
-                />
-              )}
+                <MoodCheckInWidget user={user} className="mb-2" />
 
-              {/* Quick Access to Tools - Compact Version */}
-              <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8">
-                <p className="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wide">Quick Access</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <Link
-                    href="/assessment/phq9"
-                    className="flex flex-col items-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group min-h-[100px] justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-therapy-500"
-                    aria-label="Take depression assessment"
-                  >
-                    <span className="text-3xl mb-1">📊</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center">Assess</span>
-                  </Link>
-                  <Link
-                    href="/tools/anxiety-relief"
-                    className="flex flex-col items-center p-3 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors group min-h-[100px] justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-therapy-500"
-                    aria-label="Anxiety relief techniques"
-                  >
-                    <span className="text-3xl mb-1">😌</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center">Relief</span>
-                  </Link>
-                  <Link
-                    href="/tools/mindfulness"
-                    className="flex flex-col items-center p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors group min-h-[100px] justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-therapy-500"
-                    aria-label="Mindfulness meditation"
-                  >
-                    <span className="text-3xl mb-1">🧘</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center">Meditate</span>
-                  </Link>
-                  <Link
-                    href="/crisis/support"
-                    className="flex flex-col items-center p-3 bg-red-50 hover:bg-red-100 rounded-lg transition-colors group min-h-[100px] justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-therapy-500"
-                    aria-label="Crisis support resources"
-                  >
-                    <span className="text-3xl mb-1">🆘</span>
-                    <span className="text-xs font-semibold text-gray-900 text-center">Crisis</span>
-                  </Link>
-                </div>
+                {!loading && assessments.length > 0 && (
+                  <SmartRecommendation
+                    assessments={assessments}
+                    userFirstName={getUserFirstName(user)}
+                    className="mb-2"
+                  />
+                )}
+
+                {!loading && stats && (
+                  <ProgressSummaryCollapsible
+                    moodEntries={moodEntries}
+                    assessments={assessments}
+                    currentStreak={stats.currentStreak}
+                    className="mb-2"
+                  />
+                )}
+
+                <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+                  <h2 className="text-lg font-semibold text-slate-900">Quick actions</h2>
+                  <p className="text-sm text-slate-500">
+                    Jump back into the areas you use most often.
+                  </p>
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <Link
+                      href="/assessment/phq9"
+                      className="group rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-label="Take depression assessment"
+                    >
+                      <span className="text-2xl">📊</span>
+                      <p className="mt-3 text-sm font-semibold text-slate-900">Assess</p>
+                      <p className="text-xs text-slate-500">
+                        PHQ-9 and GAD-7 in under five minutes.
+                      </p>
+                    </Link>
+                    <Link
+                      href="/tools/anxiety-relief"
+                      className="group rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-label="Anxiety relief techniques"
+                    >
+                      <span className="text-2xl">😌</span>
+                      <p className="mt-3 text-sm font-semibold text-slate-900">Relief</p>
+                      <p className="text-xs text-slate-500">Quick calming plans and guided breaths.</p>
+                    </Link>
+                    <Link
+                      href="/tools/mindfulness"
+                      className="group rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-label="Mindfulness meditation"
+                    >
+                      <span className="text-2xl">🧘</span>
+                      <p className="mt-3 text-sm font-semibold text-slate-900">Meditate</p>
+                      <p className="text-xs text-slate-500">Stick with short, evidence-based sessions.</p>
+                    </Link>
+                    <Link
+                      href="/crisis/support"
+                      className="group rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                      aria-label="Crisis support resources"
+                    >
+                      <span className="text-2xl">🆘</span>
+                      <p className="mt-3 text-sm font-semibold text-slate-900">Crisis</p>
+                      <p className="text-xs text-slate-500">24/7 hotlines and safety planning guidance.</p>
+                    </Link>
+                  </div>
+                </section>
               </div>
-
-              {/* Divider */}
-              <div className="border-b-2 border-gray-200 my-8" />
             </>
           ) : null}
 
@@ -486,31 +548,6 @@ function DashboardContent() {
                 </div>
               </div>
             </CollapsibleSection>
-          )}
-
-          {/* Time Range Selector - Only show for authenticated users */}
-          {user && (
-            <div className="mb-6">
-              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-full sm:w-fit">
-                {[
-                  { key: '7days', label: '7 Days' },
-                  { key: '30days', label: '30 Days' },
-                  { key: '90days', label: '90 Days' }
-                ].map((option) => (
-                  <button
-                    key={option.key}
-                    onClick={() => setTimeRange(option.key as typeof timeRange)}
-                    className={`flex-1 sm:flex-none px-6 py-3 text-sm font-medium rounded-md transition-colors min-h-[44px] ${
-                      timeRange === option.key
-                        ? 'bg-white text-therapy-700 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           )}
 
           {/* Guest User CTA */}

@@ -173,18 +173,24 @@ export default async function handler(
     // Track impression event automatically
     if (isNewAssignment) {
       // Track asynchronously (don't wait)
-      supabase.rpc('track_ab_test_event', {
-        p_experiment_id: experiment.id,
-        p_variant_id: variantId,
-        p_event_type: 'impression',
-        p_user_id: userId,
-        p_guest_identifier: guestIdentifier,
-        p_event_data: {
-          page_url: req.headers.referer,
-          user_agent: req.headers['user-agent'],
-          session_id: sessionId
-        }
-      }).catch(err => console.error('Failed to track impression:', err))
+      void supabase
+        .rpc('track_ab_test_event', {
+          p_experiment_id: experiment.id,
+          p_variant_id: variantId,
+          p_event_type: 'impression',
+          p_user_id: userId,
+          p_guest_identifier: guestIdentifier,
+          p_event_data: {
+            page_url: req.headers.referer,
+            user_agent: req.headers['user-agent'],
+            session_id: sessionId
+          }
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error('Failed to track impression:', error)
+          }
+        })
     }
 
     return res.status(200).json({

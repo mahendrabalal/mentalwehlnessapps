@@ -31,6 +31,115 @@ const UCLA_QUESTIONS: Question[] = [
 
 type LonelinessLevel = 'not-lonely' | 'moderate' | 'significant'
 
+const MAX_ASSESSMENT_SCORE = 9
+const API_ASSESSMENT_TYPE = 'loneliness'
+const STORAGE_ASSESSMENT_TYPE = 'ucla-loneliness'
+const LONELINESS_STORAGE_KEY = 'pendingAssessment_loneliness'
+const ASSESSMENT_TOOL_NAME = 'Social Connection Assessment (UCLA Loneliness Scale)'
+
+interface PendingLonelinessResult {
+  assessmentType: string
+  toolName: string
+  responses: Record<string, ResponseOption>
+  score: number
+  maxScore: number
+  level: LonelinessLevel
+  recommendations: string[]
+  shouldAutoSave: boolean
+  savedAt: string
+}
+
+const LEVEL_CONFIGS: Record<LonelinessLevel, {
+  color: string
+  bgColor: string
+  borderColor: string
+  textColor: string
+  iconBg: string
+  icon: string
+  label: string
+  message: string
+  tips: string[]
+}> = {
+  'not-lonely': {
+    color: 'green',
+    bgColor: 'bg-green-50',
+    borderColor: 'border-green-200',
+    textColor: 'text-green-700',
+    iconBg: 'bg-green-100',
+    icon: '💚',
+    label: 'Strong Social Connections',
+    message: 'Your responses suggest you have healthy social connections. Keep nurturing these relationships!',
+    tips: [
+      'Continue maintaining regular contact with friends and family',
+      'Consider deepening existing relationships through meaningful conversations',
+      'Share your social wellness strategies with others who might benefit',
+      'Explore new social activities or hobbies to expand your network'
+    ]
+  },
+  'moderate': {
+    color: 'yellow',
+    bgColor: 'bg-yellow-50',
+    borderColor: 'border-yellow-300',
+    textColor: 'text-yellow-800',
+    iconBg: 'bg-yellow-100',
+    icon: '💛',
+    label: 'Moderate Loneliness',
+    message: 'You\'re experiencing some feelings of loneliness. This is common and there are effective strategies to improve your connections.',
+    tips: [
+      'Schedule regular check-ins with friends or family (even brief texts count)',
+      'Join a group or class based on your interests',
+      'Volunteer for a cause you care about to meet like-minded people',
+      'Reach out to one person this week you\'ve been meaning to connect with',
+      'Consider therapy to explore relationship patterns and build connection skills'
+    ]
+  },
+  'significant': {
+    color: 'red',
+    bgColor: 'bg-red-50',
+    borderColor: 'border-red-300',
+    textColor: 'text-red-800',
+    iconBg: 'bg-red-100',
+    icon: '❤️',
+    label: 'Significant Loneliness',
+    message: 'You\'re experiencing significant loneliness. This is a health concern, but there are proven interventions that can help.',
+    tips: [
+      'Reach out for professional support - loneliness is treatable',
+      'Start small: one social interaction per day (even with a cashier)',
+      'Join an online community around a specific interest',
+      'Consider group therapy or support groups',
+      'Practice self-compassion - loneliness doesn\'t mean something is wrong with you',
+      'Look into local community centers, libraries, or religious organizations',
+      'Try our mindfulness tools to manage difficult emotions while building connections'
+    ]
+  }
+}
+
+const calculateScoreFromResponses = (assessmentResponses: Record<string, ResponseOption>): number => {
+  return Object.values(assessmentResponses).reduce((sum, value) => sum + value, 0)
+}
+
+const normalizeResponses = (storedResponses: Record<string, number | ResponseOption>): Record<string, ResponseOption> => {
+  return Object.entries(storedResponses).reduce((acc, [questionId, value]) => {
+    const numericValue = Number(value)
+    if (numericValue === 1 || numericValue === 2 || numericValue === 3) {
+      acc[questionId] = numericValue as ResponseOption
+    }
+    return acc
+  }, {} as Record<string, ResponseOption>)
+}
+
+const hasAllResponses = (assessmentResponses: Record<string, ResponseOption>): boolean => {
+  return Object.keys(assessmentResponses).length === UCLA_QUESTIONS.length
+}
+
+const getLonelinessLevel = (score: number): LonelinessLevel => {
+  if (score >= 6) return 'significant'
+  if (score >= 4) return 'moderate'
+  return 'not-lonely'
+}
+
+const getLevelConfig = (level: LonelinessLevel) => LEVEL_CONFIGS[level]
+
 export function SocialConnectionAssessment({ className = '' }: SocialConnectionAssessmentProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<Record<string, ResponseOption>>({})
@@ -38,10 +147,42 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
   const [user, setUser] = useState<any>(null)
   const [scoreChange, setScoreChange] = useState<number | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [pendingResult, setPendingResult] = useState<PendingLonelinessResult | null>(null)
   const supabase = createClient()
 
   useEffect(() => {
     checkUser()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const storedValue = sessionStorage.getItem(LONELINESS_STORAGE_KEY)
+    if (!storedValue) {
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(storedValue) as PendingLonelinessResult
+      if (parsed?.responses) {
+        const normalizedResponses = normalizeResponses(parsed.responses)
+        if (hasAllResponses(normalizedResponses)) {
+          const shouldAutoSave = parsed.shouldAutoSave ?? true
+          setResponses(normalizedResponses)
+          setShowResults(true)
+          setPendingResult({
+            ...parsed,
+            responses: normalizedResponses,
+            shouldAutoSave
+          })
+        }
+      }
+    } catch (error) {
+      console.error('Failed to restore pending loneliness assessment:', error)
+      sessionStorage.removeItem(LONELINESS_STORAGE_KEY)
+    }
   }, [])
 
   const checkUser = async () => {
@@ -55,6 +196,7 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
 
   const saveAssessmentResult = async (assessmentResponses: Record<string, ResponseOption>) => {
     if (!user) return
+    if (!hasAllResponses(assessmentResponses)) return
 
     setIsSaving(true)
     try {
@@ -66,7 +208,7 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
         return
       }
 
-      const totalScore = calculateScore()
+      const totalScore = calculateScoreFromResponses(assessmentResponses)
       const lonelinessLevel = getLonelinessLevel(totalScore)
 
       const response = await fetch('/api/assessments/save-result', {
@@ -76,10 +218,10 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          assessmentType: 'loneliness',
-          toolName: 'Social Connection Assessment (UCLA Loneliness Scale)',
+          assessmentType: API_ASSESSMENT_TYPE,
+          toolName: ASSESSMENT_TOOL_NAME,
           score: totalScore,
-          maxScore: 9,
+          maxScore: MAX_ASSESSMENT_SCORE,
           level: lonelinessLevel,
           severityScore: totalScore,
           results: {
@@ -116,87 +258,92 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
       // Auto-save for logged-in users
       if (user) {
         saveAssessmentResult(newResponses)
+      } else {
+        persistPendingResult(newResponses)
       }
     }
   }
 
-  const calculateScore = (): number => {
-    return Object.values(responses).reduce((sum, score) => sum + score, 0)
+  const persistPendingResult = (assessmentResponses: Record<string, ResponseOption>, shouldAutoSave = true) => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    if (!hasAllResponses(assessmentResponses)) {
+      return
+    }
+
+    const totalScore = calculateScoreFromResponses(assessmentResponses)
+    const lonelinessLevel = getLonelinessLevel(totalScore)
+
+    const pending: PendingLonelinessResult = {
+      assessmentType: STORAGE_ASSESSMENT_TYPE,
+      toolName: ASSESSMENT_TOOL_NAME,
+      responses: assessmentResponses,
+      score: totalScore,
+      maxScore: MAX_ASSESSMENT_SCORE,
+      level: lonelinessLevel,
+      recommendations: getLevelConfig(lonelinessLevel).tips,
+      shouldAutoSave,
+      savedAt: new Date().toISOString()
+    }
+
+    sessionStorage.setItem(LONELINESS_STORAGE_KEY, JSON.stringify(pending))
+    setPendingResult(pending)
   }
 
-  const getLonelinessLevel = (score: number): LonelinessLevel => {
-    if (score >= 6) return 'significant'
-    if (score >= 4) return 'moderate'
-    return 'not-lonely'
+  const clearPendingResult = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem(LONELINESS_STORAGE_KEY)
+    }
+    setPendingResult(null)
   }
+
+  const markPendingResultForAutoSave = () => {
+    const sourceResponses = pendingResult?.responses ?? responses
+    if (!hasAllResponses(sourceResponses)) {
+      return
+    }
+
+    persistPendingResult(sourceResponses, true)
+  }
+
+  useEffect(() => {
+    if (!user || !pendingResult || !pendingResult.shouldAutoSave) {
+      return
+    }
+
+    let cancelled = false
+
+    const autoSave = async () => {
+      try {
+        await saveAssessmentResult(pendingResult.responses)
+        if (!cancelled) {
+          clearPendingResult()
+        }
+      } catch (error) {
+        console.error('Failed to auto-save loneliness assessment after authentication:', error)
+      }
+    }
+
+    autoSave()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user, pendingResult])
 
   const resetAssessment = () => {
     setResponses({})
     setCurrentQuestion(0)
     setShowResults(false)
-  }
-
-  const score = calculateScore()
-  const level = getLonelinessLevel(score)
-
-  const getLevelConfig = (level: LonelinessLevel) => {
-    const configs = {
-      'not-lonely': {
-        color: 'green',
-        bgColor: 'bg-green-50',
-        borderColor: 'border-green-200',
-        textColor: 'text-green-700',
-        iconBg: 'bg-green-100',
-        icon: '💚',
-        label: 'Strong Social Connections',
-        message: 'Your responses suggest you have healthy social connections. Keep nurturing these relationships!',
-        tips: [
-          'Continue maintaining regular contact with friends and family',
-          'Consider deepening existing relationships through meaningful conversations',
-          'Share your social wellness strategies with others who might benefit',
-          'Explore new social activities or hobbies to expand your network'
-        ]
-      },
-      'moderate': {
-        color: 'yellow',
-        bgColor: 'bg-yellow-50',
-        borderColor: 'border-yellow-300',
-        textColor: 'text-yellow-800',
-        iconBg: 'bg-yellow-100',
-        icon: '💛',
-        label: 'Moderate Loneliness',
-        message: 'You\'re experiencing some feelings of loneliness. This is common and there are effective strategies to improve your connections.',
-        tips: [
-          'Schedule regular check-ins with friends or family (even brief texts count)',
-          'Join a group or class based on your interests',
-          'Volunteer for a cause you care about to meet like-minded people',
-          'Reach out to one person this week you\'ve been meaning to connect with',
-          'Consider therapy to explore relationship patterns and build connection skills'
-        ]
-      },
-      'significant': {
-        color: 'red',
-        bgColor: 'bg-red-50',
-        borderColor: 'border-red-300',
-        textColor: 'text-red-800',
-        iconBg: 'bg-red-100',
-        icon: '❤️',
-        label: 'Significant Loneliness',
-        message: 'You\'re experiencing significant loneliness. This is a health concern, but there are proven interventions that can help.',
-        tips: [
-          'Reach out for professional support - loneliness is treatable',
-          'Start small: one social interaction per day (even with a cashier)',
-          'Join an online community around a specific interest',
-          'Consider group therapy or support groups',
-          'Practice self-compassion - loneliness doesn\'t mean something is wrong with you',
-          'Look into local community centers, libraries, or religious organizations',
-          'Try our mindfulness tools to manage difficult emotions while building connections'
-        ]
-      }
+    if (!user) {
+      clearPendingResult()
     }
-    return configs[level]
   }
 
+  const score = calculateScoreFromResponses(responses)
+  const level = getLonelinessLevel(score)
   const config = getLevelConfig(level)
 
   if (showResults) {
@@ -244,7 +391,7 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
             </div>
             <div className="flex-1">
               <h3 className="text-xl font-bold text-gray-900">{config.label}</h3>
-              <p className="text-sm text-gray-600">Score: {score}/9</p>
+              <p className="text-sm text-gray-600">Score: {score}/{MAX_ASSESSMENT_SCORE}</p>
             </div>
           </div>
 
@@ -255,7 +402,7 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
                 level === 'not-lonely' ? 'bg-green-500' :
                 level === 'moderate' ? 'bg-yellow-500' : 'bg-red-500'
               }`}
-              style={{ width: `${(score / 9) * 100}%` }}
+              style={{ width: `${(score / MAX_ASSESSMENT_SCORE) * 100}%` }}
             ></div>
           </div>
 
@@ -341,13 +488,15 @@ export function SocialConnectionAssessment({ className = '' }: SocialConnectionA
         {!user && (
           <SaveResultsPrompt
             toolName="Loneliness Assessment"
-            assessmentType="ucla-loneliness"
+            assessmentType={STORAGE_ASSESSMENT_TYPE}
             assessmentResults={{
               score,
-              maxScore: 9,
+              maxScore: MAX_ASSESSMENT_SCORE,
               level,
               recommendations: config.tips
             }}
+            onSignupIntent={markPendingResultForAutoSave}
+            onDismissed={clearPendingResult}
             className="mb-6"
           />
         )}

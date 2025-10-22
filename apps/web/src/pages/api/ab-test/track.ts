@@ -158,14 +158,17 @@ export default async function handler(
 
     // For conversions, also update with conversion-specific data if provided
     if (eventType === 'conversion' && (conversionValue || conversionMetadata)) {
-      await supabase
+      const { error: conversionError } = await supabase
         .from('ab_test_events')
         .update({
           conversion_value: conversionValue,
           conversion_metadata: conversionMetadata
         })
         .eq('id', eventId)
-        .catch(err => console.error('Failed to update conversion data:', err))
+
+      if (conversionError) {
+        console.error('Failed to update conversion data:', conversionError)
+      }
     }
 
     return res.status(200).json({

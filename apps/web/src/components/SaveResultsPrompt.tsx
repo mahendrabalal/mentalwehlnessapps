@@ -14,13 +14,19 @@ interface SaveResultsPromptProps {
     [key: string]: any
   }
   className?: string
+  onSignupIntent?: () => void
+  onEmailIntent?: () => void
+  onDismissed?: () => void
 }
 
 export function SaveResultsPrompt({
   toolName,
   assessmentType,
   assessmentResults,
-  className = ''
+  className = '',
+  onSignupIntent,
+  onEmailIntent,
+  onDismissed
 }: SaveResultsPromptProps) {
   const { user } = useAuth()
   const router = useRouter()
@@ -93,12 +99,14 @@ export function SaveResultsPrompt({
   }
 
   const handleSignupClick = () => {
+    onSignupIntent?.()
     // Redirect to signup with current page as redirect
     const currentPath = router.pathname
     router.push(`/auth/signup?redirect=${encodeURIComponent(currentPath)}`)
   }
 
   const handleDismiss = () => {
+    onDismissed?.()
     setDismissed(true)
     // Remember dismissal for this session
     sessionStorage.setItem(`savePromptDismissed_${assessmentType}`, 'true')
@@ -228,7 +236,10 @@ export function SaveResultsPrompt({
           Create Free Account
         </button>
         <button
-          onClick={() => setEmailMode(true)}
+          onClick={() => {
+            onEmailIntent?.()
+            setEmailMode(true)
+          }}
           className="flex-1 bg-white text-therapy-600 border-2 border-therapy-600 px-6 py-3 rounded-lg font-semibold hover:bg-therapy-50 transition-colors"
         >
           Just Email Me Results

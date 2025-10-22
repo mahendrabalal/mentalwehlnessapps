@@ -11,7 +11,7 @@ function getStripe(): Stripe {
     }
 
     stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-06-20',
+      apiVersion: '2025-08-27.basil',
       typescript: true,
       // Healthcare compliance: Ensure PCI DSS Level 1 compliance
       telemetry: false // Disable telemetry for healthcare privacy

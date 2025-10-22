@@ -7,6 +7,40 @@ import { useAuth } from '@/hooks/useAuth'
 import HealthcareQualityGates from '@/lib/healthcare-quality-gates'
 import type { Session, User } from '@supabase/supabase-js'
 
+type SupabaseQueryBuilderMock = {
+  select: jest.Mock
+  insert: jest.Mock
+  update: jest.Mock
+  eq: jest.Mock
+  single: jest.Mock
+  gte: jest.Mock
+  order: jest.Mock
+  limit: jest.Mock
+}
+
+const createSupabaseQueryMock = (): SupabaseQueryBuilderMock => {
+  const builder = {
+    select: jest.fn(),
+    insert: jest.fn(),
+    update: jest.fn(),
+    eq: jest.fn(),
+    single: jest.fn(),
+    gte: jest.fn(),
+    order: jest.fn(),
+    limit: jest.fn()
+  } as unknown as SupabaseQueryBuilderMock
+
+  builder.select.mockReturnValue(builder)
+  builder.insert.mockReturnValue(builder)
+  builder.update.mockReturnValue(builder)
+  builder.eq.mockReturnValue(builder)
+  builder.gte.mockReturnValue(builder)
+  builder.order.mockReturnValue(builder)
+  builder.limit.mockReturnValue(builder)
+
+  return builder
+}
+
 interface CrisisAssessment {
   thoughts_of_harm: boolean
   specific_plan: boolean
@@ -64,16 +98,7 @@ jest.mock('@/lib/supabase', () => ({
         data: { subscription: { unsubscribe: jest.fn() } }
       }))
     },
-    from: jest.fn(() => ({
-      select: jest.fn().mockReturnThis(),
-      insert: jest.fn().mockReturnThis(),
-      update: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn(),
-      gte: jest.fn().mockReturnThis(),
-      order: jest.fn().mockReturnThis(),
-      limit: jest.fn()
-    })),
+    from: jest.fn(() => createSupabaseQueryMock()),
     rpc: jest.fn()
   })
 }))
@@ -243,11 +268,11 @@ describe('Healthcare Authentication System', () => {
     })
 
     it('should trigger emergency protocols for severe crisis levels', async () => {
-      const mockEmergencyProtocol = jest.fn()
+      const mockEmergencyProtocol = jest.fn(() => undefined)
 
       const crisisLevel = 'severe'
       if (crisisLevel === 'severe' || crisisLevel === 'imminent') {
-        mockEmergencyProtocol()
+        ;(mockEmergencyProtocol as jest.Mock)()
       }
 
       expect(mockEmergencyProtocol).toHaveBeenCalled()

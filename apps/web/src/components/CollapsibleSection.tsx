@@ -38,7 +38,7 @@ export function CollapsibleSection({
     onToggle?.(newState)
 
     // Analytics tracking
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'section_toggle', {
         section_id: id,
         expanded: newState,
@@ -47,8 +47,10 @@ export function CollapsibleSection({
   }
 
   // Respect prefers-reduced-motion for accessibility (WCAG 2.2)
-  const prefersReducedMotion =
-    isMounted && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const prefersReducedMotion = isMounted &&
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
     <div className={`bg-white rounded-lg shadow-md p-6 mb-6 ${className}`}>
@@ -131,8 +133,10 @@ export function CollapsibleSectionMini({
     onToggle?.(newState)
   }
 
-  const prefersReducedMotion =
-    isMounted && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const prefersReducedMotion = isMounted &&
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return (
     <div className="mb-4">
