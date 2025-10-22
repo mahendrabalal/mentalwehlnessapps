@@ -1,0 +1,214 @@
+# Mental Wellness App - Robots.txt
+# Industry-standard configuration for SEO + HIPAA compliance (2025)
+# Reference: Google Search Central, Bing Webmaster Tools, RFC 9309
+
+# ==============================================================================
+# DEFAULT RULES (applies to all bots not specifically listed)
+# ==============================================================================
+User-agent: *
+Allow: /
+
+# ==============================================================================
+# SECTION 1: PROTECTED AREAS (PHI, Authentication, Admin)
+# ==============================================================================
+# These areas contain personally identifiable health information (PHI)
+# or require authentication and should not be indexed
+
+# API endpoints - no crawling
+Disallow: /api/
+Disallow: /api/v1/
+Disallow: /api/v2/
+
+# Authenticated user areas - PHI protected
+Disallow: /dashboard/
+Disallow: /dashboard/*
+Disallow: /profile/
+Disallow: /profile/*
+Disallow: /settings/
+Disallow: /user/*
+
+# Authentication pages
+Disallow: /auth/
+Disallow: /auth/*
+Disallow: /login
+Disallow: /logout
+Disallow: /register
+Disallow: /signin
+Disallow: /signup
+Disallow: /password-reset
+Disallow: /verify-email
+
+# Admin/Management areas
+Disallow: /admin/
+Disallow: /admin/*
+
+# Onboarding (contains sensitive user data)
+Disallow: /onboarding/
+Disallow: /onboarding/*
+
+# Payment/Checkout - PCI compliance
+Disallow: /checkout/
+Disallow: /payment/
+Disallow: /stripe/
+Disallow: /invoice/
+
+# ==============================================================================
+# SECTION 2: PHI-SPECIFIC DISALLOWS (User Assessment Results)
+# ==============================================================================
+# Public assessment tools are allowed for discovery
+# But authenticated user results must be protected
+
+# Block authenticated assessment results
+Disallow: /assessment/*/results
+Disallow: /assessment/*/history
+Disallow: /assessment/*/download
+Disallow: /assessment/*/share
+Disallow: /user/*/assessment*
+Disallow: /user/*/results*
+
+# Allow public assessment landing pages (for SEO)
+# These are automatically allowed by default "Allow: /"
+# Examples that will be crawled:
+# /tools/burnout-assessment (public)
+# /tools/loneliness-assessment (public)
+# /tools/anxiety-relief (public)
+
+# ==============================================================================
+# SECTION 3: TECHNICAL/UTILITY DISALLOWS
+# ==============================================================================
+# Block parameter-based URLs that create duplicate content or crawl traps
+
+# Query parameters that create duplicates
+Disallow: /?*sort=
+Disallow: /?*filter=
+Disallow: /?*page=
+Disallow: /?*search=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?utm_*
+
+# System files and endpoints
+Disallow: /.well-known/
+Disallow: /__next/
+Disallow: /.env
+Disallow: /.env.local
+
+# Private/test content
+Disallow: /test/
+Disallow: /staging/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cache/
+
+# ==============================================================================
+# SECTION 4: MAJOR SEARCH ENGINES (Optimized Crawling)
+# ==============================================================================
+
+# Google - No crawl-delay (ignored by Google)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /assessment/*/results
+Disallow: /?*sort=
+Disallow: /?*filter=
+
+# Bing - Respectful crawling
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /assessment/*/results
+Request-rate: 100/1m
+
+# ==============================================================================
+# SECTION 5: RESPONSIBLE AI/GENERATIVE SEARCH BOTS (Content Protection)
+# ==============================================================================
+# As of 2025, major AI platforms respect robots.txt directives
+# These are added to protect content from being used in AI training
+
+# OpenAI
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+# Anthropic
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+# CCBot (various AI services)
+User-agent: CCBot
+Disallow: /
+
+# Others
+User-agent: facebookexternalhit
+Disallow: /
+
+User-agent: Applebot
+Disallow: /
+
+# ==============================================================================
+# SECTION 6: AGGRESSIVE CRAWLERS & SCRAPERS (Block)
+# ==============================================================================
+# These bots aggressively crawl sites without respecting crawl delays
+# Blocking them protects your server resources
+
+# SEO/Competitor analysis bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: SemrushBot-BA
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Other aggressive crawlers
+User-agent: DotBot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: YandexMobileBot
+Disallow: /
+
+# ==============================================================================
+# SECTION 7: SITEMAP & CRAWL METADATA
+# ==============================================================================
+# Google and Bing: Submit via Google Search Console and Bing Webmaster Tools
+# This is supplementary and not required but good practice
+
+Sitemap: https://www.mentalwellnessapps.com/sitemap.xml
+
+# ==============================================================================
+# COMPLIANCE NOTES
+# ==============================================================================
+# HIPAA Compliance:
+# - This site contains protected health information (PHI)
+# - Additional security layers: HTTPS, authentication, encryption at rest/transit
+# - robots.txt is complemented by: robots META tags, X-Robots-Tag headers
+# - Sensitive paths also use: <meta name="robots" content="noindex, nofollow">
+#
+# GDPR/Privacy:
+# - User data is handled per GDPR Article 6 (lawful basis)
+# - robots.txt prevents indexing of personal user data
+# - Analytics use privacy-respecting defaults
+#
+# Reference Standards:
+# - RFC 9309: Robots Exclusion Protocol
+# - Google Search Central robots.txt docs
+# - Bing Webmaster Guidelines
+# - Healthcare-specific: HIPAA Security Rule (45 CFR §164.300-318)

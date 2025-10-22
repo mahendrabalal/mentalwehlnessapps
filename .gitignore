@@ -57,7 +57,9 @@ out/
 
 # Gatsby files
 .cache/
-public
+# Allow Next.js app public assets to be versioned
+!apps/web/public/
+!apps/web/public/**
 
 # Storybook build outputs
 .out
