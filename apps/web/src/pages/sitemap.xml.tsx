@@ -1,4 +1,6 @@
 import { GetServerSideProps } from 'next'
+import { promises as fs } from 'fs'
+import path from 'path'
 import { SITE_URL } from '@/lib/seo'
 
 interface StaticPageEntry {
@@ -6,44 +8,47 @@ interface StaticPageEntry {
   changefreq: string
   priority: number
   lastmod?: string
+  sourcePath?: string
 }
 
 // Static pages that should be in sitemap
 const STATIC_PAGES: StaticPageEntry[] = [
-  { url: '/', changefreq: 'daily', priority: 1.0 },
-  { url: '/features', changefreq: 'weekly', priority: 0.9 },
-  { url: '/crisis-support', changefreq: 'monthly', priority: 1.0 }, // High priority for crisis resources
-  { url: '/blog', changefreq: 'daily', priority: 0.8 },
-  { url: '/about', changefreq: 'monthly', priority: 0.7 },
-  { url: '/contact', changefreq: 'monthly', priority: 0.6 },
-  { url: '/help', changefreq: 'monthly', priority: 0.7 },
-  { url: '/privacy', changefreq: 'monthly', priority: 0.5 },
-  { url: '/terms', changefreq: 'monthly', priority: 0.5 },
-  { url: '/medical-disclaimer', changefreq: 'monthly', priority: 0.5 },
-  { url: '/hipaa-notice', changefreq: 'monthly', priority: 0.5 },
-  { url: '/documentation', changefreq: 'monthly', priority: 0.6 },
+  { url: '/', changefreq: 'daily', priority: 1.0, sourcePath: 'index.tsx' },
+  { url: '/features', changefreq: 'weekly', priority: 0.9, sourcePath: 'features.tsx' },
+  { url: '/content', changefreq: 'weekly', priority: 0.8, sourcePath: 'content/index.tsx' },
+  { url: '/crisis-support', changefreq: 'monthly', priority: 1.0, sourcePath: 'crisis-support.tsx' }, // High priority for crisis resources
+  { url: '/crisis/support', changefreq: 'monthly', priority: 0.9, sourcePath: 'crisis/support.tsx' },
+  { url: '/blog', changefreq: 'daily', priority: 0.8, sourcePath: 'blog/index.tsx' },
+  { url: '/about', changefreq: 'monthly', priority: 0.7, sourcePath: 'about.tsx' },
+  { url: '/contact', changefreq: 'monthly', priority: 0.6, sourcePath: 'contact.tsx' },
+  { url: '/help', changefreq: 'monthly', priority: 0.7, sourcePath: 'help.tsx' },
+  { url: '/privacy', changefreq: 'monthly', priority: 0.5, sourcePath: 'privacy.tsx' },
+  { url: '/terms', changefreq: 'monthly', priority: 0.5, sourcePath: 'terms.tsx' },
+  { url: '/medical-disclaimer', changefreq: 'monthly', priority: 0.5, sourcePath: 'medical-disclaimer.tsx' },
+  { url: '/hipaa-notice', changefreq: 'monthly', priority: 0.5, sourcePath: 'hipaa-notice.tsx' },
+  { url: '/documentation', changefreq: 'monthly', priority: 0.6, sourcePath: 'documentation.tsx' },
   // Support resource pages
-  { url: '/support/emotional-exhaustion-burnout', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/affordable-mental-health-care', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/combat-loneliness-isolation', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/mindfulness-for-beginners', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/overcome-mental-health-stigma', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/emotional-regulation-skills', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/managing-anxiety-naturally', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/realistic-mental-health-expectations', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/emotional-resistance-meditation', changefreq: 'monthly', priority: 0.7 },
-  { url: '/support/meditation-consistency', changefreq: 'monthly', priority: 0.7 },
+  { url: '/support/emotional-exhaustion-burnout', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/emotional-exhaustion-burnout.tsx' },
+  { url: '/support/affordable-mental-health-care', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/affordable-mental-health-care.tsx' },
+  { url: '/support/combat-loneliness-isolation', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/combat-loneliness-isolation.tsx' },
+  { url: '/support/mindfulness-for-beginners', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/mindfulness-for-beginners.tsx' },
+  { url: '/support/overcome-mental-health-stigma', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/overcome-mental-health-stigma.tsx' },
+  { url: '/support/emotional-regulation-skills', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/emotional-regulation-skills.tsx' },
+  { url: '/support/managing-anxiety-naturally', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/managing-anxiety-naturally.tsx' },
+  { url: '/support/realistic-mental-health-expectations', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/realistic-mental-health-expectations.tsx' },
+  { url: '/support/emotional-resistance-meditation', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/emotional-resistance-meditation.tsx' },
+  { url: '/support/meditation-consistency', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/meditation-consistency.tsx' },
   // Interactive Tool Pages
-  { url: '/tools/anxiety-relief', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/burnout-assessment', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/mindfulness', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/emotional-regulation', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/loneliness-assessment', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/therapy-cost-calculator', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/stigma-assessment', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/meditation-tracker', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/recovery-timeline', changefreq: 'weekly', priority: 0.9 },
-  { url: '/tools/substance-screening', changefreq: 'weekly', priority: 0.9 },
+  { url: '/tools/anxiety-relief', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/anxiety-relief.tsx' },
+  { url: '/tools/burnout-assessment', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/burnout-assessment.tsx' },
+  { url: '/tools/mindfulness', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/mindfulness.tsx' },
+  { url: '/tools/emotional-regulation', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/emotional-regulation.tsx' },
+  { url: '/tools/loneliness-assessment', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/loneliness-assessment.tsx' },
+  { url: '/tools/therapy-cost-calculator', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/therapy-cost-calculator.tsx' },
+  { url: '/tools/stigma-assessment', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/stigma-assessment.tsx' },
+  { url: '/tools/meditation-tracker', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/meditation-tracker.tsx' },
+  { url: '/tools/recovery-timeline', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/recovery-timeline.tsx' },
+  { url: '/tools/substance-screening', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/substance-screening.tsx' },
 ]
 
 function formatLastmod(date?: string) {
@@ -126,12 +131,41 @@ ${blogEntries}
 </urlset>`
 }
 
+async function enrichStaticPagesWithLastmod(
+  pages: StaticPageEntry[]
+): Promise<StaticPageEntry[]> {
+  const pagesDir = path.join(process.cwd(), 'apps/web/src/pages')
+
+  return Promise.all(
+    pages.map(async (page) => {
+      if (page.lastmod || !page.sourcePath) {
+        return page
+      }
+
+      try {
+        const stats = await fs.stat(path.join(pagesDir, page.sourcePath))
+        return {
+          ...page,
+          lastmod: stats.mtime.toISOString(),
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn(`Sitemap: could not determine lastmod for ${page.url}`, error)
+        }
+        return page
+      }
+    })
+  )
+}
+
 function SiteMap() {
   // getServerSideProps will do the heavy lifting
   return null
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  const staticPages = await enrichStaticPagesWithLastmod(STATIC_PAGES)
+
   // Fetch blog posts from CMS (if available)
   let blogPosts: Array<{ slug: string; updatedAt?: string }> = []
 
@@ -154,7 +188,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   }
 
   // Generate the XML sitemap
-  const sitemap = generateSiteMap(STATIC_PAGES, blogPosts)
+  const sitemap = generateSiteMap(staticPages, blogPosts)
 
   res.setHeader('Content-Type', 'text/xml')
   // Cache for 1 hour
