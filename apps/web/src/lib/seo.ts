@@ -396,3 +396,355 @@ export function reviewedByStructuredData({
     }
   }
 }
+
+// Enhanced medical schemas for healthcare SEO
+export function medicalClinicStructuredData({
+  name,
+  description,
+  address,
+  phone,
+  specialties,
+  acceptsNewPatients = true
+}: {
+  name: string
+  description: string
+  address: {
+    streetAddress: string
+    addressLocality: string
+    addressRegion: string
+    postalCode: string
+    addressCountry: string
+  }
+  phone: string
+  specialties?: string[]
+  acceptsNewPatients?: boolean
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['MedicalClinic', 'LocalBusiness'],
+    name,
+    description,
+    address: {
+      '@type': 'PostalAddress',
+      ...address
+    },
+    telephone: phone,
+    openingHours: 'Mo-Fr 09:00-17:00',
+    acceptsNewPatients,
+    medicalSpecialty: specialties || ['Mental Health'],
+    paymentAccepted: ['Cash', 'Credit Card', 'Insurance'],
+    priceRange: '$$'
+  }
+}
+
+export function mentalHealthProfessionalStructuredData({
+  name,
+  credentials,
+  specialties,
+  languages,
+  acceptsNewPatients = true,
+  telehealthAvailable = true
+}: {
+  name: string
+  credentials: string
+  specialties: string[]
+  languages?: string[]
+  acceptsNewPatients?: boolean
+  telehealthAvailable?: boolean
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['Physician', 'Person'],
+    name,
+    jobTitle: credentials,
+    medicalSpecialty: specialties,
+    knowsLanguage: languages || ['English'],
+    acceptsNewPatients,
+    availableService: telehealthAvailable ? [
+      {
+        '@type': 'MedicalProcedure',
+        name: 'Telehealth Mental Health Consultation'
+      },
+      {
+        '@type': 'MedicalProcedure',
+        name: 'In-Person Mental Health Consultation'
+      }
+    ] : [
+      {
+        '@type': 'MedicalProcedure',
+        name: 'In-Person Mental Health Consultation'
+      }
+    ],
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Professional Licensure',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: 'State Medical Board'
+        }
+      }
+    ]
+  }
+}
+
+export function healthAndBeautyBusinessStructuredData({
+  name,
+  description,
+  services,
+  address,
+  phone
+}: {
+  name: string
+  description: string
+  services: string[]
+  address?: {
+    streetAddress: string
+    addressLocality: string
+    addressRegion: string
+    postalCode: string
+    addressCountry: string
+  }
+  phone?: string
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'HealthAndBeautyBusiness',
+    name,
+    description,
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Mental Health Services',
+      itemListElement: services.map(service => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: service,
+          category: 'Mental Health Services'
+        }
+      }))
+    }
+  }
+
+  if (address) {
+    schema.address = {
+      '@type': 'PostalAddress',
+      ...address
+    }
+  }
+
+  if (phone) {
+    schema.telephone = phone
+  }
+
+  return schema
+}
+
+// FAQ schema for medical Q&A
+export function medicalFAQStructuredData(faqs: Array<{
+  question: string
+  answer: string
+  category?: string
+  medicalCondition?: string
+}>): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+        author: {
+          '@type': 'Organization',
+          name: 'Mental Wellness Apps Medical Review Board'
+        }
+      },
+      about: faq.medicalCondition ? {
+        '@type': 'MedicalCondition',
+        name: faq.medicalCondition
+      } : undefined
+    }))
+  }
+}
+
+// Event schema for mental health workshops/events
+export function medicalEventStructuredData({
+  name,
+  description,
+  startDate,
+  endDate,
+  location,
+  attendeeType,
+  about
+}: {
+  name: string
+  description: string
+  startDate: string
+  endDate?: string
+  location?: {
+    name: string
+    address: {
+      streetAddress: string
+      addressLocality: string
+      addressRegion: string
+      postalCode: string
+      addressCountry: string
+    }
+  }
+  attendeeType?: string
+  about?: string
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name,
+    description,
+    startDate,
+    organizer: organizationStructuredData({ includeContext: false }),
+    attendeeType: attendeeType || 'General Public',
+    about: about || 'Mental Health and Wellness'
+  }
+
+  if (endDate) {
+    schema.endDate = endDate
+  }
+
+  if (location) {
+    schema.location = {
+      '@type': 'Place',
+      name: location.name,
+      address: {
+        '@type': 'PostalAddress',
+        ...location.address
+      }
+    }
+  } else {
+    schema.location = {
+      '@type': 'VirtualLocation',
+      url: buildAbsoluteUrl('/virtual-events')
+    }
+  }
+
+  return schema
+}
+
+// How-to schema for mental health techniques
+export function mentalHealthHowToStructuredData({
+  name,
+  description,
+  steps,
+  estimatedTime,
+  requiredEquipment,
+  benefits
+}: {
+  name: string
+  description: string
+  steps: Array<{
+    name: string
+    text: string
+    image?: string
+    duration?: string
+  }>
+  estimatedTime?: string
+  requiredEquipment?: string[]
+  benefits?: string[]
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      image: step.image ? buildAbsoluteUrl(step.image) : undefined,
+      time: step.duration ? {
+        '@type': 'QuantitativeValue',
+        name: 'Duration',
+        value: step.duration
+      } : undefined
+    })),
+    tool: requiredEquipment?.map(equipment => ({
+      '@type': 'HowToTool',
+      name: equipment
+    }))
+  }
+
+  if (estimatedTime) {
+    schema.totalTime = {
+      '@type': 'QuantitativeValue',
+      name: 'Total time',
+      value: estimatedTime
+    }
+  }
+
+  if (benefits && benefits.length > 0) {
+    schema.result = benefits.map(benefit => ({
+      '@type': 'HowToSection',
+      name: 'Benefits',
+      description: benefit
+    }))
+  }
+
+  return schema
+}
+
+// Local business schema for geographic SEO
+export function localHealthBusinessStructuredData({
+  name,
+  description,
+  cities,
+  services,
+  phone
+}: {
+  name: string
+  description: string
+  cities: Array<{
+    name: string
+    state: string
+    country?: string
+  }>
+  services: string[]
+  phone?: string
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['HealthAndBeautyBusiness', 'LocalBusiness'],
+    name,
+    description,
+    telephone: phone,
+    areaServed: cities.map(city => ({
+      '@type': 'City',
+      name: city.name,
+      containedInPlace: {
+        '@type': 'State',
+        name: city.state,
+        containedInPlace: city.country ? {
+          '@type': 'Country',
+          name: city.country
+        } : undefined
+      }
+    })),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Mental Health Services',
+      itemListElement: services.map(service => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: service,
+          category: 'Mental Health Services'
+        },
+        areaServed: cities.map(city => ({
+          '@type': 'City',
+          name: city.name
+        }))
+      }))
+    },
+    openingHours: '24/7' // For online services
+  }
+}

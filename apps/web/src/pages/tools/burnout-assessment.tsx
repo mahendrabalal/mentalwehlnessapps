@@ -38,8 +38,8 @@ export default function BurnoutAssessmentTool() {
   return (
     <>
       <SEOHead
-        title="Burnout Self Test - Free Assessment | Check Your Burnout Risk Level"
-        description="Take this free burnout self test to check your risk level. Get instant results, identify emotional exhaustion signs, and receive personalized recovery recommendations. 2-minute assessment."
+        title="Burnout Self Test - Free Assessment | Workplace Burnout Quiz & Job Stress Test"
+        description="Take this free burnout self test to check your workplace burnout risk level. Get instant results, identify job stress signs, and receive personalized recovery recommendations for emotional exhaustion and professional burnout."
         keywords={[
           "burnout self test",
           "burnout test free",
@@ -50,7 +50,14 @@ export default function BurnoutAssessmentTool() {
           "free burnout check",
           "burnout recovery",
           "job burnout symptoms",
-          "professional burnout test"
+          "professional burnout test",
+          "workplace burnout quiz",
+          "job stress test",
+          "occupational burnout assessment",
+          "work-life balance test",
+          "career burnout screening",
+          "employee burnout evaluation",
+          "mental exhaustion quiz"
         ]}
         ogImage="/og-burnout-tools.png"
         structuredData={structuredData}
@@ -201,6 +208,43 @@ export default function BurnoutAssessmentTool() {
             <p className="text-sm text-gray-500 mt-4">
               <strong>Note:</strong> This assessment is for educational purposes and not a substitute for professional medical diagnosis. Always consult with qualified healthcare providers for proper evaluation and treatment.
             </p>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">What is the difference between burnout and stress?</h3>
+                <p className="text-gray-600">
+                  While stress is characterized by over-engagement, burnout is characterized by disengagement. Stress feels like you have too much on your plate, while burnout feels like you have nothing left to give. This workplace burnout quiz helps identify both conditions.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">How accurate is this burnout self test?</h3>
+                <p className="text-gray-600">
+                  Our burnout assessment is based on the Maslach Burnout Inventory (MBI), the gold standard in occupational health with over 40 years of research validation. While not a medical diagnosis, it provides reliable insights into your burnout risk level and early warning signs.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I use this job stress test for my employees?</h3>
+                <p className="text-gray-600">
+                  Yes, this occupational burnout assessment is suitable for workplace wellness programs and employee mental health initiatives. Many organizations use it as part of their mental health screening and prevention strategies to identify at-risk employees early.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">What are the early signs of workplace burnout?</h3>
+                <p className="text-gray-600">
+                  Early warning signs include chronic fatigue, decreased productivity, cynicism about work, emotional detachment, difficulty concentrating, and physical symptoms like headaches or sleep problems. This employee burnout evaluation helps identify these patterns early.
+                </p>
+              </div>
+              <div className="pb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">How long does burnout recovery take?</h3>
+                <p className="text-gray-600">
+                  Recovery time varies based on severity and intervention. Mild burnout may improve in 2-4 weeks with proper rest and boundary setting, while severe burnout may require 2-6 months or more. Our burnout recovery recommendations provide a structured approach to healing.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Other Tools */}

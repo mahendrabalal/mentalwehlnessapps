@@ -86,6 +86,10 @@ Disallow: /?*search=
 Disallow: /*?sort=
 Disallow: /*?filter=
 Disallow: /*?utm_*
+Disallow: /*?landing=true$
+Disallow: /*?view=
+Disallow: /*?landing=
+Disallow: /?landing=true
 
 # System files and endpoints
 Disallow: /.well-known/
@@ -123,7 +127,7 @@ Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /admin/
 Disallow: /assessment/*/results
-Request-rate: 100/1m
+# Note: Request-rate directive removed for Google compatibility
 
 # ==============================================================================
 # SECTION 5: RESPONSIBLE AI/GENERATIVE SEARCH BOTS (Content Protection)

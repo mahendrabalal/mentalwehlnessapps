@@ -41,9 +41,14 @@ const SUPPORT_PAGES = [
   { label: 'Build Meditation Consistency', href: '/support/meditation-consistency', icon: '✅' },
   { label: 'Manage Meditation Anxiety', href: '/support/emotional-resistance-meditation', icon: '🧠' },
   { label: 'Realistic Recovery Expectations', href: '/support/realistic-mental-health-expectations', icon: '📊' },
+  { label: 'Sleep & Mental Health', href: '/support/sleep-mental-health', icon: '😴' },
+  { label: 'Trauma Recovery Guide', href: '/support/trauma-recovery', icon: '🛡️' },
+  { label: 'Relationships & Mental Health', href: '/support/relationships-mental-health', icon: '💑' },
 ]
 
 const TOOL_PAGES = [
+  { label: 'Depression Screening', href: '/tools/depression-screening', icon: '🧠' },
+  { label: 'Stress Management Techniques', href: '/tools/stress-management-techniques', icon: '💪' },
   { label: 'Anxiety Relief Tool', href: '/tools/anxiety-relief', icon: '😌' },
   { label: 'Burnout Assessment', href: '/tools/burnout-assessment', icon: '🔥' },
   { label: 'Mindfulness Exercises', href: '/tools/mindfulness', icon: '🧘' },
@@ -59,7 +64,7 @@ const TOOL_PAGES = [
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
   {
     label: 'Home',
-    href: '/?landing=true',
+    href: '/',
     isActive: (pathname) => pathname === '/'
   },
   {
@@ -92,6 +97,18 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
     }
   }
 
+  const handleLandingNavigation = () => {
+    setMobileMenuOpen(false)
+
+    if (user) {
+      // Set cookie to show landing page and navigate to clean URL
+      document.cookie = 'show_landing_page=true; max-age=3600; path=/'
+      router.push('/')
+    } else {
+      router.push('/')
+    }
+  }
+
   useEffect(() => {
     const handleRouteChange = () => setMobileMenuOpen(false)
 
@@ -109,16 +126,28 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2 sm:py-3">
           {/* Brand */}
-          <Link
-            href={user ? '/dashboard' : '/?landing=true'}
-            className="hover:opacity-80 transition-opacity"
-            title={user ? 'Go to Dashboard' : 'Go to Home'}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <div className="h-8 sm:h-10 lg:h-12 w-auto flex items-center">
-              <BrandLogo className="h-full w-auto" />
-            </div>
-          </Link>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="hover:opacity-80 transition-opacity"
+              title="Go to Dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="h-8 sm:h-10 lg:h-12 w-auto flex items-center">
+                <BrandLogo variant="default" className="h-full w-auto" />
+              </div>
+            </Link>
+          ) : (
+            <button
+              onClick={handleLandingNavigation}
+              className="hover:opacity-80 transition-opacity"
+              title="Go to Home"
+            >
+              <div className="h-8 sm:h-10 lg:h-12 w-auto flex items-center">
+                <BrandLogo variant="default" className="h-full w-auto" />
+              </div>
+            </button>
+          )}
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
@@ -133,6 +162,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
                 items={publicNavItems}
                 routerPathname={router.pathname}
                 onNavigate={() => setMobileMenuOpen(false)}
+                user={user}
               />
             )}
           </div>
@@ -176,6 +206,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
                 <PublicMobileNav
                   items={publicNavItems}
                   closeMenu={() => setMobileMenuOpen(false)}
+                  user={user}
                 />
               )}
             </div>
@@ -263,13 +294,26 @@ interface PublicNavProps {
   items: PublicNavItem[]
   routerPathname: string
   onNavigate: () => void
+  user?: any // Add user prop
 }
 
 function PublicNav({
   items,
   routerPathname,
   onNavigate,
+  user,
 }: PublicNavProps) {
+  const handleHomeNavigation = (href: string) => {
+    if (href === '/' && user) {
+      // Set cookie to show landing page for authenticated users
+      document.cookie = 'show_landing_page=true; max-age=3600; path=/'
+      onNavigate()
+      window.location.href = '/'
+    } else {
+      onNavigate()
+      window.location.href = href
+    }
+  }
   const [supportDropdownOpen, setSupportDropdownOpen] = useState(false)
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false)
   const supportDropdownRef = useState<HTMLDivElement | null>(null)[0]
@@ -391,7 +435,7 @@ function PublicNav({
             href={item.href}
             label={item.label}
             isActive={item.isActive?.(routerPathname)}
-            onClick={onNavigate}
+            onClick={() => item.href === '/' && user ? handleHomeNavigation(item.href) : onNavigate()}
           />
         )
       )}
@@ -429,11 +473,24 @@ function AuthenticatedMobileNav({
 interface PublicMobileNavProps {
   items: PublicNavItem[]
   closeMenu: () => void
+  user?: any // Add user prop
 }
 
-function PublicMobileNav({ items, closeMenu }: PublicMobileNavProps) {
+function PublicMobileNav({ items, closeMenu, user }: PublicMobileNavProps) {
   const [supportExpanded, setSupportExpanded] = useState(false)
   const [toolsExpanded, setToolsExpanded] = useState(false)
+
+  const handleHomeNavigation = (href: string) => {
+    if (href === '/' && user) {
+      // Set cookie to show landing page for authenticated users
+      document.cookie = 'show_landing_page=true; max-age=3600; path=/'
+      closeMenu()
+      window.location.href = '/'
+    } else {
+      closeMenu()
+      window.location.href = href
+    }
+  }
 
   return (
     <>
@@ -527,7 +584,7 @@ function PublicMobileNav({ items, closeMenu }: PublicMobileNavProps) {
             href={item.href}
             label={item.label}
             highlight={item.variant === 'cta'}
-            onClick={closeMenu}
+            onClick={() => item.href === '/' && user ? handleHomeNavigation(item.href) : closeMenu()}
           />
         )
       )}

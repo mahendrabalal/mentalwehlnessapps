@@ -50,7 +50,11 @@ export default function AnxietyReliefTool() {
           "anxiety management free",
           "calming anxiety techniques",
           "anxiety coping skills",
-          "mental health anxiety tools"
+          "mental health anxiety tools",
+          "mental wellness activities",
+          "anxiety wellness activities",
+          "mental health activities",
+          "stress relief activities"
         ]}
         ogImage="/og-anxiety-tools.png"
         structuredData={structuredData}
@@ -141,6 +145,51 @@ export default function AnxietyReliefTool() {
 
           {/* Main Tool Component */}
           <QuickAnxietyRelief className="mb-8" />
+
+          {/* Mental Wellness Activities Section */}
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl shadow-lg p-6 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Daily Mental Wellness Activities</h2>
+            <p className="text-gray-600 mb-6">
+              Beyond immediate anxiety relief, these evidence-based mental wellness activities can help build long-term resilience and emotional wellbeing.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">🌅</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Morning Mindfulness</h3>
+                <p className="text-sm text-gray-600">Start your day with 5 minutes of mindful breathing to set a calm tone.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">🚶</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Movement Breaks</h3>
+                <p className="text-sm text-gray-600">Take 10-minute walks throughout the day to reduce tension and clear your mind.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">📓</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Gratitude Journaling</h3>
+                <p className="text-sm text-gray-600">Write 3 things you're grateful for each day to shift focus to positive thoughts.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">🎨</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Creative Expression</h3>
+                <p className="text-sm text-gray-600">Engage in creative activities like drawing, music, or writing to process emotions.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">🌿</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Nature Connection</h3>
+                <p className="text-sm text-gray-600">Spend time outdoors or care for plants to ground yourself and reduce stress.</p>
+              </div>
+              <div className="bg-white rounded-lg p-4">
+                <div className="text-2xl mb-2">🧘</div>
+                <h3 className="font-semibold text-gray-900 mb-2">Progressive Relaxation</h3>
+                <p className="text-sm text-gray-600">Practice tensing and releasing muscle groups to release physical tension.</p>
+              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <p className="text-sm text-purple-700 font-medium">
+                💡 <strong>Tip:</strong> Consistency is key. Choose 2-3 activities that resonate with you and practice them regularly for best results.
+              </p>
+            </div>
+          </div>
 
           {/* Related Resources */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">

@@ -52,6 +52,12 @@ const STATIC_PAGES: StaticPageEntry[] = [
   { url: '/tools/meditation-tracker', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/meditation-tracker.tsx' },
   { url: '/tools/recovery-timeline', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/recovery-timeline.tsx' },
   { url: '/tools/substance-screening', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/substance-screening.tsx' },
+  // New mental wellness pages for keyword targeting
+  { url: '/tools/depression-screening', changefreq: 'weekly', priority: 1.0, sourcePath: 'tools/depression-screening.tsx' },
+  { url: '/support/trauma-recovery', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/trauma-recovery.tsx' },
+  { url: '/support/sleep-mental-health', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/sleep-mental-health.tsx' },
+  { url: '/tools/stress-management-techniques', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/stress-management-techniques.tsx' },
+  { url: '/support/relationships-mental-health', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/relationships-mental-health.tsx' },
 ]
 
 function formatLastmod(date?: string) {

@@ -46,7 +46,17 @@ export function SEOHead({
   const router = useRouter()
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mentalwellnessapps.com'
   const pathFromRouter = router.asPath.split('?')[0].split('#')[0]
-  const canonicalTarget = canonical ?? `${baseUrl}${pathFromRouter}`
+
+  // Handle duplicate content parameters explicitly
+  const url = new URL(router.asPath, baseUrl)
+  const duplicateParams = ['landing', 'view', 'sort', 'filter', 'page', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid']
+
+  // Remove duplicate parameters for canonical URL
+  duplicateParams.forEach(param => url.searchParams.delete(param))
+
+  // Build canonical URL
+  const canonicalPath = url.pathname + (url.search || '')
+  const canonicalTarget = canonical ?? `${baseUrl}${canonicalPath}`
   const fullUrl = canonicalTarget.startsWith('http') ? canonicalTarget : `${baseUrl}${canonicalTarget}`
   const fullImageUrl =
     ogImage && (ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`)

@@ -56,10 +56,19 @@ export default function FreeMentalHealthTools() {
 
   const tools = [
     {
+      href: '/tools/depression-screening',
+      emoji: '🧠',
+      title: 'Depression Screening',
+      description: 'Free PHQ-9 test for depression symptoms',
+      category: 'Assessment',
+      time: '2 minutes',
+      color: 'indigo'
+    },
+    {
       href: '/tools/burnout-assessment',
       emoji: '🔥',
       title: 'Burnout Assessment',
-      description: 'Check your risk level for emotional exhaustion',
+      description: 'Check your workplace burnout risk level',
       category: 'Assessment',
       time: '5 minutes',
       color: 'orange'
@@ -72,6 +81,15 @@ export default function FreeMentalHealthTools() {
       category: 'Relief Tool',
       time: '2 minutes',
       color: 'blue'
+    },
+    {
+      href: '/tools/stress-management-techniques',
+      emoji: '💪',
+      title: 'Stress Management',
+      description: 'Coping skills and relaxation techniques',
+      category: 'Relief Tool',
+      time: '5-20 minutes',
+      color: 'yellow'
     },
     {
       href: '/tools/loneliness-assessment',
@@ -149,7 +167,10 @@ export default function FreeMentalHealthTools() {
           'evidence-based mental health tools',
           'no cost mental health resources',
           'free therapy tools',
-          'mental wellness tools free'
+          'mental wellness tools free',
+          'mental wellness test',
+          'free mental wellness test',
+          'mental health assessment tools'
         ]}
         ogImage="/og-free-mental-health-tools.png"
         structuredData={structuredData}
@@ -299,6 +320,42 @@ export default function FreeMentalHealthTools() {
                 <h3 className="font-semibold text-gray-900 mb-2">Access Resources</h3>
                 <p className="text-sm text-gray-600">Explore coping strategies, recovery guides, and next steps tailored to your results</p>
               </div>
+            </div>
+          </div>
+
+  {/* Mental Wellness Tests Section */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Mental Wellness Tests & Assessments</h2>
+            <p className="text-lg text-gray-600 text-center mb-8 max-w-3xl mx-auto">
+              Our evidence-based mental wellness tests help you understand your emotional health, identify areas for improvement, and get personalized recommendations for your wellbeing journey.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {tools.filter(t => t.category === 'Assessment').map((tool, index) => (
+                <Link
+                  key={index}
+                  href={tool.href}
+                  className="bg-gradient-to-br from-therapy-50 to-blue-50 border border-therapy-200 rounded-xl p-6 hover:shadow-lg transition-all group"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-3xl group-hover:scale-110 transition-transform">{tool.emoji}</span>
+                    <div>
+                      <span className="bg-therapy-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                        Mental Wellness Test
+                      </span>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-therapy-600 transition-colors">
+                    {tool.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{tool.description}</p>
+                  <div className="flex items-center text-sm text-therapy-600 font-medium">
+                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    </svg>
+                    {tool.time} • Instant Results
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
 

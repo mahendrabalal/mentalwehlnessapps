@@ -38,12 +38,17 @@ export default function Home() {
   const [showLandingPage, setShowLandingPage] = useState(false)
 
   useEffect(() => {
-    // Check if ?landing=true is in URL to force showing landing page
+    // Check for landing page cookie (set by middleware) or URL parameter
+    const hasLandingCookie = document.cookie.includes('show_landing_page=true')
     const urlParams = new URLSearchParams(window.location.search)
     const forceLanding = urlParams.get('landing') === 'true'
 
-    if (forceLanding) {
+    if (forceLanding || hasLandingCookie) {
       setShowLandingPage(true)
+      // Clear the cookie after reading to prevent automatic landing page on next visit
+      if (hasLandingCookie) {
+        document.cookie = 'show_landing_page=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+      }
     } else if (user && !loading) {
       // Only redirect if user is authenticated AND not explicitly viewing landing
       router.push('/dashboard')
@@ -108,6 +113,14 @@ export default function Home() {
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Yes, our platform and crisis links are available globally, with localized crisis resources in most countries and languages."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is mental wellness?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mental wellness is a state of well-being where you realize your abilities, can cope with normal life stresses, work productively, and contribute to your community. It's about having emotional resilience, healthy relationships, and the capacity to adapt to change."
           }
         }
       ]
@@ -249,9 +262,14 @@ export default function Home() {
                       <h3 className="text-lg font-semibold text-gray-900">Good morning! 🌅</h3>
                       <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">All Features Free</span>
                     </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                       <p className="text-sm text-blue-900 font-medium mb-1">🎯 Today's Focus: Stress management and relaxation</p>
                       <p className="text-sm text-blue-700">Based on your sleep score (6/10) and yesterday's stress level, here's your personalized plan...</p>
+                    </div>
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
+                      <p className="text-sm text-purple-900 font-medium mb-1">💭 Daily Mental Wellness Quote</p>
+                      <p className="text-sm text-purple-700 italic">"Your mental health is a priority. Your happiness is essential. Your self-care is non-negotiable."</p>
+                      <p className="text-xs text-purple-600 mt-2">— Unknown</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-gray-50 rounded-lg p-4">
@@ -691,6 +709,23 @@ export default function Home() {
                     </h3>
                     <p className="text-gray-600">
                       Yes. Our digital tools and crisis links work in most countries and languages. We're committed to making mental health support accessible globally, with localized crisis resources available.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* FAQ 5 - New */}
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
+                    <span className="text-therapy-600 font-semibold text-sm">Q5</span>
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      What is mental wellness?
+                    </h3>
+                    <p className="text-gray-600">
+                      Mental wellness is a state of well-being where you realize your abilities, can cope with normal life stresses, work productively, and contribute to your community. It's about having emotional resilience, healthy relationships, and the capacity to adapt to change and thrive.
                     </p>
                   </div>
                 </div>
