@@ -18,9 +18,20 @@ export default function LonelinessAssessmentTool() {
   return (
     <>
       <SEOHead
-        title="Free Loneliness Assessment - Combat Social Isolation | Mental Wellness App"
-        description="Take the UCLA Loneliness Scale (ULS-3) assessment to measure your social connection. Get instant, personalized strategies to combat loneliness and build meaningful relationships. No signup required."
-        keywords={["loneliness assessment", "UCLA loneliness scale", "social isolation test", "loneliness quiz", "combat loneliness", "social connection", "isolation screening", "loneliness help"]}
+        title="Free Loneliness Test - UCLA Scale | Social Isolation Support Online"
+        description="Take our free loneliness test using the clinically-validated UCLA Loneliness Scale. Get instant results and personalized strategies to combat social isolation and build meaningful connections."
+        keywords={[
+          "free loneliness test",
+          "loneliness assessment online",
+          "UCLA loneliness scale free",
+          "social isolation support",
+          "loneliness quiz free",
+          "combat loneliness online",
+          "social connection assessment",
+          "isolation screening tool",
+          "loneliness help free",
+          "relationship building support"
+        ]}
         ogImage="/og-loneliness-tools.png"
         structuredData={structuredData}
       />

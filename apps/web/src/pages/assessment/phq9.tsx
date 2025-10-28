@@ -6,6 +6,9 @@ import type { User } from '@supabase/supabase-js'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import { SEOHead } from '@/components/SEOHead'
 
+// Disable static generation for this page
+export const dynamic = 'force-dynamic'
+
 const PHQ9_QUESTIONS = [
   "Little interest or pleasure in doing things",
   "Feeling down, depressed, or hopeless",

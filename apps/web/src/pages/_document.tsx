@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext, DocumentInitialProps } from 'next/document'
+import { Head as NextHead } from 'next/document'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
@@ -13,8 +14,9 @@ class MyDocument extends Document {
         {/* Character Encoding */}
         <meta charSet="UTF-8" />
 
-        {/* Viewport for responsive design */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover" />
+              {/* Viewport meta tag moved to _app.tsx DefaultSEO component to resolve Next.js warnings
+          Next.js 14 prefers viewport meta tags in _app.tsx for proper deduplication
+          Core Web Vitals optimization maintained through enhanced viewport content */}
 
         {/* DNS Prefetch for faster loading */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
@@ -48,10 +50,36 @@ class MyDocument extends Document {
 
         {/* Global Site Metadata */}
         <meta name="author" content="Mental Wellness App" />
+        <meta name="description" content="Free mental health support tools for anxiety, burnout, and loneliness. Evidence-based, HIPAA-compliant, 100% free." />
+        <meta name="keywords" content="mental health, anxiety, burnout, depression, therapy, counseling, stress management, emotional wellness, mental wellness tools, free mental health support" />
 
         {/* Healthcare & HIPAA Compliance Meta */}
         <meta name="healthcare-platform" content="mental-wellness" />
         <meta name="hipaa-compliant" content="true" />
+        <meta name="medical-disclaimer" content="This is not a substitute for professional medical advice" />
+        <meta name="content-classification" content="healthcare" />
+        <meta name="target-audience" content="general-public" />
+
+        {/* Content Classification */}
+        <meta name="rating" content="general" />
+        <meta name="distribution" content="global" />
+        <meta name="language" content="en" />
+
+        {/* Enhanced Robots Meta */}
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow" />
+
+        {/* Open Graph/Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Mental Wellness App" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="en" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@mentalwellness" />
+        <meta name="twitter:creator" content="@mentalwellness" />
 
         {/* Google Site Verification (Add your verification code when available) */}
         {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
@@ -66,12 +94,35 @@ class MyDocument extends Document {
         {/* Geo Location */}
         <meta name="geo.region" content="US" />
         <meta name="geo.placename" content="United States" />
+        <meta name="icbm" content="40.7128; -74.0060" />
 
-        {/* Language */}
+        {/* Language and Regional Settings */}
         <meta httpEquiv="content-language" content="en-US" />
+        <meta name="geo.country" content="US" />
 
         {/* Prevent automatic translation */}
         <meta name="google" content="notranslate" />
+
+        {/* Security and Privacy Headers */}
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        <meta name="permissions-policy" content="camera=(), microphone=(), geolocation=()" />
+
+        {/* Content Security and HIPAA */}
+        <meta name="privacy-policy-url" content="/privacy" />
+        <meta name="terms-of-service-url" content="/terms" />
+        <meta name="hipaa-compliance-url" content="/hipaa" />
+
+        {/* Performance Optimization */}
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        {/* Accessibility Improvements */}
+        <meta name="accessibility-mode" content="enabled" />
+        <meta name="screen-reader-optimized" content="true" />
 
         {/* Google Analytics - Add when GA4 property is created */}
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (

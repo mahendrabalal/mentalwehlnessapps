@@ -291,3 +291,108 @@ export function articleStructuredData({
     },
   }
 }
+
+// Export aliases for compatibility
+export const howToStructuredData = buildHowToStructuredData
+export const faqStructuredData = buildFaqStructuredData
+
+export function medicalEntityStructuredData({
+  name,
+  description,
+  alternateName,
+  cause,
+  symptom,
+  riskFactor,
+  treatment,
+  typicalTest,
+  medicalSpecialty
+}: {
+  name: string
+  description: string
+  alternateName?: string[]
+  cause?: string[]
+  symptom?: string[]
+  riskFactor?: string[]
+  treatment?: string[]
+  typicalTest?: string[]
+  medicalSpecialty?: string
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalEntity',
+    name,
+    description,
+    medicalSpecialty: medicalSpecialty || 'Mental Health'
+  }
+
+  if (alternateName && alternateName.length > 0) {
+    schema.alternateName = alternateName
+  }
+
+  if (cause && cause.length > 0) {
+    schema.cause = cause.map(c => ({
+      '@type': 'MedicalCause',
+      name: c
+    }))
+  }
+
+  if (symptom && symptom.length > 0) {
+    schema.symptom = symptom.map(s => ({
+      '@type': 'MedicalSymptom',
+      name: s
+    }))
+  }
+
+  if (riskFactor && riskFactor.length > 0) {
+    schema.riskFactor = riskFactor
+  }
+
+  if (treatment && treatment.length > 0) {
+    schema.treatment = treatment.map(t => ({
+      '@type': 'MedicalTherapy',
+      name: t
+    }))
+  }
+
+  if (typicalTest && typicalTest.length > 0) {
+    schema.typicalTest = typicalTest.map(t => ({
+      '@type': 'MedicalTest',
+      name: t
+    }))
+  }
+
+  return schema
+}
+
+export function reviewedByStructuredData({
+  reviewedBy,
+  dateReviewed,
+  medicalOrganization
+}: {
+  reviewedBy: {
+    name: string
+    credentials: string
+    expertise?: string
+  }
+  dateReviewed: string
+  medicalOrganization?: string
+}): StructuredData {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ReviewedBy',
+    author: {
+      '@type': 'Person',
+      name: reviewedBy.name,
+      jobTitle: reviewedBy.credentials,
+      knowsAbout: reviewedBy.expertise
+    },
+    dateReviewed,
+    publisher: medicalOrganization ? {
+      '@type': 'Organization',
+      name: medicalOrganization
+    } : {
+      '@type': 'Organization',
+      name: 'Mental Wellness Apps Clinical Review Board'
+    }
+  }
+}

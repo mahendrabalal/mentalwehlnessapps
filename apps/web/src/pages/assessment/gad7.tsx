@@ -6,6 +6,9 @@ import type { User } from '@supabase/supabase-js'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import { SEOHead } from '@/components/SEOHead'
 
+// Disable static generation for this page
+export const dynamic = 'force-dynamic'
+
 const GAD7_QUESTIONS = [
   "Feeling nervous, anxious or on edge",
   "Not being able to stop or control worrying",
