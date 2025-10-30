@@ -30,13 +30,18 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
 ]
 
-const SUPPORT_PAGES = [
+// Top 6 most popular support pages (always visible)
+const TOP_SUPPORT_PAGES = [
   { label: 'Emotional Burnout Recovery', href: '/support/emotional-exhaustion-burnout', icon: '🔥' },
-  { label: 'Affordable Therapy Options', href: '/support/affordable-mental-health-care', icon: '💰' },
   { label: 'Combat Loneliness', href: '/support/combat-loneliness-isolation', icon: '💙' },
   { label: 'Anxiety Relief Techniques', href: '/support/managing-anxiety-naturally', icon: '😌' },
   { label: 'Mindfulness for Beginners', href: '/support/mindfulness-for-beginners', icon: '🧘' },
   { label: 'Overcome Mental Health Stigma', href: '/support/overcome-mental-health-stigma', icon: '💪' },
+  { label: 'Affordable Therapy Options', href: '/support/affordable-mental-health-care', icon: '💰' },
+]
+
+// Additional support pages (collapsed by default)
+const MORE_SUPPORT_PAGES = [
   { label: 'Emotional Regulation Skills', href: '/support/emotional-regulation-skills', icon: '🎯' },
   { label: 'Build Meditation Consistency', href: '/support/meditation-consistency', icon: '✅' },
   { label: 'Manage Meditation Anxiety', href: '/support/emotional-resistance-meditation', icon: '🧠' },
@@ -46,20 +51,27 @@ const SUPPORT_PAGES = [
   { label: 'Relationships & Mental Health', href: '/support/relationships-mental-health', icon: '💑' },
 ]
 
-const TOOL_PAGES = [
-  { label: 'Depression Screening', href: '/tools/depression-screening', icon: '🧠' },
-  { label: 'Stress Management Techniques', href: '/tools/stress-management-techniques', icon: '💪' },
-  { label: 'Anxiety Relief Tool', href: '/tools/anxiety-relief', icon: '😌' },
-  { label: 'Burnout Assessment', href: '/tools/burnout-assessment', icon: '🔥' },
-  { label: 'Mindfulness Exercises', href: '/tools/mindfulness', icon: '🧘' },
-  { label: 'Emotional Regulation', href: '/tools/emotional-regulation', icon: '🎯' },
-  { label: 'Loneliness Assessment', href: '/tools/loneliness-assessment', icon: '💙' },
-  { label: 'Therapy Cost Calculator', href: '/tools/therapy-cost-calculator', icon: '💰' },
-  { label: 'Stigma Assessment', href: '/tools/stigma-assessment', icon: '💪' },
-  { label: 'Meditation Habit Tracker', href: '/tools/meditation-tracker', icon: '✅' },
-  { label: 'Recovery Timeline', href: '/tools/recovery-timeline', icon: '📊' },
-  { label: 'Substance Use Resources', href: '/tools/substance-screening', icon: '🆘' },
-]
+// Categorized tool pages for better organization
+const TOOL_CATEGORIES = {
+  'Mental Health Challenges': [
+    { label: 'Depression Screening', href: '/tools/depression-screening', icon: '🧠' },
+    { label: 'Anxiety Relief Tool', href: '/tools/anxiety-relief', icon: '😌' },
+    { label: 'Burnout Assessment', href: '/tools/burnout-assessment', icon: '🔥' },
+    { label: 'Loneliness Assessment', href: '/tools/loneliness-assessment', icon: '💙' },
+    { label: 'Stigma Assessment', href: '/tools/stigma-assessment', icon: '💪' },
+  ],
+  'Self-Care Skills': [
+    { label: 'Mindfulness Exercises', href: '/tools/mindfulness', icon: '🧘' },
+    { label: 'Emotional Regulation', href: '/tools/emotional-regulation', icon: '🎯' },
+    { label: 'Stress Management Techniques', href: '/tools/stress-management-techniques', icon: '💪' },
+    { label: 'Meditation Habit Tracker', href: '/tools/meditation-tracker', icon: '✅' },
+  ],
+  'Planning & Resources': [
+    { label: 'Therapy Cost Calculator', href: '/tools/therapy-cost-calculator', icon: '💰' },
+    { label: 'Recovery Timeline', href: '/tools/recovery-timeline', icon: '📊' },
+    { label: 'Substance Use Resources', href: '/tools/substance-screening', icon: '🆘' },
+  ],
+}
 
 const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
   {
@@ -81,7 +93,6 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
   const { isPremium } = useSubscription()
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [supportDropdownOpen, setSupportDropdownOpen] = useState(false)
 
   const isMarketing = variant === 'marketing'
   const publicNavItems = isMarketing ? MARKETING_PUBLIC_NAV : DEFAULT_PUBLIC_NAV
@@ -338,8 +349,14 @@ function PublicNav({
       {/* Find Support Dropdown */}
       <div className="relative" ref={supportDropdownRef as any}>
         <button
-          onClick={() => setSupportDropdownOpen(!supportDropdownOpen)}
-          onMouseEnter={() => setSupportDropdownOpen(true)}
+          onClick={() => {
+            setSupportDropdownOpen(!supportDropdownOpen)
+            setToolsDropdownOpen(false)
+          }}
+          onMouseEnter={() => {
+            setSupportDropdownOpen(true)
+            setToolsDropdownOpen(false)
+          }}
           className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
         >
           Find Support
@@ -351,9 +368,15 @@ function PublicNav({
         {supportDropdownOpen && (
           <div
             onMouseLeave={() => setSupportDropdownOpen(false)}
-            className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+            className="absolute left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-[32rem] overflow-y-auto"
           >
-            {SUPPORT_PAGES.map((page) => (
+            {/* Popular Resources */}
+            <div className="px-4 py-2">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                Popular Resources
+              </p>
+            </div>
+            {TOP_SUPPORT_PAGES.map((page) => (
               <Link
                 key={page.href}
                 href={page.href}
@@ -367,6 +390,54 @@ function PublicNav({
                 <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
               </Link>
             ))}
+
+            {/* More Resources - Collapsible */}
+            <details className="group px-4 py-2 mt-2">
+              <summary className="cursor-pointer text-sm text-therapy-600 hover:text-therapy-700 font-medium list-none flex items-center gap-2">
+                <svg
+                  className="w-4 h-4 transition-transform group-open:rotate-90"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                {MORE_SUPPORT_PAGES.length} more resources
+              </summary>
+              <div className="mt-2 space-y-1">
+                {MORE_SUPPORT_PAGES.map((page) => (
+                  <Link
+                    key={page.href}
+                    href={page.href}
+                    onClick={() => {
+                      setSupportDropdownOpen(false)
+                      onNavigate()
+                    }}
+                    className="flex items-center gap-3 px-2 py-2 hover:bg-gray-50 rounded transition-colors"
+                  >
+                    <span className="text-lg">{page.icon}</span>
+                    <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </details>
+
+            {/* View All Link */}
+            <div className="border-t border-gray-200 mt-2 pt-2">
+              <Link
+                href="/support"
+                onClick={() => {
+                  setSupportDropdownOpen(false)
+                  onNavigate()
+                }}
+                className="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors group"
+              >
+                <span className="text-sm font-semibold text-gray-900 group-hover:text-therapy-600">
+                  View All Resources
+                </span>
+                <span className="text-gray-400 group-hover:text-therapy-600">→</span>
+              </Link>
+            </div>
           </div>
         )}
       </div>
@@ -374,8 +445,14 @@ function PublicNav({
       {/* Tools Dropdown */}
       <div className="relative" ref={toolsDropdownRef as any}>
         <button
-          onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
-          onMouseEnter={() => setToolsDropdownOpen(true)}
+          onClick={() => {
+            setToolsDropdownOpen(!toolsDropdownOpen)
+            setSupportDropdownOpen(false)
+          }}
+          onMouseEnter={() => {
+            setToolsDropdownOpen(true)
+            setSupportDropdownOpen(false)
+          }}
           className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
         >
           Tools
@@ -387,34 +464,51 @@ function PublicNav({
         {toolsDropdownOpen && (
           <div
             onMouseLeave={() => setToolsDropdownOpen(false)}
-            className="absolute left-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+            className="absolute left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 max-h-[32rem] overflow-y-auto"
           >
-            {TOOL_PAGES.map((page) => (
+            {Object.entries(TOOL_CATEGORIES).map(([category, tools], index) => (
+              <div key={category} className={index > 0 ? 'mt-4' : ''}>
+                {/* Category Header */}
+                <div className="px-4 py-2">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    {category}
+                  </p>
+                </div>
+
+                {/* Category Tools */}
+                {tools.map((tool) => (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    onClick={() => {
+                      setToolsDropdownOpen(false)
+                      onNavigate()
+                    }}
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="text-xl">{tool.icon}</span>
+                    <span className="text-sm text-gray-700 hover:text-gray-900">{tool.label}</span>
+                  </Link>
+                ))}
+              </div>
+            ))}
+
+            {/* View All Link */}
+            <div className="border-t border-gray-200 mt-4 pt-2">
               <Link
-                key={page.href}
-                href={page.href}
+                href="/tools/free-mental-health-tools"
                 onClick={() => {
                   setToolsDropdownOpen(false)
                   onNavigate()
                 }}
-                className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors group"
               >
-                <span className="text-xl">{page.icon}</span>
-                <span className="text-sm text-gray-700 hover:text-gray-900">{page.label}</span>
+                <span className="text-sm font-semibold text-gray-900 group-hover:text-therapy-600">
+                  View All 12 Tools
+                </span>
+                <span className="text-gray-400 group-hover:text-therapy-600">→</span>
               </Link>
-            ))}
-            <div className="border-t border-gray-200 my-2"></div>
-            <Link
-              href="/dashboard"
-              onClick={() => {
-                setToolsDropdownOpen(false)
-                onNavigate()
-              }}
-              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
-            >
-              <span className="text-xl">📊</span>
-              <span className="text-sm font-semibold text-gray-900">View All Tools</span>
-            </Link>
+            </div>
           </div>
         )}
       </div>
@@ -513,7 +607,13 @@ function PublicMobileNav({ items, closeMenu, user }: PublicMobileNavProps) {
 
         {supportExpanded && (
           <div className="mt-1 space-y-1">
-            {SUPPORT_PAGES.map((page) => (
+            {/* Popular Resources */}
+            <div className="px-6 py-2">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                Popular Resources
+              </p>
+            </div>
+            {TOP_SUPPORT_PAGES.map((page) => (
               <Link
                 key={page.href}
                 href={page.href}
@@ -524,6 +624,36 @@ function PublicMobileNav({ items, closeMenu, user }: PublicMobileNavProps) {
                 <span>{page.label}</span>
               </Link>
             ))}
+
+            {/* More Resources */}
+            <details className="px-6 py-2">
+              <summary className="cursor-pointer text-sm text-therapy-600 font-medium list-none">
+                {MORE_SUPPORT_PAGES.length} more resources →
+              </summary>
+              <div className="mt-2 space-y-1">
+                {MORE_SUPPORT_PAGES.map((page) => (
+                  <Link
+                    key={page.href}
+                    href={page.href}
+                    onClick={closeMenu}
+                    className="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <span>{page.icon}</span>
+                    <span>{page.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </details>
+
+            {/* View All Link */}
+            <Link
+              href="/support"
+              onClick={closeMenu}
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-therapy-600 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
+            >
+              <span>→</span>
+              <span>View All Resources</span>
+            </Link>
           </div>
         )}
       </div>
@@ -546,25 +676,39 @@ function PublicMobileNav({ items, closeMenu, user }: PublicMobileNavProps) {
         </button>
 
         {toolsExpanded && (
-          <div className="mt-1 space-y-1">
-            {TOOL_PAGES.map((page) => (
-              <Link
-                key={page.href}
-                href={page.href}
-                onClick={closeMenu}
-                className="flex items-center gap-2 px-6 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
-              >
-                <span>{page.icon}</span>
-                <span>{page.label}</span>
-              </Link>
+          <div className="mt-1 space-y-3">
+            {Object.entries(TOOL_CATEGORIES).map(([category, tools]) => (
+              <div key={category}>
+                {/* Category Header */}
+                <div className="px-6 py-2">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    {category}
+                  </p>
+                </div>
+
+                {/* Category Tools */}
+                {tools.map((tool) => (
+                  <Link
+                    key={tool.href}
+                    href={tool.href}
+                    onClick={closeMenu}
+                    className="flex items-center gap-2 px-6 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <span>{tool.icon}</span>
+                    <span>{tool.label}</span>
+                  </Link>
+                ))}
+              </div>
             ))}
+
+            {/* View All Link */}
             <Link
-              href="/dashboard"
+              href="/tools/free-mental-health-tools"
               onClick={closeMenu}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-therapy-600 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
             >
-              <span>📊</span>
-              <span>View All Tools</span>
+              <span>→</span>
+              <span>View All 12 Tools</span>
             </Link>
           </div>
         )}
