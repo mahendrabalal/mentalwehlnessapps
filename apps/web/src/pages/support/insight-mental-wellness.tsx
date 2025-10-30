@@ -49,9 +49,12 @@ export default function InsightMentalWellnessPage() {
     <>
       <SEOHead
         title="Gain Mental Wellness Insight - Free Self-Awareness & Mental Health Assessment"
-        description="Develop deeper insight into your mental wellness with self-awareness tools, assessments, and strategies. Understand your emotions, patterns, and mental health needs. Free guidance inside."
+        description="Develop deeper insight into your mental wellness with self-awareness tools, assessments, strategies, and real-life examples. Understand your emotions, patterns, and mental health needs. Free guidance inside."
         keywords={[
           'insight mental wellness',
+          'mental wellness examples',
+          'examples of mental wellness',
+          'mental health examples',
           'mental health self-awareness',
           'understanding mental wellness',
           'mental health insight',
@@ -59,7 +62,8 @@ export default function InsightMentalWellnessPage() {
           'mental wellness assessment',
           'gain insight mental health',
           'emotional awareness',
-          'mental health patterns'
+          'mental health patterns',
+          'good mental wellness examples'
         ]}
         ogImage="/og-mental-wellness-insight.png"
         structuredData={structuredData}
@@ -269,8 +273,151 @@ export default function InsightMentalWellnessPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* Mental Wellness Examples */}
         <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Real-Life Mental Wellness Examples
+              </h2>
+              <p className="text-xl text-gray-600">
+                See what good mental wellness looks like in action across different life situations
+              </p>
+            </div>
+
+            <div className="space-y-8">
+              {/* Example 1: Work Stress */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">💼 Managing Work Stress</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Sarah works 70+ hours weekly, skips meals, ignores burnout symptoms, feels guilty taking breaks, bottles up stress, and can't sleep. She tells herself "I just need to push through."
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Mark works efficiently during set hours, takes lunch breaks, notices early burnout signs, sets boundaries with his manager, uses stress management techniques, and prioritizes sleep. He knows sustainable pace beats burnout.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 2: Emotional Response */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">😔 Handling Difficult Emotions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      When Lisa feels sad, she immediately distracts herself with social media, numbs feelings with alcohol, avoids thinking about emotions, and pushes away people who notice she's struggling.
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      When Tom feels sad, he acknowledges the feeling without judgment, journals about what triggered it, talks to a trusted friend, uses healthy coping skills like walking, and seeks therapy when sadness persists.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 3: Social Connections */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">🤝 Building Social Connections</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Jake feels lonely but cancels plans last minute, scrolls social media comparing himself to others, doesn't reach out when struggling, and convinces himself he's better off alone.
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Emma recognizes loneliness as a signal to connect. She reaches out to friends, joins activities aligned with her interests, limits comparison-inducing social media, and is vulnerable about needing connection.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 4: Self-Care Routine */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">🌿 Daily Self-Care Practices</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Rachel views self-care as selfish, skips meals when busy, sleeps 4-5 hours, never exercises, ignores physical health, and only rests when completely exhausted or sick.
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      David treats self-care as essential maintenance. He sleeps 7-8 hours, exercises regularly, eats nutritious meals, takes breaks throughout the day, and knows that caring for himself allows him to show up for others.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 5: Seeking Help */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">🆘 Asking for Support</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Mike struggles with depression for months but avoids therapy due to stigma, tells himself "others have it worse," doesn't tell anyone he's struggling, and waits until crisis before seeking help.
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      Ana notices depression symptoms early and schedules therapy, tells close friends she's struggling, uses free mental health resources while waiting for an appointment, and views asking for help as strength, not weakness.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Example 6: Stress Coping */}
+              <div className="bg-white rounded-xl p-8 shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">⚡ Responding to Acute Stress</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <h4 className="font-bold text-red-900 mb-2">❌ Poor Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      When stressed about a deadline, Chris catastrophizes ("I'll get fired"), snaps at family members, stress-eats junk food, loses sleep ruminating, and avoids the problem entirely.
+                    </p>
+                  </div>
+                  <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <h4 className="font-bold text-green-900 mb-2">✓ Good Mental Wellness</h4>
+                    <p className="text-gray-700 text-sm">
+                      When facing a deadline, Maya breaks the project into manageable steps, uses breathing exercises to stay calm, communicates with her team, maintains sleep schedule, and knows one stressful week doesn't define her worth.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-12 bg-indigo-50 rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">See Yourself in These Examples?</h3>
+              <p className="text-lg text-gray-700 mb-6">
+                Good mental wellness isn't about perfection—it's about having awareness and healthy coping strategies. Our free assessments can help you identify areas where you're doing well and areas to improve.
+              </p>
+              <Link
+                href="/tools/depression-screening"
+                className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-lg"
+              >
+                Take Free Mental Wellness Assessment
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">

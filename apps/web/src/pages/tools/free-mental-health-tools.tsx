@@ -155,12 +155,17 @@ export default function FreeMentalHealthTools() {
   return (
     <>
       <SEOHead
-        title="Free Mental Health Tools - 10+ Evidence-Based Resources | No Signup Required"
-        description="Access 10+ free mental health tools for anxiety relief, burnout assessment, mindfulness, and emotional regulation. Instant results, clinically-reviewed, 100% free forever."
+        title="Free Mental Wellness Test & Health Tools - 10+ Evidence-Based Assessments"
+        description="Take a free mental wellness test for depression, anxiety, burnout & stress. 10+ evidence-based mental health assessment tools. Instant results, clinically-reviewed, 100% free forever."
         keywords={[
+          'mental wellness test',
+          'free mental wellness test',
+          'mental health test',
           'free mental health tools',
+          'mental wellness assessment',
           'free anxiety relief',
           'free burnout test',
+          'free depression test',
           'free mindfulness exercises',
           'free emotional regulation',
           'mental health assessment free',
@@ -168,9 +173,8 @@ export default function FreeMentalHealthTools() {
           'no cost mental health resources',
           'free therapy tools',
           'mental wellness tools free',
-          'mental wellness test',
-          'free mental wellness test',
-          'mental health assessment tools'
+          'mental health assessment tools',
+          'mental wellness quiz'
         ]}
         ogImage="/og-free-mental-health-tools.png"
         structuredData={structuredData}
@@ -215,11 +219,10 @@ export default function FreeMentalHealthTools() {
           {/* Page Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Free Mental Health Tools
+              Free Mental Wellness Test & Health Tools
             </h1>
             <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
-              Access 10+ evidence-based mental health tools for anxiety, burnout, loneliness, and emotional wellness.
-              No signup required, instant results, completely free forever.
+              Take a free mental wellness test to assess your emotional health. 10+ evidence-based assessment tools for depression, anxiety, burnout, stress, and loneliness. No signup required, instant results, completely free forever.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               <span className="bg-green-100 text-green-800 text-sm font-medium px-4 py-2 rounded-full">
