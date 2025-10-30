@@ -76,14 +76,17 @@ export function CollapsibleSection({
 
         {/* Chevron Icon */}
         <div className="flex-shrink-0">
-          <div
-            className={`text-2xl transition-transform ${
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-transform ${
               prefersReducedMotion ? '' : 'duration-200'
             } ${isExpanded ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
             aria-hidden="true"
           >
-            ▼
-          </div>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
       </button>
 
@@ -151,14 +154,17 @@ export function CollapsibleSectionMini({
           {icon && <span className="text-lg flex-shrink-0">{icon}</span>}
           <span className="font-medium text-gray-900 text-sm">{title}</span>
         </div>
-        <span
-          className={`text-lg transition-transform ${
+        <svg
+          className={`w-4 h-4 text-gray-400 transition-transform ${
             prefersReducedMotion ? '' : 'duration-200'
           } ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
           aria-hidden="true"
         >
-          ▼
-        </span>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
 
       {isMounted && (

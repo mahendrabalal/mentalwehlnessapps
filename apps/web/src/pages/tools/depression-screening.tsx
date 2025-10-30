@@ -4,6 +4,7 @@ import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
 import { useToolTracking } from '@/hooks/useAnalytics'
 
@@ -405,34 +406,65 @@ export default function DepressionScreeningTool() {
             </div>
           )}
 
-          {/* FAQ Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">What is the PHQ-9 depression test?</h3>
-                <p className="text-gray-600">
-                  The PHQ-9 (Patient Health Questionnaire-9) is a clinically validated tool used by healthcare providers to screen for depression. It consists of 9 questions based on DSM-5 criteria for major depressive disorder.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">How accurate is this depression screening?</h3>
-                <p className="text-gray-600">
-                  The PHQ-9 has a sensitivity of 88% and specificity of 88% for detecting major depression. While highly accurate, this screening tool is not a substitute for professional diagnosis.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">What do the different severity levels mean?</h3>
-                <p className="text-gray-600">
-                  Scores are categorized as: 0-4 (minimal), 5-9 (mild), 10-14 (moderate), 15-19 (moderately severe), and 20-27 (severe). Higher scores indicate more severe depressive symptoms and stronger recommendations for professional treatment.
-                </p>
-              </div>
-              <div className="pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">When should I seek professional help?</h3>
-                <p className="text-gray-600">
-                  If your score is 10 or higher, or if you're having thoughts of self-harm, seek professional help immediately. Even with lower scores, if symptoms persist or interfere with daily life, consider consulting a mental health professional.
-                </p>
-              </div>
+          {/* FAQ Section - Progressive Disclosure */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <CollapsibleSection
+                id="faq-phq9-what"
+                title="What is the PHQ-9 depression test?"
+                icon="📋"
+                summary="Clinically validated screening tool based on DSM-5 criteria"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    The PHQ-9 (Patient Health Questionnaire-9) is a clinically validated tool used by healthcare providers to screen for depression. It consists of 9 questions based on DSM-5 criteria for major depressive disorder.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-phq9-accuracy"
+                title="How accurate is this depression screening?"
+                icon="🎯"
+                summary="88% sensitivity and specificity for detecting major depression"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    The PHQ-9 has a sensitivity of 88% and specificity of 88% for detecting major depression. While highly accurate, this screening tool is not a substitute for professional diagnosis.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-phq9-severity"
+                title="What do the different severity levels mean?"
+                icon="📊"
+                summary="5 levels from minimal (0-4) to severe (20-27) depression"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Scores are categorized as: 0-4 (minimal), 5-9 (mild), 10-14 (moderate), 15-19 (moderately severe), and 20-27 (severe). Higher scores indicate more severe depressive symptoms and stronger recommendations for professional treatment.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-phq9-help"
+                title="When should I seek professional help?"
+                icon="🆘"
+                summary="Score ≥10, thoughts of self-harm, or persistent symptoms"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    If your score is 10 or higher, or if you're having thoughts of self-harm, seek professional help immediately. Even with lower scores, if symptoms persist or interfere with daily life, consider consulting a mental health professional.
+                  </p>
+                </div>
+              </CollapsibleSection>
             </div>
           </div>
 

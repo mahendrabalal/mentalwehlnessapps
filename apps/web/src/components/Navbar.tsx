@@ -49,6 +49,9 @@ const MORE_SUPPORT_PAGES = [
   { label: 'Sleep & Mental Health', href: '/support/sleep-mental-health', icon: '😴' },
   { label: 'Trauma Recovery Guide', href: '/support/trauma-recovery', icon: '🛡️' },
   { label: 'Relationships & Mental Health', href: '/support/relationships-mental-health', icon: '💑' },
+  { label: 'Gain Mental Wellness Insight', href: '/support/insight-mental-wellness', icon: '🔍' },
+  { label: 'Balanced Mental Wellness', href: '/support/balanced-mental-wellness', icon: '⚖️' },
+  { label: 'Teen Mental Wellness Day', href: '/support/world-teen-mental-wellness-day', icon: '🌟' },
 ]
 
 // Categorized tool pages for better organization

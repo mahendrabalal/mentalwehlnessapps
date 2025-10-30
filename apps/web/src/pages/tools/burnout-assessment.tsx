@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { BurnoutRiskIndicator } from '@/components/BurnoutRiskIndicator'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
 
 export default function BurnoutAssessmentTool() {
@@ -210,40 +211,79 @@ export default function BurnoutAssessmentTool() {
             </p>
           </div>
 
-          {/* FAQ Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">What is the difference between burnout and stress?</h3>
-                <p className="text-gray-600">
-                  While stress is characterized by over-engagement, burnout is characterized by disengagement. Stress feels like you have too much on your plate, while burnout feels like you have nothing left to give. This workplace burnout quiz helps identify both conditions.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">How accurate is this burnout self test?</h3>
-                <p className="text-gray-600">
-                  Our burnout assessment is based on the Maslach Burnout Inventory (MBI), the gold standard in occupational health with over 40 years of research validation. While not a medical diagnosis, it provides reliable insights into your burnout risk level and early warning signs.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Can I use this job stress test for my employees?</h3>
-                <p className="text-gray-600">
-                  Yes, this occupational burnout assessment is suitable for workplace wellness programs and employee mental health initiatives. Many organizations use it as part of their mental health screening and prevention strategies to identify at-risk employees early.
-                </p>
-              </div>
-              <div className="border-b border-gray-200 pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">What are the early signs of workplace burnout?</h3>
-                <p className="text-gray-600">
-                  Early warning signs include chronic fatigue, decreased productivity, cynicism about work, emotional detachment, difficulty concentrating, and physical symptoms like headaches or sleep problems. This employee burnout evaluation helps identify these patterns early.
-                </p>
-              </div>
-              <div className="pb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">How long does burnout recovery take?</h3>
-                <p className="text-gray-600">
-                  Recovery time varies based on severity and intervention. Mild burnout may improve in 2-4 weeks with proper rest and boundary setting, while severe burnout may require 2-6 months or more. Our burnout recovery recommendations provide a structured approach to healing.
-                </p>
-              </div>
+          {/* FAQ Section - Progressive Disclosure */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              <CollapsibleSection
+                id="faq-burnout-difference"
+                title="What is the difference between burnout and stress?"
+                icon="⚡"
+                summary="Stress = over-engagement, Burnout = disengagement"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    While stress is characterized by over-engagement, burnout is characterized by disengagement. Stress feels like you have too much on your plate, while burnout feels like you have nothing left to give. This workplace burnout quiz helps identify both conditions.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-burnout-accuracy"
+                title="How accurate is this burnout self test?"
+                icon="🎯"
+                summary="Based on Maslach Burnout Inventory (MBI) with 40+ years of validation"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Our burnout assessment is based on the Maslach Burnout Inventory (MBI), the gold standard in occupational health with over 40 years of research validation. While not a medical diagnosis, it provides reliable insights into your burnout risk level and early warning signs.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-burnout-employees"
+                title="Can I use this job stress test for my employees?"
+                icon="👥"
+                summary="Suitable for workplace wellness programs and mental health initiatives"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Yes, this occupational burnout assessment is suitable for workplace wellness programs and employee mental health initiatives. Many organizations use it as part of their mental health screening and prevention strategies to identify at-risk employees early.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-burnout-signs"
+                title="What are the early signs of workplace burnout?"
+                icon="⚠️"
+                summary="Chronic fatigue, decreased productivity, cynicism, emotional detachment"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Early warning signs include chronic fatigue, decreased productivity, cynicism about work, emotional detachment, difficulty concentrating, and physical symptoms like headaches or sleep problems. This employee burnout evaluation helps identify these patterns early.
+                  </p>
+                </div>
+              </CollapsibleSection>
+
+              <CollapsibleSection
+                id="faq-burnout-recovery"
+                title="How long does burnout recovery take?"
+                icon="⏱️"
+                summary="2-4 weeks for mild, 2-6+ months for severe cases"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Recovery time varies based on severity and intervention. Mild burnout may improve in 2-4 weeks with proper rest and boundary setting, while severe burnout may require 2-6 months or more. Our burnout recovery recommendations provide a structured approach to healing.
+                  </p>
+                </div>
+              </CollapsibleSection>
             </div>
           </div>
 

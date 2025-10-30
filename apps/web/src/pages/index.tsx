@@ -7,6 +7,7 @@ import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import { BrandLogo } from '@/components/BrandLogo'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
@@ -457,92 +458,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Pricing Section */}
-        <section id="pricing" className="bg-white py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                100% Free Mental Health Support
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                All features unlocked. No subscriptions. No paywalls. Mental wellness support accessible to everyone.
-              </p>
-            </div>
-
-            <div className="max-w-2xl mx-auto">
-              {/* All Features Free */}
-              <div className="border border-therapy-500 rounded-2xl p-8 bg-gradient-to-b from-therapy-50 to-white">
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">All Features Included</h3>
-                  <div className="text-5xl font-bold text-gray-900 mb-2">$0</div>
-                  <p className="text-gray-600">Forever free - no credit card required</p>
-                </div>
-
-                <ul className="space-y-4 mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Digital therapy alternatives</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Stress-management analytics</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Crisis prevention system</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Daily wellness briefings</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Unlimited digital therapeutic support</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Advanced mood tracking</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">24/7 Crisis resources</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <svg className="w-5 h-5 text-therapy-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-gray-700">Premium content library</span>
-                  </li>
-                </ul>
-
-                <Link
-                  href="/auth/signup"
-                  className="block w-full bg-therapy-600 hover:bg-therapy-700 text-white text-center py-3 px-6 rounded-lg font-semibold transition-colors"
-                >
-                  Get Started Free
-                </Link>
-
-                <p className="text-xs text-gray-500 text-center mt-3">
-                  No credit card • No subscriptions • No hidden costs
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Trust & Safety Section */}
         <section id="about" className="bg-gray-50 py-24">
@@ -630,7 +545,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* FAQ Section - Progressive Disclosure */}
         <section className="bg-gray-50 py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -645,91 +560,81 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="space-y-6">
-              {/* FAQ 1 */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
-                    <span className="text-therapy-600 font-semibold text-sm">Q1</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Is Mental Wellness Apps really free?
-                    </h3>
-                    <p className="text-gray-600">
-                      Yes. All tools are completely free—no subscriptions or credit card required. We believe mental health support should be accessible to everyone, regardless of financial situation.
-                    </p>
-                  </div>
+            <div className="space-y-4">
+              {/* FAQ 1 - Default Expanded */}
+              <CollapsibleSection
+                id="faq-free"
+                title="Is Mental Wellness Apps really free?"
+                icon="💰"
+                summary="100% free, no subscriptions or credit card required"
+                defaultExpanded={true}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Yes. All tools are completely free—no subscriptions or credit card required. We believe mental health support should be accessible to everyone, regardless of financial situation.
+                  </p>
                 </div>
-              </div>
+              </CollapsibleSection>
 
               {/* FAQ 2 */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
-                    <span className="text-therapy-600 font-semibold text-sm">Q2</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Are these tools evidence-based?
-                    </h3>
-                    <p className="text-gray-600">
-                      Every exercise is grounded in cognitive-behavioral and mindfulness research validated by professionals. Our therapeutic approaches are overseen by licensed mental health experts.
-                    </p>
-                  </div>
+              <CollapsibleSection
+                id="faq-evidence"
+                title="Are these tools evidence-based?"
+                icon="🔬"
+                summary="Grounded in CBT and mindfulness research, validated by professionals"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Every exercise is grounded in cognitive-behavioral and mindfulness research validated by professionals. Our therapeutic approaches are overseen by licensed mental health experts.
+                  </p>
                 </div>
-              </div>
+              </CollapsibleSection>
 
               {/* FAQ 3 */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
-                    <span className="text-therapy-600 font-semibold text-sm">Q3</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Is my data private?
-                    </h3>
-                    <p className="text-gray-600">
-                      Absolutely. We use encrypted, HIPAA-grade storage to keep your personal health data secure. Your information is never sold, shared, or used for purposes beyond your care.
-                    </p>
-                  </div>
+              <CollapsibleSection
+                id="faq-privacy"
+                title="Is my data private?"
+                icon="🔒"
+                summary="Encrypted, HIPAA-grade storage — never sold or shared"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Absolutely. We use encrypted, HIPAA-grade storage to keep your personal health data secure. Your information is never sold, shared, or used for purposes beyond your care.
+                  </p>
                 </div>
-              </div>
+              </CollapsibleSection>
 
               {/* FAQ 4 */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
-                    <span className="text-therapy-600 font-semibold text-sm">Q4</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Can I access it worldwide?
-                    </h3>
-                    <p className="text-gray-600">
-                      Yes. Our digital tools and crisis links work in most countries and languages. We're committed to making mental health support accessible globally, with localized crisis resources available.
-                    </p>
-                  </div>
+              <CollapsibleSection
+                id="faq-worldwide"
+                title="Can I access it worldwide?"
+                icon="🌍"
+                summary="Available in most countries with localized crisis resources"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Yes. Our digital tools and crisis links work in most countries and languages. We're committed to making mental health support accessible globally, with localized crisis resources available.
+                  </p>
                 </div>
-              </div>
+              </CollapsibleSection>
 
-              {/* FAQ 5 - New */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-therapy-100 rounded-full flex items-center justify-center">
-                    <span className="text-therapy-600 font-semibold text-sm">Q5</span>
-                  </div>
-                  <div className="flex-grow">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      What is mental wellness?
-                    </h3>
-                    <p className="text-gray-600">
-                      Mental wellness is a state of well-being where you realize your abilities, can cope with normal life stresses, work productively, and contribute to your community. It's about having emotional resilience, healthy relationships, and the capacity to adapt to change and thrive.
-                    </p>
-                  </div>
+              {/* FAQ 5 */}
+              <CollapsibleSection
+                id="faq-mental-wellness"
+                title="What is mental wellness?"
+                icon="🧠"
+                summary="A state of well-being with emotional resilience and healthy coping"
+                defaultExpanded={false}
+              >
+                <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed">
+                    Mental wellness is a state of well-being where you realize your abilities, can cope with normal life stresses, work productively, and contribute to your community. It's about having emotional resilience, healthy relationships, and the capacity to adapt to change and thrive.
+                  </p>
                 </div>
-              </div>
+              </CollapsibleSection>
             </div>
 
             <div className="text-center mt-12">
@@ -738,7 +643,7 @@ export default function Home() {
               </p>
               <Link
                 href="/help"
-                className="inline-flex items-center text-therapy-600 hover:text-therapy-700 font-medium"
+                className="inline-flex items-center text-therapy-600 hover:text-therapy-700 font-medium transition-colors"
               >
                 Visit Mental Health Help Center
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

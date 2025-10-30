@@ -200,6 +200,36 @@ export default function SupportResourcesPage() {
           description: 'Navigate trauma healing with evidence-based approaches and find professional support.',
           time: '11 min read',
           relatedTool: null
+        },
+        {
+          href: '/support/balanced-mental-wellness',
+          title: 'Balanced Mental Wellness',
+          description: 'Achieve balance across all life areas with the 5 pillars of wellness and work-life balance strategies.',
+          time: '12 min read',
+          relatedTool: { href: '/tools/emotional-regulation', name: 'Emotional Regulation Tool' }
+        }
+      ]
+    },
+    {
+      id: 'mental-wellness-insight',
+      title: 'Mental Wellness & Awareness',
+      emoji: '🔍',
+      description: 'Build self-awareness and understanding of your mental health',
+      color: 'indigo',
+      resources: [
+        {
+          href: '/support/insight-mental-wellness',
+          title: 'Gain Mental Wellness Insight',
+          description: 'Develop self-awareness about your mental health, identify patterns, and understand your emotional needs.',
+          time: '9 min read',
+          relatedTool: { href: '/tools/depression-screening', name: 'Depression Screening' }
+        },
+        {
+          href: '/support/world-teen-mental-wellness-day',
+          title: 'World Teen Mental Wellness Day (October 3)',
+          description: 'Resources and support for teen mental health, parent guidance, and crisis resources. Join the awareness movement.',
+          time: '13 min read',
+          relatedTool: { href: '/tools/anxiety-relief', name: 'Teen Anxiety Relief' }
         }
       ]
     }
@@ -213,7 +243,7 @@ export default function SupportResourcesPage() {
     <>
       <SEOHead
         title="Mental Health Support Resources - Expert Guides & Free Tools | Evidence-Based"
-        description="Access 13+ comprehensive mental health support resources covering burnout, anxiety, loneliness, mindfulness, trauma recovery, and more. Evidence-based guides with free interactive tools."
+        description="Access 16+ comprehensive mental health support resources covering burnout, anxiety, loneliness, mindfulness, trauma recovery, balanced wellness, teen mental health, and more. Evidence-based guides with free interactive tools."
         keywords={[
           'mental health support resources',
           'mental health guides',
@@ -225,7 +255,10 @@ export default function SupportResourcesPage() {
           'mental health education',
           'evidence-based mental health',
           'free mental health resources',
-          'mental wellness guides'
+          'mental wellness guides',
+          'balanced mental wellness',
+          'mental wellness insight',
+          'teen mental wellness'
         ]}
         ogImage="/og-support-resources.png"
         structuredData={structuredData}
@@ -285,11 +318,11 @@ export default function SupportResourcesPage() {
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             <div className="text-center">
-              <div className="text-3xl font-bold text-therapy-600 mb-2">13+</div>
+              <div className="text-3xl font-bold text-therapy-600 mb-2">16+</div>
               <div className="text-sm text-gray-600">Support Guides</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-therapy-600 mb-2">6</div>
+              <div className="text-3xl font-bold text-therapy-600 mb-2">8</div>
               <div className="text-sm text-gray-600">Topic Categories</div>
             </div>
             <div className="text-center">

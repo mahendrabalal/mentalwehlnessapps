@@ -38,6 +38,9 @@ const STATIC_PAGES: StaticPageEntry[] = [
   { url: '/support/realistic-mental-health-expectations', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/realistic-mental-health-expectations.tsx' },
   { url: '/support/emotional-resistance-meditation', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/emotional-resistance-meditation.tsx' },
   { url: '/support/meditation-consistency', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/meditation-consistency.tsx' },
+  { url: '/support/insight-mental-wellness', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/insight-mental-wellness.tsx' },
+  { url: '/support/balanced-mental-wellness', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/balanced-mental-wellness.tsx' },
+  { url: '/support/world-teen-mental-wellness-day', changefreq: 'monthly', priority: 0.8, sourcePath: 'support/world-teen-mental-wellness-day.tsx' },
   // Interactive Tool Pages
   { url: '/tools/free-mental-health-tools', changefreq: 'weekly', priority: 1.0, sourcePath: 'tools/free-mental-health-tools.tsx' },
   { url: '/tools/emotional-exhaustion-recovery', changefreq: 'weekly', priority: 0.9, sourcePath: 'tools/emotional-exhaustion-recovery.tsx' },
