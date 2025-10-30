@@ -48,7 +48,7 @@ export default function WorldTeenMentalWellnessDayPage() {
   return (
     <>
       <SEOHead
-        title="World Teen Mental Wellness Day (October 3) - Teen Mental Health Support & Resources"
+        title="World Teen Mental Wellness Day: Oct 3 Resources"
         description="October 3rd is World Teen Mental Wellness Day. Learn about teen mental health challenges, support strategies for parents and teens, and free resources for mental wellness."
         keywords={[
           'world teen mental wellness day',

@@ -48,7 +48,7 @@ export default function InsightMentalWellnessPage() {
   return (
     <>
       <SEOHead
-        title="Gain Mental Wellness Insight - Free Self-Awareness & Mental Health Assessment"
+        title="Insight Mental Wellness: Free Assessment & Guide"
         description="Develop deeper insight into your mental wellness with self-awareness tools, assessments, strategies, and real-life examples. Understand your emotions, patterns, and mental health needs. Free guidance inside."
         keywords={[
           'insight mental wellness',

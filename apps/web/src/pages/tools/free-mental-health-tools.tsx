@@ -155,7 +155,7 @@ export default function FreeMentalHealthTools() {
   return (
     <>
       <SEOHead
-        title="Free Mental Wellness Test & Health Tools - 10+ Evidence-Based Assessments"
+        title="Mental Wellness Test: Free Tools & Assessments"
         description="Take a free mental wellness test for depression, anxiety, burnout & stress. 10+ evidence-based mental health assessment tools. Instant results, clinically-reviewed, 100% free forever."
         keywords={[
           'mental wellness test',
