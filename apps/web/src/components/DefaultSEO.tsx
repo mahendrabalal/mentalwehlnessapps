@@ -6,26 +6,27 @@ export function DefaultSEO() {
 
   return (
     <Head>
-      {/* Default Meta Tags - Fallback for pages without specific SEOHead */}
-      <title>Free Mental Health Support - Evidence-Based Tools & Resources</title>
-      <meta name="title" content="Free Mental Health Support - Evidence-Based Tools & Resources" />
-      <meta name="description" content="Get 100% free, evidence-based mental health tools for anxiety, stress, burnout & loneliness. HIPAA-compliant, clinically-reviewed support available worldwide." />
+      {/* Fallback Meta Tags - Will be overridden by page-specific SEOHead component
+          Next.js automatically deduplicates <Head> tags by key (name/property)
+          These ensure meta tags are always present in server-rendered HTML */}
+      <title>Mental Wellness App - Free Mental Health Support</title>
+      <meta name="description" content="Free evidence-based mental health tools for anxiety, stress, and burnout. HIPAA-compliant, 100% free support available worldwide." />
 
       {/* Viewport meta tag - Optimized for Core Web Vitals and mobile performance */}
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, minimum-scale=1.0, viewport-fit=cover, user-scalable=no, shrink-to-fit=no" />
 
-      {/* Default Open Graph */}
-      <meta property="og:title" content="Free Mental Health Support - Evidence-Based Tools & Resources" />
-      <meta property="og:description" content="Get 100% free, evidence-based mental health tools for anxiety, stress, burnout & loneliness. HIPAA-compliant, clinically-reviewed support available worldwide." />
+      {/* Fallback Open Graph - Overridden by page-specific SEOHead */}
+      <meta property="og:title" content="Mental Wellness App - Free Mental Health Support" />
+      <meta property="og:description" content="Free evidence-based mental health tools for anxiety, stress, and burnout. HIPAA-compliant, 100% free support available worldwide." />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Mental Wellness App" />
 
-      {/* Default Twitter Card */}
+      {/* Fallback Twitter Card - Overridden by page-specific SEOHead */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Free Mental Health Support - Evidence-Based Tools & Resources" />
-      <meta name="twitter:description" content="Get 100% free, evidence-based mental health tools for anxiety, stress, burnout & loneliness. HIPAA-compliant, clinically-reviewed support available worldwide." />
+      <meta name="twitter:title" content="Mental Wellness App - Free Mental Health Support" />
+      <meta name="twitter:description" content="Free evidence-based mental health tools for anxiety, stress, and burnout. HIPAA-compliant, 100% free support available worldwide." />
 
-      {/* Structured Data */}
+      {/* Global Structured Data - Organization and Website Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

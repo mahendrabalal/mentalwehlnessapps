@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function TraumaRecoverySupport() {
   const structuredData = [
@@ -37,8 +38,10 @@ export default function TraumaRecoverySupport() {
   return (
     <>
       <SEOHead
-        title="Trauma Recovery Guide | PTSD Support Resources & Healing Techniques"
-        description="Comprehensive guide to trauma recovery and PTSD support. Find evidence-based healing techniques, coping strategies, and professional resources for emotional trauma recovery and post-traumatic growth."
+        title="Trauma Recovery Guide - PTSD Support & Healing"
+        description="Comprehensive trauma recovery and PTSD guide. Evidence-based healing techniques, coping strategies, and professional resources."
+        publishedTime={SUPPORT_PAGES_DATES['trauma-recovery'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['trauma-recovery'].modified}
         keywords={[
           "trauma recovery",
           "PTSD support",

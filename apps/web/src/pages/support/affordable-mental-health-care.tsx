@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function AffordableMentalHealthCarePage() {
   const faqs = [
@@ -40,8 +41,10 @@ export default function AffordableMentalHealthCarePage() {
   return (
     <>
       <SEOHead
-        title="Finding Affordable Mental Health Care - Free & Low-Cost Therapy Options"
-        description="Break through financial barriers to mental health care. Discover free therapy resources, sliding scale options, insurance alternatives, and 100% free mental health tools. Start your journey today."
+        title="Affordable Mental Health Care - Free & Low-Cost"
+        description="Break financial barriers to mental health care. Free therapy resources, sliding scale options, insurance alternatives, and 100% free tools."
+        publishedTime={SUPPORT_PAGES_DATES['affordable-mental-health-care'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['affordable-mental-health-care'].modified}
         keywords={[
           'affordable mental health therapy',
           'finding affordable therapy near me',

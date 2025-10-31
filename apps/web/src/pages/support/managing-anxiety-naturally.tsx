@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function ManagingAnxietyNaturallyPage() {
   const faqs = [
@@ -36,8 +37,10 @@ export default function ManagingAnxietyNaturallyPage() {
   return (
     <>
       <SEOHead
-        title="Managing Anxiety Naturally - Mindfulness Techniques for Quick Relief"
-        description="Reduce anxiety symptoms quickly with evidence-based mindfulness techniques. Free guided exercises for panic attacks, GAD, and everyday anxiety. CBT + mindfulness strategies."
+        title="Managing Anxiety Naturally - Quick Relief Tips"
+        description="Reduce anxiety fast with mindfulness techniques. Free guided exercises for panic attacks, GAD, and everyday anxiety. CBT + mindfulness strategies."
+        publishedTime={SUPPORT_PAGES_DATES['managing-anxiety-naturally'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['managing-anxiety-naturally'].modified}
         keywords={[
           'mindfulness techniques to reduce anxiety',
           'quick anxiety relief',

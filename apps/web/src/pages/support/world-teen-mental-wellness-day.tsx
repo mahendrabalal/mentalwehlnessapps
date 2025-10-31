@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function WorldTeenMentalWellnessDayPage() {
   const faqs = [
@@ -49,7 +50,9 @@ export default function WorldTeenMentalWellnessDayPage() {
     <>
       <SEOHead
         title="World Teen Mental Wellness Day: Oct 3 Resources"
-        description="October 3rd is World Teen Mental Wellness Day. Learn about teen mental health challenges, support strategies for parents and teens, and free resources for mental wellness."
+        description="October 3rd is World Teen Mental Wellness Day. Learn about teen mental health, support strategies for parents and teens, and free resources."
+        publishedTime={SUPPORT_PAGES_DATES['world-teen-mental-wellness-day'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['world-teen-mental-wellness-day'].modified}
         keywords={[
           'world teen mental wellness day',
           'teen mental health awareness',

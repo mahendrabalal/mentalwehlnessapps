@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildBreadcrumbList, medicalWebPageStructuredData, softwareApplicationStructuredData } from '@/lib/seo'
+import { HOMEPAGE_LAST_MODIFIED, HOMEPAGE_PUBLISHED } from '@/lib/seo-constants'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import { BrandLogo } from '@/components/BrandLogo'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
@@ -146,6 +147,9 @@ export default function Home() {
           "digital mental health support"
         ]}
         ogImage="/og-default.png"
+        ogType="website"
+        publishedTime={HOMEPAGE_PUBLISHED}
+        modifiedTime={HOMEPAGE_LAST_MODIFIED}
         structuredData={structuredData}
       />
 

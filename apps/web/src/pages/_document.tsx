@@ -50,7 +50,7 @@ class MyDocument extends Document {
 
         {/* Global Site Metadata */}
         <meta name="author" content="Mental Wellness App" />
-        <meta name="description" content="Free mental health support tools for anxiety, burnout, and loneliness. Evidence-based, HIPAA-compliant, 100% free." />
+        {/* Meta description removed - handled by page-specific SEOHead component to prevent duplicates */}
         <meta name="keywords" content="mental health, anxiety, burnout, depression, therapy, counseling, stress management, emotional wellness, mental wellness tools, free mental health support" />
 
         {/* Healthcare & HIPAA Compliance Meta */}

@@ -140,6 +140,23 @@ export function SEOHead({
         <meta property="article:author" content={author} />
       )}
 
+      {/* Modified time for website pages (SEO freshness signal) */}
+      {ogType === 'website' && modifiedTime && (
+        <>
+          <meta property="og:updated_time" content={modifiedTime} />
+          <meta property="article:modified_time" content={modifiedTime} />
+          <meta name="last-modified" content={modifiedTime} />
+        </>
+      )}
+
+      {/* Published time for website pages */}
+      {ogType === 'website' && publishedTime && (
+        <>
+          <meta property="article:published_time" content={publishedTime} />
+          <meta name="article:published_time" content={publishedTime} />
+        </>
+      )}
+
       {/* Twitter Card */}
       <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:url" content={fullUrl} />

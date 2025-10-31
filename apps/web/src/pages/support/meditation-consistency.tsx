@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, buildHowToStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function MeditationConsistencyPage() {
   const faqs = [
@@ -76,8 +77,10 @@ export default function MeditationConsistencyPage() {
   return (
     <>
       <SEOHead
-        title="Tips for Maintaining a Daily Mindfulness Meditation Habit - Free Support"
-        description="Struggling to stay consistent with meditation? Learn evidence-based habit formation strategies to build a sustainable daily mindfulness practice. Free habit tracking and reminders."
+        title="Daily Meditation Habit - Tips & Free Support"
+        description="Stay consistent with meditation using evidence-based habit strategies. Build a sustainable practice with free tracking and reminders."
+        publishedTime={SUPPORT_PAGES_DATES['meditation-consistency'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['meditation-consistency'].modified}
         keywords={[
           'maintaining daily meditation habit',
           'meditation consistency tips',

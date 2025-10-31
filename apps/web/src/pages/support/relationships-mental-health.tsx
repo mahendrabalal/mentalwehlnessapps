@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function RelationshipsMentalHealthSupport() {
   const structuredData = [
@@ -37,8 +38,10 @@ export default function RelationshipsMentalHealthSupport() {
   return (
     <>
       <SEOHead
-        title="Relationships and Mental Health | Healthy Communication & Support Guide"
-        description="Comprehensive guide to relationships and mental health. Learn healthy communication skills, conflict resolution techniques, and how to support loved ones with mental health conditions. Build stronger, supportive relationships."
+        title="Relationships & Mental Health - Support Guide"
+        description="Guide to relationships and mental health. Learn communication skills, conflict resolution, and how to support loved ones with mental health conditions."
+        publishedTime={SUPPORT_PAGES_DATES['relationships-mental-health'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['relationships-mental-health'].modified}
         keywords={[
           "relationships and mental health",
           "healthy communication skills",

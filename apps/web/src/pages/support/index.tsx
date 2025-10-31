@@ -5,6 +5,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, howToStructuredData, faqStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function SupportResourcesPage() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>('emotional-health')
@@ -242,8 +243,10 @@ export default function SupportResourcesPage() {
   return (
     <>
       <SEOHead
-        title="Mental Health Support Resources - Expert Guides & Free Tools | Evidence-Based"
-        description="Access 16+ comprehensive mental health support resources covering burnout, anxiety, loneliness, mindfulness, trauma recovery, balanced wellness, teen mental health, and more. Evidence-based guides with free interactive tools."
+        title="Mental Health Support - Expert Guides & Free Tools"
+        description="Access 16+ mental health resources: burnout, anxiety, loneliness, mindfulness, trauma recovery, teen health. Evidence-based guides with free tools."
+        publishedTime={SUPPORT_PAGES_DATES['index'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['index'].modified}
         keywords={[
           'mental health support resources',
           'mental health guides',

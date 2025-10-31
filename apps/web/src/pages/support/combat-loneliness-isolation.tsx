@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function CombatLonelinessIsolationPage() {
   const faqs = [
@@ -36,8 +37,10 @@ export default function CombatLonelinessIsolationPage() {
   return (
     <>
       <SEOHead
-        title="Combat Loneliness & Isolation - Free 24/7 Support & Mindfulness Techniques"
-        description="Feeling alone? Learn evidence-based strategies to overcome loneliness and social isolation through mindfulness, self-care, and meaningful connection. Free 24/7 AI companion support."
+        title="Combat Loneliness - Free 24/7 Support & Tips"
+        description="Overcome loneliness with mindfulness, self-care, and meaningful connections. Evidence-based strategies with free 24/7 AI companion."
+        publishedTime={SUPPORT_PAGES_DATES['combat-loneliness-isolation'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['combat-loneliness-isolation'].modified}
         keywords={[
           'combat loneliness',
           'overcoming social isolation',

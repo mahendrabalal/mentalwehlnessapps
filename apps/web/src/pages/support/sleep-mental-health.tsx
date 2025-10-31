@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function SleepMentalHealthSupport() {
   const structuredData = [
@@ -37,8 +38,10 @@ export default function SleepMentalHealthSupport() {
   return (
     <>
       <SEOHead
-        title="Sleep and Mental Health | Sleep Hygiene Tips & Insomnia Treatment"
-        description="Comprehensive guide to the connection between sleep and mental health. Learn evidence-based sleep hygiene tips, insomnia treatments, and how poor sleep affects depression, anxiety, and mental wellness."
+        title="Sleep & Mental Health - Hygiene Tips & Treatment"
+        description="Guide to sleep and mental health connection. Evidence-based sleep hygiene, insomnia treatments, and how sleep affects depression/anxiety."
+        publishedTime={SUPPORT_PAGES_DATES['sleep-mental-health'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['sleep-mental-health'].modified}
         keywords={[
           "sleep and mental health",
           "sleep hygiene tips",

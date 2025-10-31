@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function EmotionalExhaustionBurnoutPage() {
   const faqs = [
@@ -40,8 +41,10 @@ export default function EmotionalExhaustionBurnoutPage() {
   return (
     <>
       <SEOHead
-        title="Emotional Exhaustion & Burnout Recovery - Free Support & Natural Strategies"
-        description="Feeling emotionally drained? Learn how to recognize, prevent, and recover from burnout naturally. Free tools for tracking exhaustion, setting boundaries, and restoring your energy."
+        title="Burnout Recovery - Free Support & Natural Tips"
+        description="Recognize and recover from burnout naturally. Free tools for tracking exhaustion, setting boundaries, and restoring energy."
+        publishedTime={SUPPORT_PAGES_DATES['emotional-exhaustion-burnout'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['emotional-exhaustion-burnout'].modified}
         keywords={[
           'emotional exhaustion',
           'burnout recovery',

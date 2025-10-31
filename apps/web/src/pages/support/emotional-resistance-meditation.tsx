@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function EmotionalResistanceMeditationPage() {
   const faqs = [
@@ -40,8 +41,10 @@ export default function EmotionalResistanceMeditationPage() {
   return (
     <>
       <SEOHead
-        title="Managing Anxiety & Emotional Resistance in Meditation - Free Support"
-        description="Does meditation make you anxious? Learn evidence-based techniques for managing emotional resistance in mindfulness practice. Free guided meditations designed for anxiety and discomfort."
+        title="Managing Anxiety in Meditation - Free Support"
+        description="Meditation making you anxious? Learn techniques for managing emotional resistance. Free guided meditations for anxiety and discomfort."
+        publishedTime={SUPPORT_PAGES_DATES['emotional-resistance-meditation'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['emotional-resistance-meditation'].modified}
         keywords={[
           'managing anxiety in meditation',
           'emotional resistance meditation',

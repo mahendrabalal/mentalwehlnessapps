@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function RealisticMentalHealthExpectationsPage() {
   const faqs = [
@@ -44,8 +45,10 @@ export default function RealisticMentalHealthExpectationsPage() {
   return (
     <>
       <SEOHead
-        title="Realistic Expectations for Mental Health Recovery & Mindfulness - Free Guide"
-        description="Understand realistic timelines for therapy and mindfulness progress. Evidence-based expectations for mental health recovery to help you stay motivated and measure success accurately."
+        title="Mental Health Recovery - Realistic Expectations"
+        description="Understand realistic therapy and mindfulness timelines. Evidence-based expectations to stay motivated and measure success accurately."
+        publishedTime={SUPPORT_PAGES_DATES['realistic-mental-health-expectations'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['realistic-mental-health-expectations'].modified}
         keywords={[
           'realistic expectations mental health recovery',
           'how long does therapy take to work',

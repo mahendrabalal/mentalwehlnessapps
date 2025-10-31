@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function EmotionalRegulationSkillsPage() {
   const faqs = [
@@ -36,8 +37,10 @@ export default function EmotionalRegulationSkillsPage() {
   return (
     <>
       <SEOHead
-        title="Emotional Regulation Skills - DBT Techniques for Managing Stress & Anger"
-        description="Struggling with intense emotions? Learn proven DBT skills for emotional regulation including STOP, TIPP, distress tolerance, and emotion identification. Free tools and guided practice."
+        title="Emotional Regulation Skills - DBT Techniques"
+        description="Learn DBT skills for emotional regulation: STOP, TIPP, distress tolerance, emotion identification. Free tools and guided practice."
+        publishedTime={SUPPORT_PAGES_DATES['emotional-regulation-skills'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['emotional-regulation-skills'].modified}
         keywords={[
           'best emotional regulation skills',
           'managing stress and anger',

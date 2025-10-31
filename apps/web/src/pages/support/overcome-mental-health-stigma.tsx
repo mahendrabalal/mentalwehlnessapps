@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function OvercomeMentalHealthStigmaPage() {
   const faqs = [
@@ -36,8 +37,10 @@ export default function OvercomeMentalHealthStigmaPage() {
   return (
     <>
       <SEOHead
-        title="Overcoming Mental Health Stigma - Private, Judgment-Free Support"
-        description="Don't let stigma stop you from getting help. Learn how to overcome mental health stigma, talk to family about therapy, and access private, judgment-free support through our free app."
+        title="Overcome Mental Health Stigma - Judgment-Free"
+        description="Don't let stigma stop you. Learn to overcome mental health stigma, talk to family about therapy, and access private judgment-free support."
+        publishedTime={SUPPORT_PAGES_DATES['overcome-mental-health-stigma'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['overcome-mental-health-stigma'].modified}
         keywords={[
           'overcoming stigma around mental health',
           'mental health stigma in men',

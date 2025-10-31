@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function MindfulnessForBeginnersPage() {
   const faqs = [
@@ -36,8 +37,10 @@ export default function MindfulnessForBeginnersPage() {
   return (
     <>
       <SEOHead
-        title="Mindfulness for Beginners - Stay Focused During Meditation | Free Guide"
-        description="Can't focus during meditation? Learn beginner-friendly mindfulness techniques, ADHD-friendly practices, and 2-minute exercises. Free guided meditations and support."
+        title="Mindfulness for Beginners - Meditation Guide"
+        description="Can't focus? Learn beginner mindfulness techniques, ADHD-friendly practices, 2-minute exercises. Free guided meditations."
+        publishedTime={SUPPORT_PAGES_DATES['mindfulness-for-beginners'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['mindfulness-for-beginners'].modified}
         keywords={[
           'mindfulness meditation for beginners',
           'how to stay focused during meditation',

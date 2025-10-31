@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function BalancedMentalWellnessPage() {
   const faqs = [
@@ -49,7 +50,9 @@ export default function BalancedMentalWellnessPage() {
     <>
       <SEOHead
         title="Balanced Mental Wellness: 5 Pillars & Work-Life Tips"
-        description="Achieve balanced mental wellness across all life areas. Learn the 5 pillars of wellness, work-life balance strategies, and practical tips for holistic mental health."
+        description="Achieve balanced mental wellness. Learn the 5 pillars, work-life balance strategies, and practical tips for holistic mental health."
+        publishedTime={SUPPORT_PAGES_DATES['balanced-mental-wellness'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['balanced-mental-wellness'].modified}
         keywords={[
           'balanced mental wellness',
           'work-life balance',

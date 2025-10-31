@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/Navbar'
 import { SEOHead } from '@/components/SEOHead'
 import { buildBreadcrumbList, buildFaqStructuredData, medicalWebPageStructuredData } from '@/lib/seo'
+import { SUPPORT_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function InsightMentalWellnessPage() {
   const faqs = [
@@ -49,7 +50,9 @@ export default function InsightMentalWellnessPage() {
     <>
       <SEOHead
         title="Insight Mental Wellness: Free Assessment & Guide"
-        description="Develop deeper insight into your mental wellness with self-awareness tools, assessments, strategies, and real-life examples. Understand your emotions, patterns, and mental health needs. Free guidance inside."
+        description="Develop mental wellness insight with self-awareness tools, assessments, and strategies. Understand your emotions, patterns, and needs. Free guidance."
+        publishedTime={SUPPORT_PAGES_DATES['insight-mental-wellness'].published}
+        modifiedTime={SUPPORT_PAGES_DATES['insight-mental-wellness'].modified}
         keywords={[
           'insight mental wellness',
           'mental wellness examples',
