@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, howToStructuredData, faqStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function FreeMentalHealthTools() {
   const structuredData = [
@@ -156,7 +157,9 @@ export default function FreeMentalHealthTools() {
     <>
       <SEOHead
         title="Mental Wellness Test: Free Tools & Assessments"
-        description="Take a free mental wellness test for depression, anxiety, burnout & stress. 10+ evidence-based mental health assessment tools. Instant results, clinically-reviewed, 100% free forever."
+        description="Take a free mental wellness test for depression, anxiety, burnout & stress. 10+ evidence-based assessment tools. Instant results, clinically-reviewed, 100% free."
+        publishedTime={TOOLS_PAGES_DATES['free-mental-health-tools'].published}
+        modifiedTime={TOOLS_PAGES_DATES['free-mental-health-tools'].modified}
         keywords={[
           'mental wellness test',
           'free mental wellness test',

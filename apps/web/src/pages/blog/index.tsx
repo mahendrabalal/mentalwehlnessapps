@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer'
 import { fetchArticles, fetchSiteSettings } from '@/lib/cms/articleService'
 import { SEOHead, SEO_CONFIG } from '@/components/SEOHead'
 import { buildAbsoluteUrl, buildBreadcrumbList } from '@/lib/seo'
+import { BLOG_PAGES_DATES } from '@/lib/seo-constants'
 
 interface BlogIndexProps {
   articles: CmsArticle[]
@@ -54,6 +55,8 @@ export default function BlogIndexPage({
         description={description}
         keywords={SEO_CONFIG.blog.keywords}
         ogImage="/og-default.png"
+        publishedTime={BLOG_PAGES_DATES.index.published}
+        modifiedTime={BLOG_PAGES_DATES.index.modified}
         structuredData={structuredData}
       >
         <meta

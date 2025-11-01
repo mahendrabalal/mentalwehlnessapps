@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function SubstanceScreeningTool() {
   const structuredData = [
@@ -17,8 +18,10 @@ export default function SubstanceScreeningTool() {
   return (
     <>
       <SEOHead
-        title="Substance Use Screening & Support Resources | Mental Wellness App"
-        description="Get confidential information about substance use screening and professional support resources. Find treatment options, support groups, and crisis intervention services."
+        title="Substance Use Screening & Support Resources"
+        description="Get confidential substance use screening info and professional support resources. Find treatment options, support groups, and crisis intervention."
+        publishedTime={TOOLS_PAGES_DATES['substance-screening'].published}
+        modifiedTime={TOOLS_PAGES_DATES['substance-screening'].modified}
         keywords={["substance use screening", "drug abuse test", "addiction screening", "substance use disorder", "addiction help", "DAST-10", "substance abuse resources", "treatment finder"]}
         ogImage="/og-substance-screening.png"
         structuredData={structuredData}

@@ -6,6 +6,7 @@ import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
 import { useToolTracking } from '@/hooks/useAnalytics'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function StressManagementTechniques() {
   const [selectedTechnique, setSelectedTechnique] = useState<string | null>(null)
@@ -204,8 +205,10 @@ export default function StressManagementTechniques() {
   return (
     <>
       <SEOHead
-        title="Stress Management Techniques | Free Coping Skills & Relaxation Methods"
-        description="Learn evidence-based stress management techniques and coping skills. Find immediate stress relief methods, long-term stress reduction strategies, and workplace stress management tools. Free, evidence-based resources."
+        title="Stress Management Techniques - Free Coping Skills"
+        description="Learn evidence-based stress management techniques and coping skills. Find immediate stress relief, long-term strategies, and workplace tools. Free resources."
+        publishedTime={TOOLS_PAGES_DATES['stress-management-techniques'].published}
+        modifiedTime={TOOLS_PAGES_DATES['stress-management-techniques'].modified}
         keywords={[
           "stress management techniques",
           "stress reduction methods",

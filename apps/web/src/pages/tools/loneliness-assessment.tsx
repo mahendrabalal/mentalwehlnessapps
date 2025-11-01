@@ -5,6 +5,7 @@ import { SocialConnectionAssessment } from '@/components/SocialConnectionAssessm
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function LonelinessAssessmentTool() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function LonelinessAssessmentTool() {
   return (
     <>
       <SEOHead
-        title="Free Loneliness Test - UCLA Scale | Social Isolation Support Online"
-        description="Take our free loneliness test using the clinically-validated UCLA Loneliness Scale. Get instant results and personalized strategies to combat social isolation and build meaningful connections."
+        title="Free Loneliness Test - UCLA Scale Assessment"
+        description="Take our free loneliness test using the UCLA Loneliness Scale. Get instant results and personalized strategies to combat isolation and build connections."
+        publishedTime={TOOLS_PAGES_DATES['loneliness-assessment'].published}
+        modifiedTime={TOOLS_PAGES_DATES['loneliness-assessment'].modified}
         keywords={[
           "free loneliness test",
           "loneliness assessment online",

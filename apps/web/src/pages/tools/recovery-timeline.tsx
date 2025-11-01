@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function RecoveryTimelineTool() {
   const structuredData = [
@@ -17,8 +18,10 @@ export default function RecoveryTimelineTool() {
   return (
     <>
       <SEOHead
-        title="Mental Health Recovery Timeline Tool - Realistic Expectations | Mental Wellness App"
-        description="Set realistic recovery expectations with our evidence-based timeline tool. Learn what to expect from therapy, medication, and lifestyle changes at each stage of your mental health journey."
+        title="Mental Health Recovery Timeline - Realistic Expectations"
+        description="Set realistic recovery expectations with our evidence-based timeline tool. Learn what to expect from therapy, medication, and lifestyle changes over time."
+        publishedTime={TOOLS_PAGES_DATES['recovery-timeline'].published}
+        modifiedTime={TOOLS_PAGES_DATES['recovery-timeline'].modified}
         keywords={["recovery timeline", "mental health recovery", "therapy timeline", "how long therapy takes", "recovery expectations", "mental health healing", "realistic expectations"]}
         ogImage="/og-recovery-timeline.png"
         structuredData={structuredData}

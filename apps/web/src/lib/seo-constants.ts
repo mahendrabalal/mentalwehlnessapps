@@ -93,3 +93,77 @@ export const SUPPORT_PAGES_DATES = {
     modified: '2025-10-30T11:25:40+00:00'
   }
 } as const
+
+/**
+ * Tools Pages - Published and Modified Dates
+ * Update the modified date when making significant content changes to each page
+ */
+export const TOOLS_PAGES_DATES = {
+  'mindfulness': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'emotional-regulation': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'therapy-cost-calculator': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'stigma-assessment': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'meditation-tracker': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'recovery-timeline': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'substance-screening': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'emotional-exhaustion-recovery': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'loneliness-assessment': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'stress-management-techniques': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'anxiety-relief': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'depression-screening': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'burnout-assessment': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  },
+  'free-mental-health-tools': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-10-30T11:25:40+00:00'
+  }
+} as const
+
+/**
+ * Blog Pages - Published and Modified Dates
+ * Update the modified date when making significant content changes to each page
+ */
+export const BLOG_PAGES_DATES = {
+  'index': {
+    published: '2024-01-01T00:00:00Z',
+    modified: '2025-11-01T00:00:00+00:00'
+  }
+} as const

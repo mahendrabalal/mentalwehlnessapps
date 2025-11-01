@@ -5,6 +5,7 @@ import { QuickAnxietyRelief } from '@/components/QuickAnxietyRelief'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function AnxietyReliefTool() {
   const structuredData = [
@@ -38,8 +39,10 @@ export default function AnxietyReliefTool() {
   return (
     <>
       <SEOHead
-        title="Free Anxiety Relief Tools - Immediate Help for Panic & Stress | No Signup"
-        description="Get immediate anxiety relief with evidence-based techniques: breathing exercises, grounding methods, and panic attack support. Free tools for instant stress reduction and anxiety management."
+        title="Free Anxiety Relief Tools - Immediate Panic & Stress Help"
+        description="Get immediate anxiety relief with evidence-based techniques: breathing exercises, grounding methods, and panic support. Free tools for instant stress reduction."
+        publishedTime={TOOLS_PAGES_DATES['anxiety-relief'].published}
+        modifiedTime={TOOLS_PAGES_DATES['anxiety-relief'].modified}
         keywords={[
           "free anxiety relief tools",
           "immediate anxiety help",

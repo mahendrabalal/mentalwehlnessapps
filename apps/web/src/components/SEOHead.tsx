@@ -238,8 +238,8 @@ export const SEO_CONFIG = {
     ],
   },
   blog: {
-    title: 'Free Mental Health Resources - Expert Coping Strategies & Support',
-    description: 'Clinically-reviewed mental health education for burnout, anxiety, loneliness, and stigma. Evidence-based coping strategies, mindfulness techniques, and free therapy guides.',
+    title: 'Mental Health Resources - Evidence-Based Tools & Support',
+    description: 'Clinically-reviewed mental health resources for anxiety, burnout, and stress. Evidence-based coping strategies, mindfulness tools, and therapy guides.',
     keywords: [
       'mental health coping strategies',
       'burnout recovery',

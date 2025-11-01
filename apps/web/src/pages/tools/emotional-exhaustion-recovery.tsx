@@ -4,6 +4,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData, howToStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function EmotionalExhaustionRecovery() {
   const structuredData = [
@@ -126,8 +127,10 @@ export default function EmotionalExhaustionRecovery() {
   return (
     <>
       <SEOHead
-        title="Emotional Exhaustion Recovery Guide - Free Burnout Treatment & Recovery Plan"
-        description="Complete guide to recover from emotional exhaustion and burnout. Evidence-based strategies, recovery timeline, and practical steps. Free resources for mental wellness recovery."
+        title="Emotional Exhaustion Recovery - Burnout Treatment Guide"
+        description="Complete guide to recover from emotional exhaustion and burnout. Evidence-based strategies, recovery timeline, and practical steps. Free resources."
+        publishedTime={TOOLS_PAGES_DATES['emotional-exhaustion-recovery'].published}
+        modifiedTime={TOOLS_PAGES_DATES['emotional-exhaustion-recovery'].modified}
         keywords={[
           'emotional exhaustion recovery',
           'burnout recovery guide',

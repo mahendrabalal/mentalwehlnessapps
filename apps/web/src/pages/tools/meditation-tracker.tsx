@@ -5,6 +5,7 @@ import { MeditationHabitBuilder } from '@/components/MeditationHabitBuilder'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function MeditationTrackerTool() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function MeditationTrackerTool() {
   return (
     <>
       <SEOHead
-        title="Free Meditation Habit Tracker - Build Consistency | Mental Wellness App"
-        description="Build a lasting meditation habit with our research-based tracker. Identify your stage (Pre-Intention, Preparation, Action, Maintenance) and get personalized strategies. Based on 2025 habit formation science."
+        title="Free Meditation Habit Tracker - Build Consistency"
+        description="Build a lasting meditation habit with our research-based tracker. Get personalized strategies based on your stage. Backed by habit formation science."
+        publishedTime={TOOLS_PAGES_DATES['meditation-tracker'].published}
+        modifiedTime={TOOLS_PAGES_DATES['meditation-tracker'].modified}
         keywords={["meditation habit tracker", "meditation consistency", "build meditation habit", "meditation streak", "mindfulness practice", "meditation schedule", "habit formation", "meditation app"]}
         ogImage="/og-meditation-tracker.png"
         structuredData={structuredData}

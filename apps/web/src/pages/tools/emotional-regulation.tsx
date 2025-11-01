@@ -5,6 +5,7 @@ import { EmotionalRegulationToolkit } from '@/components/EmotionalRegulationTool
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function EmotionalRegulationTool() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function EmotionalRegulationTool() {
   return (
     <>
       <SEOHead
-        title="Free Emotional Regulation Tools - Master Your Emotions | Mental Wellness App"
-        description="Master your emotions with our free emotional regulation toolkit. Learn DBT skills, manage intense emotions, and build emotional resilience. No signup required."
+        title="Free Emotional Regulation Tools - Master Your Emotions"
+        description="Master your emotions with free emotional regulation tools. Learn DBT skills, manage intense emotions, and build resilience. No signup required."
+        publishedTime={TOOLS_PAGES_DATES['emotional-regulation'].published}
+        modifiedTime={TOOLS_PAGES_DATES['emotional-regulation'].modified}
         keywords={["emotional regulation", "DBT skills", "emotion management", "emotional control", "free DBT", "emotional resilience", "manage emotions"]}
         ogImage="/og-emotional-regulation-tools.png"
         structuredData={structuredData}

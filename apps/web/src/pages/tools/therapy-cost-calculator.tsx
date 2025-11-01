@@ -5,6 +5,7 @@ import { TherapyCostCalculator } from '@/components/TherapyCostCalculator'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function TherapyCostCalculatorTool() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function TherapyCostCalculatorTool() {
   return (
     <>
       <SEOHead
-        title="Free Therapy Cost Calculator - Find Affordable Mental Health Care | Mental Wellness App"
-        description="Compare therapy costs and find affordable mental health support. Calculate costs for traditional therapy, online platforms, and app-based care. Real 2025 pricing with insurance estimates. No signup required."
+        title="Free Therapy Cost Calculator - Find Affordable Care"
+        description="Compare therapy costs and find affordable mental health support. Calculate costs for traditional therapy, online platforms, and apps. Real 2025 pricing."
+        publishedTime={TOOLS_PAGES_DATES['therapy-cost-calculator'].published}
+        modifiedTime={TOOLS_PAGES_DATES['therapy-cost-calculator'].modified}
         keywords={["therapy cost calculator", "affordable therapy", "mental health costs", "therapy pricing", "cheap therapy options", "insurance therapy costs", "BetterHelp cost comparison", "affordable mental health care", "therapy budget"]}
         ogImage="/og-therapy-cost-calculator.png"
         structuredData={structuredData}

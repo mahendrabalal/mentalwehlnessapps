@@ -7,6 +7,7 @@ import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
 import { useToolTracking } from '@/hooks/useAnalytics'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function DepressionScreeningTool() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -145,8 +146,10 @@ export default function DepressionScreeningTool() {
   return (
     <>
       <SEOHead
-        title="Free Depression Screening Test | PHQ-9 Assessment Online - Mental Wellness"
-        description="Take this free depression screening test based on the PHQ-9 to assess your mental health. Get instant results, identify depression symptoms, and receive personalized treatment recommendations. 2-minute assessment."
+        title="Free Depression Screening Test - PHQ-9 Online"
+        description="Take a free PHQ-9 depression test. Get instant results, identify symptoms, and receive personalized treatment recommendations. 2-minute assessment."
+        publishedTime={TOOLS_PAGES_DATES['depression-screening'].published}
+        modifiedTime={TOOLS_PAGES_DATES['depression-screening'].modified}
         keywords={[
           "free depression test",
           "depression screening online",

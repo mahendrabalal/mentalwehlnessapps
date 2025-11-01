@@ -6,6 +6,7 @@ import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function BurnoutAssessmentTool() {
   const structuredData = [
@@ -39,8 +40,10 @@ export default function BurnoutAssessmentTool() {
   return (
     <>
       <SEOHead
-        title="Burnout Self Test - Free Assessment | Workplace Burnout Quiz & Job Stress Test"
-        description="Take this free burnout self test to check your workplace burnout risk level. Get instant results, identify job stress signs, and receive personalized recovery recommendations for emotional exhaustion and professional burnout."
+        title="Burnout Self Test - Free Workplace Assessment"
+        description="Take this free burnout self test to check your workplace risk level. Get instant results, identify job stress signs, and receive personalized recovery recommendations."
+        publishedTime={TOOLS_PAGES_DATES['burnout-assessment'].published}
+        modifiedTime={TOOLS_PAGES_DATES['burnout-assessment'].modified}
         keywords={[
           "burnout self test",
           "burnout test free",

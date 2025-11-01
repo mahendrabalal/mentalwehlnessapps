@@ -5,6 +5,7 @@ import { MindfulnessForBeginners } from '@/components/MindfulnessForBeginners'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function MindfulnessTool() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function MindfulnessTool() {
   return (
     <>
       <SEOHead
-        title="Free Mindfulness & Meditation Exercises | Mental Wellness App"
-        description="Start your mindfulness journey with our free guided meditation exercises. Perfect for beginners. Build consistency with daily practice reminders. No signup required."
+        title="Free Mindfulness & Meditation Exercises for Beginners"
+        description="Start your mindfulness journey with free guided meditation exercises. Perfect for beginners. Build consistency with daily practice. No signup required."
+        publishedTime={TOOLS_PAGES_DATES['mindfulness'].published}
+        modifiedTime={TOOLS_PAGES_DATES['mindfulness'].modified}
         keywords={["mindfulness", "meditation for beginners", "guided meditation", "free meditation", "mindfulness exercises", "meditation practice", "daily meditation"]}
         ogImage="/og-mindfulness-tools.png"
         structuredData={structuredData}

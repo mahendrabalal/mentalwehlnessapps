@@ -5,6 +5,7 @@ import { StigmaAssessmentTool } from '@/components/StigmaAssessmentTool'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { medicalWebPageStructuredData } from '@/lib/seo'
+import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function StigmaAssessmentPage() {
   const structuredData = [
@@ -18,8 +19,10 @@ export default function StigmaAssessmentPage() {
   return (
     <>
       <SEOHead
-        title="Free Mental Health Stigma Self-Assessment | Overcome Internalized Stigma"
-        description="Measure internalized mental health stigma with our private assessment. Based on clinical research (SSMIS-SF). Get personalized stigma-reduction strategies. Completely confidential, no signup required."
+        title="Free Mental Health Stigma Assessment - SSMIS-SF Test"
+        description="Measure internalized mental health stigma with our private assessment. Based on SSMIS-SF research. Get stigma-reduction strategies. Confidential, no signup."
+        publishedTime={TOOLS_PAGES_DATES['stigma-assessment'].published}
+        modifiedTime={TOOLS_PAGES_DATES['stigma-assessment'].modified}
         keywords={["mental health stigma assessment", "self-stigma test", "internalized stigma", "mental health shame", "stigma screening", "overcome mental health stigma", "self-stigma scale", "mental illness stigma"]}
         ogImage="/og-stigma-assessment.png"
         structuredData={structuredData}
