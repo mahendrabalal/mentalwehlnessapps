@@ -131,6 +131,20 @@ const nextConfig = {
             value: 'no-store, max-age=0'
           }
         ]
+      },
+      {
+        // Block indexing of Next.js internal files
+        source: '/_next/(.*)',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive, nosnippet'
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
       }
     ]
   },

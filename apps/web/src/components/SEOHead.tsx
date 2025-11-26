@@ -47,17 +47,46 @@ export function SEOHead({
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.mentalwellnessapps.com'
   const pathFromRouter = router.asPath.split('?')[0].split('#')[0]
 
-  // Handle duplicate content parameters explicitly
-  const url = new URL(router.asPath, baseUrl)
+  // Handle duplicate content parameters explicitly for canonical URL
+  // Always start with the clean pathname from router
+  const pathname = router.pathname
+  
+  // Parse current query parameters, excluding duplicate content params
+  const currentUrl = new URL(router.asPath, baseUrl)
   const duplicateParams = ['landing', 'view', 'sort', 'filter', 'page', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid']
-
-  // Remove duplicate parameters for canonical URL
-  duplicateParams.forEach(param => url.searchParams.delete(param))
-
-  // Build canonical URL
-  const canonicalPath = url.pathname + (url.search || '')
+  
+  // Create clean search params by removing duplicate content parameters
+  const cleanParams = new URLSearchParams()
+  currentUrl.searchParams.forEach((value, key) => {
+    if (!duplicateParams.includes(key)) {
+      cleanParams.append(key, value)
+    }
+  })
+  
+  // Build canonical URL - use clean pathname and filtered search params
+  const cleanSearch = cleanParams.toString() ? `?${cleanParams.toString()}` : ''
+  const canonicalPath = pathname + cleanSearch
   const canonicalTarget = canonical ?? `${baseUrl}${canonicalPath}`
-  const fullUrl = canonicalTarget.startsWith('http') ? canonicalTarget : `${baseUrl}${canonicalTarget}`
+  
+  // Ensure canonical URL is always properly formatted and absolute
+  let fullUrl: string
+  if (canonicalTarget.startsWith('http')) {
+    fullUrl = canonicalTarget
+  } else {
+    // Ensure no double slashes and proper URL formation
+    const cleanPath = canonicalTarget.startsWith('/') ? canonicalTarget : `/${canonicalTarget}`
+    fullUrl = `${baseUrl}${cleanPath}`
+  }
+  
+  // Final validation - ensure URL is well-formed
+  try {
+    const validatedUrl = new URL(fullUrl)
+    fullUrl = validatedUrl.toString()
+  } catch (error) {
+    // Fallback to base URL if canonical URL is malformed
+    console.warn('Invalid canonical URL generated, falling back to base URL:', error)
+    fullUrl = baseUrl
+  }
   const fullImageUrl =
     ogImage && (ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`)
 

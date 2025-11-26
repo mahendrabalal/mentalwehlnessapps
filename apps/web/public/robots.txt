@@ -93,6 +93,7 @@ Disallow: /?landing=true
 
 # System files and endpoints
 Disallow: /.well-known/
+Disallow: /_next/
 Disallow: /__next/
 Disallow: /.env
 Disallow: /.env.local
@@ -112,6 +113,7 @@ Disallow: /cache/
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
+Disallow: /_next/
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /admin/
@@ -123,6 +125,7 @@ Disallow: /?*filter=
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
+Disallow: /_next/
 Disallow: /dashboard/
 Disallow: /auth/
 Disallow: /admin/
