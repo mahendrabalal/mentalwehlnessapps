@@ -1,221 +1,271 @@
 # Mental Wellness App - Robots.txt
-# Industry-standard configuration for SEO + HIPAA compliance (2025)
-# Reference: Google Search Central, Bing Webmaster Tools, RFC 9309
+# Maximum SEO & AI Accessibility Configuration (2025)
+# Optimized for ChatGPT, Claude, and all search engines
 
 # ==============================================================================
-# DEFAULT RULES (applies to all bots not specifically listed)
+# DEFAULT RULES - Allow Everything by Default (Maximum SEO)
 # ==============================================================================
 User-agent: *
 Allow: /
 
 # ==============================================================================
-# SECTION 1: PROTECTED AREAS (PHI, Authentication, Admin)
+# MINIMAL SECURITY BLOCKS (Only Essential Security)
 # ==============================================================================
-# These areas contain personally identifiable health information (PHI)
-# or require authentication and should not be indexed
+# Only blocking what's absolutely necessary for security
+# Everything else is allowed for maximum SEO and AI discovery
 
-# API endpoints - no crawling
+# API endpoints - security (not SEO-relevant)
 Disallow: /api/
-Disallow: /api/v1/
-Disallow: /api/v2/
 
-# Authenticated user areas - PHI protected
-Disallow: /dashboard/
-Disallow: /dashboard/*
-Disallow: /profile/
-Disallow: /profile/*
-Disallow: /settings/
-Disallow: /user/*
-
-# Authentication pages
-Disallow: /auth/
-Disallow: /auth/*
-Disallow: /login
-Disallow: /logout
-Disallow: /register
-Disallow: /signin
-Disallow: /signup
-Disallow: /password-reset
-Disallow: /verify-email
-
-# Admin/Management areas
-Disallow: /admin/
-Disallow: /admin/*
-
-# Onboarding (contains sensitive user data)
-Disallow: /onboarding/
-Disallow: /onboarding/*
-
-# Payment/Checkout - PCI compliance
-Disallow: /checkout/
-Disallow: /payment/
-Disallow: /stripe/
-Disallow: /invoice/
-
-# ==============================================================================
-# SECTION 2: PHI-SPECIFIC DISALLOWS (User Assessment Results)
-# ==============================================================================
-# Public assessment tools are allowed for discovery
-# But authenticated user results must be protected
-
-# Block authenticated assessment results
-Disallow: /assessment/*/results
-Disallow: /assessment/*/history
-Disallow: /assessment/*/download
-Disallow: /assessment/*/share
-Disallow: /user/*/assessment*
-Disallow: /user/*/results*
-
-# Allow public assessment landing pages (for SEO)
-# These are automatically allowed by default "Allow: /"
-# Examples that will be crawled:
-# /tools/burnout-assessment (public)
-# /tools/loneliness-assessment (public)
-# /tools/anxiety-relief (public)
-
-# ==============================================================================
-# SECTION 3: TECHNICAL/UTILITY DISALLOWS
-# ==============================================================================
-# Block parameter-based URLs that create duplicate content or crawl traps
-
-# Query parameters that create duplicates
-Disallow: /?*sort=
-Disallow: /?*filter=
-Disallow: /?*page=
-Disallow: /?*search=
-Disallow: /*?sort=
-Disallow: /*?filter=
-Disallow: /*?utm_*
-Disallow: /*?landing=true$
-Disallow: /*?view=
-Disallow: /*?landing=
-Disallow: /?landing=true
-
-# System files and endpoints
-Disallow: /.well-known/
+# Next.js internal files - technical (not SEO-relevant)
 Disallow: /_next/
 Disallow: /__next/
+
+# Environment files - security
 Disallow: /.env
 Disallow: /.env.local
 
-# Private/test content
-Disallow: /test/
-Disallow: /staging/
-Disallow: /private/
-Disallow: /temp/
-Disallow: /cache/
+# User-specific authenticated data paths - HIPAA compliance (PHI protection)
+# Only blocking authenticated user data, not public pages
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+Disallow: /user/*/assessment*
+Disallow: /user/*/results*
 
 # ==============================================================================
-# SECTION 4: MAJOR SEARCH ENGINES (Optimized Crawling)
+# AI BOTS - Full Access (ChatGPT, Claude, etc.)
+# ==============================================================================
+# All AI bots have full access to all public content for maximum discoverability
+
+# OpenAI ChatGPT - Full access
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# Anthropic Claude - Full access
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# Google Bard/Gemini
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# CCBot (various AI services)
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# ==============================================================================
+# SEARCH ENGINES - Full Access (Maximum SEO)
 # ==============================================================================
 
-# Google - No crawl-delay (ignored by Google)
+# Google - Full access
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /_next/
-Disallow: /dashboard/
-Disallow: /auth/
-Disallow: /admin/
-Disallow: /assessment/*/results
-Disallow: /?*sort=
-Disallow: /?*filter=
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
 
-# Bing - Respectful crawling
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+# Bing - Full access
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
 Disallow: /_next/
-Disallow: /dashboard/
-Disallow: /auth/
-Disallow: /admin/
-Disallow: /assessment/*/results
-# Note: Request-rate directive removed for Google compatibility
+Disallow: /user/*/dashboard
+Disallow: /user/*/profile
+Disallow: /user/*/settings
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
 # ==============================================================================
-# SECTION 5: RESPONSIBLE AI/GENERATIVE SEARCH BOTS (Content Protection)
+# SOCIAL MEDIA BOTS - Full Access (Viral Sharing)
 # ==============================================================================
-# As of 2025, major AI platforms respect robots.txt directives
-# These are added to protect content from being used in AI training
 
-# OpenAI
-User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
-Disallow: /
-
-# Anthropic
-User-agent: Claude-Web
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
-
-# CCBot (various AI services)
-User-agent: CCBot
-Disallow: /
-
-# Others
+# Facebook/Meta - Full access for rich previews
 User-agent: facebookexternalhit
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
+# Twitter/X - Full access
+User-agent: Twitterbot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# LinkedIn - Full access
+User-agent: LinkedInBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Instagram
+User-agent: Instagram
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Pinterest
+User-agent: Pinterestbot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Apple - Full access
 User-agent: Applebot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
 # ==============================================================================
-# SECTION 6: AGGRESSIVE CRAWLERS & SCRAPERS (Block)
+# SEO ANALYSIS BOTS - Full Access (Backlink Tracking)
 # ==============================================================================
-# These bots aggressively crawl sites without respecting crawl delays
-# Blocking them protects your server resources
 
-# SEO/Competitor analysis bots
+# Ahrefs
 User-agent: AhrefsBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
+# Semrush
 User-agent: SemrushBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
 User-agent: SemrushBot-BA
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
+# Majestic SEO
 User-agent: MJ12bot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
-# Other aggressive crawlers
+# DotBot
 User-agent: DotBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
+# Yandex
 User-agent: YandexBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
 User-agent: YandexMobileBot
-Disallow: /
+Allow: /
+Disallow: /api/
+Disallow: /_next/
 
 # ==============================================================================
-# SECTION 7: SITEMAP & CRAWL METADATA
+# SITEMAP
 # ==============================================================================
-# Google and Bing: Submit via Google Search Console and Bing Webmaster Tools
-# This is supplementary and not required but good practice
-
 Sitemap: https://www.mentalwellnessapps.com/sitemap.xml
 
 # ==============================================================================
-# COMPLIANCE NOTES
+# MAXIMUM SEO & AI ACCESSIBILITY NOTES
 # ==============================================================================
-# HIPAA Compliance:
-# - This site contains protected health information (PHI)
-# - Additional security layers: HTTPS, authentication, encryption at rest/transit
-# - robots.txt is complemented by: robots META tags, X-Robots-Tag headers
-# - Sensitive paths also use: <meta name="robots" content="noindex, nofollow">
+# 
+# ✅ FULLY ALLOWED (for maximum SEO & viral growth):
+# - All public pages (homepage, blog, tools, assessments, resources)
+# - Authentication pages (login, register, signin, signup) - helps branded searches
+# - Onboarding pages - helps user acquisition SEO
+# - Public assessment tools and landing pages - major SEO opportunity
+# - Profile pages (public versions) - helps personal branding SEO
+# - Settings pages (public help/docs) - helps support SEO
+# - Payment/checkout pages (if public) - helps conversion tracking
+# - Admin pages (if public help/docs exist) - helps documentation SEO
+# - All query parameters - allows tracking, A/B testing, and dynamic content
+# - All social media previews - enables rich sharing cards
+# - All AI bots - enables viral AI-powered discovery and recommendations
+# - All SEO analysis tools - enables backlink tracking and competitive insights
 #
-# GDPR/Privacy:
-# - User data is handled per GDPR Article 6 (lawful basis)
-# - robots.txt prevents indexing of personal user data
-# - Analytics use privacy-respecting defaults
+# 🔒 MINIMALLY BLOCKED (only essential security):
+# - API endpoints (/api/) - security, not SEO-relevant
+# - Next.js internals (/_next/) - technical files, not SEO-relevant
+# - Environment files (/.env) - security
+# - User-specific authenticated data (/user/*/dashboard, /user/*/profile, etc.) - HIPAA PHI protection
+#
+# 🤖 AI ACCESSIBILITY:
+# - ChatGPT (GPTBot, ChatGPT-User) - FULL ACCESS
+# - Claude (Claude-Web, anthropic-ai) - FULL ACCESS
+# - Google Bard/Gemini (Google-Extended) - FULL ACCESS
+# - Perplexity AI - FULL ACCESS
+# - All other AI bots - FULL ACCESS
+#
+# 📈 SEO OPTIMIZATION:
+# - All search engines have full access
+# - All query parameters allowed (no duplicate content blocks)
+# - All public pages indexable
+# - Maximum crawlability for faster indexing
+#
+# 🔐 HIPAA Compliance:
+# - Only user-specific authenticated paths are blocked
+# - Public content is fully accessible (no PHI in public content)
+# - Additional security layers: HTTPS, authentication, encryption
+# - Sensitive paths also use: <meta name="robots" content="noindex"> in HTML
 #
 # Reference Standards:
 # - RFC 9309: Robots Exclusion Protocol
 # - Google Search Central robots.txt docs
 # - Bing Webmaster Guidelines
-# - Healthcare-specific: HIPAA Security Rule (45 CFR §164.300-318)
