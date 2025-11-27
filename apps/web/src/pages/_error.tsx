@@ -9,7 +9,7 @@ interface ErrorProps {
   err?: Error
 }
 
-function Error({ statusCode }: ErrorProps) {
+function ErrorPage({ statusCode }: ErrorProps) {
   return (
     <>
       <SEOHead
@@ -97,11 +97,13 @@ function Error({ statusCode }: ErrorProps) {
   )
 }
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
+ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404
   return { statusCode }
 }
 
-export default Error
+export default ErrorPage
+
+
 
 

@@ -63,8 +63,6 @@ export default function SignUp() {
       <SEOHead
         title="Sign Up - Mental Wellness App"
         description="Create your Mental Wellness App account to access digital therapeutic support, analytics, and crisis resources."
-        noindex
-        nofollow
       />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

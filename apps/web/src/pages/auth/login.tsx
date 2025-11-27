@@ -73,8 +73,6 @@ export default function Login() {
       <SEOHead
         title="Sign In - Mental Wellness App"
         description="Access your Mental Wellness App account to continue your personalized mental health journey."
-        noindex
-        nofollow
       />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

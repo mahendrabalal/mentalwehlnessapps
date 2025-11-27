@@ -109,8 +109,6 @@ function PremiumFeaturesContent() {
         <SEOHead
           title={baseTitle}
           description={baseDescription}
-          noindex
-          nofollow
         />
         <Navbar />
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -125,8 +123,6 @@ function PremiumFeaturesContent() {
       <SEOHead
         title={baseTitle}
         description={baseDescription}
-        noindex
-        nofollow
       />
 
       <Navbar />

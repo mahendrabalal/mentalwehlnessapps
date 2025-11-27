@@ -27,6 +27,19 @@ const STATIC_PAGES: StaticPageEntry[] = [
   { url: '/medical-disclaimer', changefreq: 'monthly', priority: 0.5, sourcePath: 'medical-disclaimer.tsx' },
   { url: '/hipaa-notice', changefreq: 'monthly', priority: 0.5, sourcePath: 'hipaa-notice.tsx' },
   { url: '/documentation', changefreq: 'monthly', priority: 0.6, sourcePath: 'documentation.tsx' },
+  // Pricing and trial pages
+  { url: '/pricing', changefreq: 'monthly', priority: 0.8, sourcePath: 'pricing.tsx' },
+  { url: '/free-trial', changefreq: 'monthly', priority: 0.8, sourcePath: 'free-trial.tsx' },
+  // Support index page
+  { url: '/support', changefreq: 'weekly', priority: 0.8, sourcePath: 'support/index.tsx' },
+  // Assessment pages (public landing pages)
+  { url: '/assessment/phq9', changefreq: 'weekly', priority: 0.9, sourcePath: 'assessment/phq9.tsx' },
+  { url: '/assessment/gad7', changefreq: 'weekly', priority: 0.9, sourcePath: 'assessment/gad7.tsx' },
+  // Auth pages (for branded searches)
+  { url: '/auth/login', changefreq: 'monthly', priority: 0.6, sourcePath: 'auth/login.tsx' },
+  { url: '/auth/signup', changefreq: 'monthly', priority: 0.7, sourcePath: 'auth/signup.tsx' },
+  // Premium features page
+  { url: '/premium/features', changefreq: 'monthly', priority: 0.8, sourcePath: 'premium/features.tsx' },
   // Support resource pages
   { url: '/support/emotional-exhaustion-burnout', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/emotional-exhaustion-burnout.tsx' },
   { url: '/support/affordable-mental-health-care', changefreq: 'monthly', priority: 0.7, sourcePath: 'support/affordable-mental-health-care.tsx' },

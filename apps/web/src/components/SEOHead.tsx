@@ -20,6 +20,7 @@ export interface SEOProps {
   nofollow?: boolean
   structuredData?: Record<string, unknown> | Record<string, unknown>[]
   locale?: string
+  alternateLocales?: Array<{ locale: string; url: string }> // For hreflang tags
   children?: ReactNode
 }
 
@@ -41,6 +42,7 @@ export function SEOHead({
   nofollow = false,
   structuredData,
   locale = 'en_US',
+  alternateLocales,
   children,
 }: SEOProps) {
   const router = useRouter()
@@ -210,6 +212,29 @@ export function SEOHead({
           }}
         />
       ) : null}
+
+      {/* Additional SEO Meta Tags */}
+      <meta name="format-detection" content="telephone=no" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      
+      {/* Language and Locale */}
+      <meta httpEquiv="content-language" content="en-US" />
+      
+      {/* Hreflang tags for international SEO */}
+      {alternateLocales && alternateLocales.length > 0 && (
+        <>
+          <link rel="alternate" hrefLang={locale.replace('_', '-')} href={fullUrl} />
+          {alternateLocales.map((alt) => (
+            <link key={alt.locale} rel="alternate" hrefLang={alt.locale} href={alt.url} />
+          ))}
+          <link rel="alternate" hrefLang="x-default" href={fullUrl} />
+        </>
+      )}
+      
+      {/* Content freshness signals */}
+      {modifiedTime && (
+        <meta name="revised" content={modifiedTime} />
+      )}
 
       {children}
     </Head>

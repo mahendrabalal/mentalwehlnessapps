@@ -202,7 +202,7 @@ export default function PHQ9Assessment() {
   if (!user) {
     return (
       <>
-        <SEOHead title={baseTitle} description={baseDescription} noindex nofollow />
+        <SEOHead title={baseTitle} description={baseDescription} />
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h2>

@@ -5,10 +5,37 @@ import { BurnoutRiskIndicator } from '@/components/BurnoutRiskIndicator'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
-import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData, buildFaqStructuredData } from '@/lib/seo'
 import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
 export default function BurnoutAssessmentTool() {
+  const faqData = [
+    {
+      question: 'What is burnout and how is it different from stress?',
+      answer: 'Burnout is a state of emotional, physical, and mental exhaustion caused by prolonged stress. Unlike regular stress, burnout is characterized by feelings of emptiness, cynicism, and reduced professional efficacy. While stress can be motivating, burnout leads to disengagement and decreased performance.'
+    },
+    {
+      question: 'How accurate is this burnout assessment?',
+      answer: 'This assessment is based on validated burnout measurement frameworks including the Maslach Burnout Inventory. While it provides valuable insights, it is not a substitute for professional evaluation. If you score high, consider consulting with a mental health professional.'
+    },
+    {
+      question: 'Can burnout be prevented?',
+      answer: 'Yes, burnout can be prevented through stress management, work-life balance, setting boundaries, seeking social support, and practicing self-care. Early recognition of warning signs is key to prevention.'
+    },
+    {
+      question: 'How long does it take to recover from burnout?',
+      answer: 'Recovery time varies depending on severity and individual circumstances. Mild burnout may improve in weeks with proper self-care, while severe burnout may require months of professional support and lifestyle changes.'
+    },
+    {
+      question: 'Is this burnout test free?',
+      answer: 'Yes, this burnout assessment is completely free with no hidden costs, subscriptions, or credit card required. You can take it as many times as needed to track your progress.'
+    },
+    {
+      question: 'What should I do if my burnout assessment shows high risk?',
+      answer: 'If your assessment indicates high burnout risk, consider: 1) Speaking with a mental health professional, 2) Implementing stress management techniques, 3) Setting work boundaries, 4) Taking time off if possible, 5) Building a support network. Professional help is recommended for severe cases.'
+    }
+  ]
+
   const structuredData = [
     medicalWebPageStructuredData({
       name: 'Burnout Self Test - Free Assessment for Emotional Exhaustion',
@@ -34,7 +61,8 @@ export default function BurnoutAssessmentTool() {
       },
       dateReviewed: '2025-10-28',
       medicalOrganization: 'American Psychological Association'
-    })
+    }),
+    buildFaqStructuredData(faqData)
   ]
 
   return (

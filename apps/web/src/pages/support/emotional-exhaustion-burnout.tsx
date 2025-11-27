@@ -392,6 +392,59 @@ export default function EmotionalExhaustionBurnoutPage() {
           </div>
         </section>
 
+        {/* Related Tools & Resources */}
+        <section className="py-12 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Related Tools & Support</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <Link
+                href="/tools/burnout-assessment"
+                className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl hover:shadow-lg transition-all border-2 border-orange-200"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">🔥</span>
+                  <h3 className="text-xl font-bold text-gray-900">Burnout Assessment Tool</h3>
+                </div>
+                <p className="text-gray-700 mb-4">Take our free burnout self-test to check your risk level and get personalized recovery recommendations.</p>
+                <span className="text-orange-600 font-semibold">Take Assessment →</span>
+              </Link>
+              <Link
+                href="/tools/emotional-exhaustion-recovery"
+                className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl hover:shadow-lg transition-all border-2 border-blue-200"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">💙</span>
+                  <h3 className="text-xl font-bold text-gray-900">Recovery Timeline Tool</h3>
+                </div>
+                <p className="text-gray-700 mb-4">Track your recovery progress and get evidence-based strategies for each stage of burnout recovery.</p>
+                <span className="text-blue-600 font-semibold">Start Recovery Plan →</span>
+              </Link>
+              <Link
+                href="/tools/stress-management-techniques"
+                className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl hover:shadow-lg transition-all border-2 border-green-200"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">🧘</span>
+                  <h3 className="text-xl font-bold text-gray-900">Stress Management Tools</h3>
+                </div>
+                <p className="text-gray-700 mb-4">Learn practical stress management techniques to prevent burnout and manage daily stressors effectively.</p>
+                <span className="text-green-600 font-semibold">Explore Techniques →</span>
+              </Link>
+              <Link
+                href="/support/realistic-mental-health-expectations"
+                className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl hover:shadow-lg transition-all border-2 border-purple-200"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">📊</span>
+                  <h3 className="text-xl font-bold text-gray-900">Realistic Recovery Expectations</h3>
+                </div>
+                <p className="text-gray-700 mb-4">Set healthy, realistic expectations for your burnout recovery journey and avoid common pitfalls.</p>
+                <span className="text-purple-600 font-semibold">Read Guide →</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Related Articles */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -5,7 +5,7 @@ import { SEOHead } from '@/components/SEOHead'
 import { GuestToolBanner } from '@/components/GuestToolBanner'
 import { LegalDisclaimer } from '@/components/LegalDisclaimer'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
-import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData } from '@/lib/seo'
+import { medicalWebPageStructuredData, medicalEntityStructuredData, reviewedByStructuredData, buildFaqStructuredData } from '@/lib/seo'
 import { useToolTracking } from '@/hooks/useAnalytics'
 import { TOOLS_PAGES_DATES } from '@/lib/seo-constants'
 
@@ -115,6 +115,33 @@ export default function DepressionScreeningTool() {
   const severity = getSeverityLevel(score)
   const recommendations = getRecommendations(score)
 
+  const faqData = [
+    {
+      question: 'Is this depression screening test accurate?',
+      answer: 'Yes, this test is based on the PHQ-9 (Patient Health Questionnaire-9), which is a clinically validated screening tool used by healthcare professionals worldwide. However, it is not a diagnostic tool and should not replace professional medical evaluation.'
+    },
+    {
+      question: 'How long does the depression screening take?',
+      answer: 'The depression screening takes approximately 2-3 minutes to complete. It consists of 9 questions based on the PHQ-9 assessment framework.'
+    },
+    {
+      question: 'What should I do if my results show severe depression?',
+      answer: 'If your results indicate severe depression symptoms, it is important to seek professional help immediately. Contact a mental health provider, your primary care physician, or reach out to crisis support services. This test is not a substitute for professional diagnosis or treatment.'
+    },
+    {
+      question: 'Is this depression test free?',
+      answer: 'Yes, this depression screening test is completely free with no hidden costs, subscriptions, or credit card required. You can take it as many times as needed.'
+    },
+    {
+      question: 'Can I use this test to diagnose depression?',
+      answer: 'No, this is a screening tool, not a diagnostic tool. It can help identify potential symptoms of depression, but only a qualified healthcare professional can provide an official diagnosis. If you have concerns about your mental health, please consult with a healthcare provider.'
+    },
+    {
+      question: 'What is the PHQ-9 assessment?',
+      answer: 'The PHQ-9 (Patient Health Questionnaire-9) is a validated screening tool used by healthcare professionals to assess depression severity. It evaluates 9 key symptoms of depression over the past 2 weeks and provides a severity score ranging from minimal to severe.'
+    }
+  ]
+
   const structuredData = [
     medicalWebPageStructuredData({
       name: 'Free Depression Screening Test | PHQ-9 Assessment Online',
@@ -140,7 +167,8 @@ export default function DepressionScreeningTool() {
       },
       dateReviewed: '2025-10-28',
       medicalOrganization: 'American Psychiatric Association'
-    })
+    }),
+    buildFaqStructuredData(faqData)
   ]
 
   return (
@@ -471,34 +499,94 @@ export default function DepressionScreeningTool() {
             </div>
           </div>
 
-          {/* Other Tools */}
-          <div className="bg-gradient-to-r from-therapy-50 to-blue-50 rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Related Mental Health Tools</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <Link
-                href="/tools/anxiety-relief"
-                className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow"
-              >
-                <span className="text-3xl block mb-2">😌</span>
-                <h3 className="font-semibold text-gray-900 mb-1">Anxiety Relief</h3>
-                <p className="text-sm text-gray-600">Immediate anxiety techniques</p>
-              </Link>
-              <Link
-                href="/tools/burnout-assessment"
-                className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow"
-              >
-                <span className="text-3xl block mb-2">🔥</span>
-                <h3 className="font-semibold text-gray-900 mb-1">Burnout Test</h3>
-                <p className="text-sm text-gray-600">Check your burnout level</p>
-              </Link>
-              <Link
-                href="/tools/mindfulness"
-                className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow"
-              >
-                <span className="text-3xl block mb-2">🧘</span>
-                <h3 className="font-semibold text-gray-900 mb-1">Mindfulness</h3>
-                <p className="text-sm text-gray-600">Meditation exercises</p>
-              </Link>
+          {/* Related Tools & Support Resources */}
+          <div className="space-y-6 mb-8">
+            {/* Related Mental Health Tools */}
+            <div className="bg-gradient-to-r from-therapy-50 to-blue-50 rounded-xl shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Related Mental Health Tools</h2>
+              <p className="text-gray-600 mb-4">Explore other free assessments and tools to support your mental wellness journey.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Link
+                  href="/tools/anxiety-relief"
+                  className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow border border-gray-200"
+                >
+                  <span className="text-3xl block mb-2">😌</span>
+                  <h3 className="font-semibold text-gray-900 mb-1">Anxiety Relief</h3>
+                  <p className="text-sm text-gray-600">Immediate anxiety techniques</p>
+                </Link>
+                <Link
+                  href="/tools/burnout-assessment"
+                  className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow border border-gray-200"
+                >
+                  <span className="text-3xl block mb-2">🔥</span>
+                  <h3 className="font-semibold text-gray-900 mb-1">Burnout Test</h3>
+                  <p className="text-sm text-gray-600">Check your burnout level</p>
+                </Link>
+                <Link
+                  href="/tools/mindfulness"
+                  className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow border border-gray-200"
+                >
+                  <span className="text-3xl block mb-2">🧘</span>
+                  <h3 className="font-semibold text-gray-900 mb-1">Mindfulness</h3>
+                  <p className="text-sm text-gray-600">Meditation exercises</p>
+                </Link>
+                <Link
+                  href="/tools/stress-management-techniques"
+                  className="bg-white p-4 rounded-lg hover:shadow-md transition-shadow border border-gray-200"
+                >
+                  <span className="text-3xl block mb-2">💆</span>
+                  <h3 className="font-semibold text-gray-900 mb-1">Stress Management</h3>
+                  <p className="text-sm text-gray-600">Stress relief techniques</p>
+                </Link>
+              </div>
+            </div>
+
+            {/* Related Support Articles */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Support Resources for Depression</h2>
+              <p className="text-gray-600 mb-4">Read evidence-based guides and articles to help you understand and manage depression.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Link
+                  href="/support/managing-anxiety-naturally"
+                  className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors border border-blue-200"
+                >
+                  <span className="text-2xl">📖</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Managing Anxiety Naturally</h3>
+                    <p className="text-sm text-gray-600">Learn natural techniques to manage anxiety symptoms that often accompany depression.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/support/emotional-regulation-skills"
+                  className="flex items-start gap-3 p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors border border-purple-200"
+                >
+                  <span className="text-2xl">🧠</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Emotional Regulation Skills</h3>
+                    <p className="text-sm text-gray-600">Develop skills to manage difficult emotions and improve your emotional well-being.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/support/mindfulness-for-beginners"
+                  className="flex items-start gap-3 p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors border border-green-200"
+                >
+                  <span className="text-2xl">🌱</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Mindfulness for Beginners</h3>
+                    <p className="text-sm text-gray-600">Start your mindfulness practice to support depression recovery and mental wellness.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/crisis-support"
+                  className="flex items-start gap-3 p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors border border-red-200"
+                >
+                  <span className="text-2xl">🆘</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Crisis Support Resources</h3>
+                    <p className="text-sm text-gray-600">If you're in crisis or having thoughts of self-harm, get immediate help now.</p>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -292,6 +292,110 @@ export function articleStructuredData({
   }
 }
 
+// Review/Rating structured data for SEO
+export function reviewStructuredData({
+  name,
+  description,
+  ratingValue,
+  bestRating = 5,
+  worstRating = 1,
+  reviewCount,
+  author,
+  datePublished,
+}: {
+  name: string
+  description: string
+  ratingValue: number
+  bestRating?: number
+  worstRating?: number
+  reviewCount?: number
+  author?: string
+  datePublished?: string
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name,
+    description,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: ratingValue.toFixed(1),
+      bestRating: bestRating.toString(),
+      worstRating: worstRating.toString(),
+      reviewCount: reviewCount?.toString() || '1',
+    },
+  }
+
+  if (author && datePublished) {
+    schema.review = {
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: author,
+      },
+      datePublished,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: ratingValue.toString(),
+        bestRating: bestRating.toString(),
+        worstRating: worstRating.toString(),
+      },
+      reviewBody: description,
+    }
+  }
+
+  return schema
+}
+
+// Video structured data for SEO
+export function videoStructuredData({
+  name,
+  description,
+  thumbnailUrl,
+  contentUrl,
+  embedUrl,
+  uploadDate,
+  duration,
+  transcript,
+}: {
+  name: string
+  description: string
+  thumbnailUrl: string
+  contentUrl?: string
+  embedUrl?: string
+  uploadDate: string
+  duration?: string // ISO 8601 duration format (e.g., "PT5M30S" for 5 minutes 30 seconds)
+  transcript?: string
+}): StructuredData {
+  const schema: StructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name,
+    description,
+    thumbnailUrl: buildAbsoluteUrl(thumbnailUrl),
+    uploadDate,
+    publisher: organizationStructuredData({ includeContext: false }),
+  }
+
+  if (contentUrl) {
+    schema.contentUrl = buildAbsoluteUrl(contentUrl)
+  }
+
+  if (embedUrl) {
+    schema.embedUrl = buildAbsoluteUrl(embedUrl)
+  }
+
+  if (duration) {
+    schema.duration = duration
+  }
+
+  if (transcript) {
+    schema.transcript = transcript
+  }
+
+  return schema
+}
+
 // Export aliases for compatibility
 export const howToStructuredData = buildHowToStructuredData
 export const faqStructuredData = buildFaqStructuredData
