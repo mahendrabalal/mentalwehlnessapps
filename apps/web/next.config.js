@@ -174,6 +174,12 @@ const nextConfig = {
         destination: '/auth/register',
         permanent: true,
       },
+      // Dev environment redirects
+      {
+        source: '/studio',
+        destination: 'http://localhost:3334/admin',
+        permanent: false,
+      },
       // Security redirects
       {
         source: '/.env',
