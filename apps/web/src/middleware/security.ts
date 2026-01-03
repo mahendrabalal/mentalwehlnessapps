@@ -32,7 +32,7 @@ export class SecurityMiddleware {
       "img-src 'self' data: https: https://q.stripe.com https://m.stripe.network https://www.googletagmanager.com https://www.google-analytics.com",
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://www.google-analytics.com https://region1.google-analytics.com https://ipapi.co",
       "font-src 'self' https://fonts.gstatic.com",
-      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network"
+      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network https://www.youtube.com https://player.vimeo.com"
     ].join('; '),
     'Cache-Control': 'no-store, no-cache, must-revalidate, private',
     'Pragma': 'no-cache',
@@ -87,8 +87,8 @@ export class SecurityMiddleware {
 
       // Look for Supabase session cookies in various formats
       const authCookie = cookieStore.get('sb-auth-token') ||
-                        cookieStore.get('supabase-auth-token') ||
-                        cookieStore.get('supabase.auth.token')
+        cookieStore.get('supabase-auth-token') ||
+        cookieStore.get('supabase.auth.token')
 
       if (!authCookie?.value) {
         return { valid: false }

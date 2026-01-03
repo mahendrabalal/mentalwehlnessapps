@@ -37,7 +37,7 @@ const securityHeaders = [
       "img-src 'self' data: https: https://www.googletagmanager.com https://www.google-analytics.com https://q.stripe.com https://m.stripe.network",
       "font-src 'self' https://fonts.gstatic.com",
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://region1.google-analytics.com https://api.stripe.com https://js.stripe.com https://m.stripe.network https://q.stripe.com https://ipapi.co",
-      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network",
+      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.network https://www.youtube.com https://player.vimeo.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'"
@@ -142,8 +142,8 @@ export async function middleware(request: NextRequest) {
       // Check for clinical data access requirements
       if (isClinicalRoute(pathname)) {
         if (context.authenticationTier !== 'clinical' &&
-            context.crisisLevel !== 'severe' &&
-            context.crisisLevel !== 'imminent') {
+          context.crisisLevel !== 'severe' &&
+          context.crisisLevel !== 'imminent') {
           const upgradeUrl = new URL('/auth/upgrade-tier', request.url)
           upgradeUrl.searchParams.set('required', 'clinical')
           upgradeUrl.searchParams.set('redirect', pathname)
