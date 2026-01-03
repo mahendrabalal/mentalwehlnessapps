@@ -161,6 +161,12 @@ export default defineType({
         defineArrayMember({
           type: "callout",
         }),
+        defineArrayMember({
+          type: "video",
+        }),
+        defineArrayMember({
+          type: "htmlBlock",
+        }),
       ],
       validation: (rule) => rule.required().min(1),
     }),

@@ -83,9 +83,9 @@ export default function BlogArticlePage({
       image: ogImage ?? heroImageUrl ?? buildAbsoluteUrl('/og-default.png'),
       author: authors.length
         ? authors.map((author) => ({
-            '@type': 'Person',
-            name: author.name,
-          }))
+          '@type': 'Person',
+          name: author.name,
+        }))
         : undefined,
       publisher: organizationStructuredData({ includeContext: false }),
       isAccessibleForFree: true,
@@ -166,13 +166,13 @@ export default function BlogArticlePage({
           </div>
         </header>
         {heroImageUrl ? (
-          <div className="mx-auto mb-12 max-w-5xl px-4">
-            <div className="overflow-hidden rounded-3xl border border-gray-200 shadow-lg">
+          <div className="mx-auto mb-12 max-w-3xl px-4">
+            <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroImageUrl}
                 alt={article.heroImage?.alt ?? article.title}
-                className="h-auto w-full"
+                className="max-h-[350px] w-full object-cover bg-gray-50"
               />
             </div>
           </div>

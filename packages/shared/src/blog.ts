@@ -34,17 +34,17 @@ export const cmsArticleSchema = z.object({
   excerpt: z.string(),
   publishedAt: z.string().nullable().optional(),
   readingTime: z.number().nullable().optional(),
-  topics: z.array(z.string()).optional(),
-  contentType: z.enum(['article', 'faq', 'howto']).optional(),
+  topics: z.array(z.string()).nullable().optional(),
+  contentType: z.enum(['article', 'faq', 'howto']).nullable().optional(),
   focusKeyword: z.string().nullable().optional(),
-  relatedKeywords: z.array(z.string()).optional(),
-  heroImage: cmsImageSchema.optional(),
-  authors: z.array(cmsAuthorSchema).optional(),
+  relatedKeywords: z.array(z.string()).nullable().optional(),
+  heroImage: cmsImageSchema.nullable().optional(),
+  authors: z.array(cmsAuthorSchema).nullable().optional(),
   clinicalReview: z
     .object({
-      reviewer: z.string().optional(),
-      credential: z.string().optional(),
-      reviewedAt: z.string().optional(),
+      reviewer: z.string().nullable().optional(),
+      credential: z.string().nullable().optional(),
+      reviewedAt: z.string().nullable().optional(),
     })
     .nullable()
     .optional(),
@@ -55,8 +55,9 @@ export const cmsArticleSchema = z.object({
       metaDescription: z.string().optional(),
       keywords: z.array(z.string()).optional(),
     })
+    .nullable()
     .optional(),
-  body: z.array(z.unknown()).optional(),
+  body: z.array(z.unknown()).nullable().optional(),
   status: z.string().optional(),
   language: z.string().optional(),
   updatedAt: z.string().optional(),

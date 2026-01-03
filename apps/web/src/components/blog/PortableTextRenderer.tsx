@@ -50,6 +50,51 @@ const components: PortableTextComponents = {
         </aside>
       )
     },
+    video: ({ value }) => {
+      const { url, alt, caption } = value;
+      if (!url) return null;
+
+      let embedUrl = '';
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        const id = url.includes('watch?v=')
+          ? url.split('watch?v=')[1].split('&')[0]
+          : url.split('/').pop();
+        embedUrl = `https://www.youtube.com/embed/${id}`;
+      } else if (url.includes('vimeo.com')) {
+        const id = url.split('/').pop();
+        embedUrl = `https://player.vimeo.com/video/${id}`;
+      }
+
+      if (!embedUrl) return null;
+
+      return (
+        <figure className="my-8">
+          <div className="aspect-video overflow-hidden rounded-xl border border-gray-200 bg-black shadow-sm">
+            <iframe
+              src={embedUrl}
+              title={alt || 'Video player'}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          </div>
+          {caption ? (
+            <figcaption className="mt-3 text-center text-sm text-gray-600">
+              {caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    },
+    htmlBlock: ({ value }) => {
+      if (!value?.html) return null;
+      return (
+        <div
+          className="my-8 overflow-hidden rounded-xl border border-gray-100 p-4"
+          dangerouslySetInnerHTML={{ __html: value.html }}
+        />
+      );
+    },
   },
   marks: {
     link: ({ children, value }) => {
