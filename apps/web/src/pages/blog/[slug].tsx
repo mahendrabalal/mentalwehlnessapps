@@ -112,10 +112,10 @@ export default function BlogArticlePage({
         keywords={articleKeywords}
         structuredData={structuredData}
       />
-      <Navbar />
+      <Navbar variant="marketing" />
       <article className="pb-24">
         <header className="bg-gradient-to-b from-wellness-50 via-white to-white">
-          <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-0">
+          <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 sm:px-6 lg:px-0">
             <div className="flex flex-col gap-6">
               {preview ? (
                 <span className="w-fit rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-700">

@@ -196,7 +196,7 @@ function getCountryFromTimezone(): { code: string; name: string } | null {
  */
 async function getCountryFromIP(): Promise<{ code: string; name: string } | null> {
   try {
-    const response = await fetch('https://ipapi.co/json/', {
+    const response = await fetch('/api/geolocation', {
       signal: AbortSignal.timeout(5000) // 5 second timeout
     })
 

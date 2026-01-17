@@ -1,6 +1,7 @@
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { urlFor } from '../../lib/cms/image'
 
 interface PortableTextRendererProps {
@@ -87,7 +88,16 @@ const components: PortableTextComponents = {
       );
     },
     htmlBlock: ({ value }) => {
-      if (!value?.html) return null;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [mounted, setMounted] = useState(false)
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useEffect(() => {
+        setMounted(true)
+      }, [])
+
+      if (!value?.html || !mounted) return null;
+
       return (
         <div
           className="my-8 overflow-hidden rounded-xl border border-gray-100 p-4"

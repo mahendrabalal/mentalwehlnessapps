@@ -135,8 +135,24 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
     }
   }, [router])
 
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const navClasses = isMarketing
+    ? `fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'
+    }`
+    : 'sticky top-0 z-40 bg-white border-b border-gray-200'
+
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav className={navClasses}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2 sm:py-3">
           {/* Brand */}

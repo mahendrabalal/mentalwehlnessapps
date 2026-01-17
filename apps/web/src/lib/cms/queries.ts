@@ -18,7 +18,7 @@ const authorFields = `
   }
 `
 
-const articleFields = `
+const listingFields = `
   _id,
   _createdAt,
   title,
@@ -41,21 +41,25 @@ const articleFields = `
   authors[]->{${authorFields}},
   heroImage{
     ${imageFields}
-  },
+  }
+`
+
+const articleFields = `
+  ${listingFields},
   body
 `
 
 export const allArticlesQuery = groq`
 *[_type == "article" && defined(slug.current)]
 | order(coalesce(publishedAt, _createdAt) desc) {
-  ${articleFields}
+  ${listingFields}
 }
 `
 
 export const latestArticlesQuery = groq`
 *[_type == "article" && defined(slug.current) && status != "draft"]
 | order(coalesce(publishedAt, _createdAt) desc)[0...20] {
-  ${articleFields}
+  ${listingFields}
 }
 `
 

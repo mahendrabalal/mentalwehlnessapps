@@ -64,8 +64,8 @@ export default function BlogIndexPage({
           content={ogDescription}
         />
       </SEOHead>
-      <Navbar />
-      <section className="bg-gradient-to-b from-wellness-50 via-white to-white py-16">
+      <Navbar variant="marketing" />
+      <section className="bg-gradient-to-b from-wellness-50 via-white to-white pt-24 pb-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 text-center sm:gap-8">
             <span className="inline-flex items-center justify-center rounded-full bg-wellness-100 px-4 py-1 text-sm font-semibold text-wellness-700">
