@@ -25,7 +25,7 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
     href: '/blog',
     isActive: (pathname) => pathname.startsWith('/blog')
   },
-  { label: 'About', href: '#about' },
+  { label: 'About', href: '/about' },
   { label: 'Sign In', href: '/auth/login' },
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
 ]
@@ -147,7 +147,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
   }, [])
 
   const navClasses = isMarketing
-    ? `fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'
+    ? `fixed top-0 w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md ${isScrolled ? 'border-b border-gray-200' : ''
     }`
     : 'sticky top-0 z-40 bg-white border-b border-gray-200'
 
@@ -299,7 +299,7 @@ interface NavLinkProps {
 
 function NavLink({ href, label, isActive = false, onClick }: NavLinkProps) {
   const baseClasses = 'transition-colors'
-  const activeClasses = isActive ? 'text-therapy-600 font-medium' : 'text-gray-600 hover:text-gray-900'
+  const activeClasses = isActive ? 'text-therapy-600 font-bold' : 'text-gray-600 hover:text-gray-900 font-medium'
 
   if (href.startsWith('#')) {
     return (
@@ -376,7 +376,7 @@ function PublicNav({
             setSupportDropdownOpen(true)
             setToolsDropdownOpen(false)
           }}
-          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
+          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 font-medium"
         >
           Find Support
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -472,7 +472,7 @@ function PublicNav({
             setToolsDropdownOpen(true)
             setSupportDropdownOpen(false)
           }}
-          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
+          className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 font-medium"
         >
           Tools
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

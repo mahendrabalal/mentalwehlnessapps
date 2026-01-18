@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
@@ -144,7 +145,18 @@ export default function Home() {
           "evidence-based therapy tools",
           "crisis support resources",
           "mental wellness platform",
-          "digital mental health support"
+          "digital mental health support",
+          "mental wellness month",
+          "insight mental wellness",
+          "mental wellness retreat",
+          "balanced mental wellness",
+          "what is mental wellness",
+          "world teen mental wellness day",
+          "mindful mental wellness",
+          "mental wellness center",
+          "mental wellness apps",
+          "mental wellness activities",
+          "mental wellness in the workplace"
         ]}
         ogImage="/og-default.png"
         ogType="website"
@@ -182,139 +194,130 @@ export default function Home() {
         <Navbar variant="marketing" />
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="space-y-8">
+        <section className="relative overflow-hidden bg-white min-h-[600px] lg:min-h-[700px] flex items-center mt-16 lg:mt-20">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/hero-bg.webp"
+              alt="Mental wellness hero background"
+              fill
+              className="object-cover object-center"
+              priority
+              quality={90}
+            />
+            {/* Overlay: Stronger on mobile for readability, gradient on desktop */}
+            <div className="absolute inset-0 bg-white/90 sm:bg-white/80 lg:bg-transparent lg:bg-gradient-to-r lg:from-white/95 lg:via-white/60 lg:to-transparent"></div>
+          </div>
+
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 z-10 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+              {/* Left Column: Text & CTA */}
+              <div className="space-y-8 max-w-2xl">
                 <div className="space-y-4">
-                  <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                    Free Mental Health
-                    <br />
-                    <span className="bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
-                      Support Online
+                  <h1 className="font-bold leading-tight tracking-tight">
+                    <span className="block text-3xl sm:text-4xl lg:text-5xl text-slate-800 font-serif italic mb-2">
+                      Free Mental Wellness Tools & Support
+                    </span>
+                    <span className="block text-2xl sm:text-3xl lg:text-3xl text-[#00cba9] font-extrabold">
+                      Balanced Mental Wellness Retreat, Mindfulness Insight Technique, Exercises & Counseling
                     </span>
                   </h1>
-                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-xl">
+                  <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-medium pt-2 max-w-lg">
                     Evidence-based digital tools for anxiety, stress, burnout & loneliness—100% free, secure, and available worldwide.
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    href="/auth/signup"
-                    className="bg-therapy-600 hover:bg-therapy-700 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-all hover:scale-105 shadow-lg min-h-[56px] flex items-center justify-center"
-                  >
-                    Get Started Free
-                  </Link>
-                  <Link
-                    href="#features"
-                    className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-4 rounded-lg text-base sm:text-lg font-semibold transition-colors text-center min-h-[56px] flex items-center justify-center"
-                  >
-                    See How It Works
-                  </Link>
+                <div className="space-y-6 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link
+                      href="/auth/signup"
+                      className="inline-block bg-[#bc32b8] hover:bg-[#a92da5] text-white px-8 py-4 rounded-lg text-lg font-bold transition-all shadow-md text-center"
+                    >
+                      Get Started Free
+                    </Link>
+                    <Link
+                      href="#how-it-works"
+                      className="inline-flex items-center justify-center text-gray-700 hover:text-[#bc32b8] px-6 py-4 rounded-lg text-lg font-bold transition-colors"
+                    >
+                      See How It Works
+                    </Link>
+                  </div>
+
+                  <div className="text-gray-600 text-lg font-medium">
+                    <Link href="#learn-more" className="text-[#00cba9] hover:underline font-semibold flex items-center gap-2">
+                      Learn more about mental wellness <span>→</span>
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="mt-6 text-center">
-                  <Link
-                    href="/blog"
-                    className="inline-flex items-center text-therapy-600 hover:text-therapy-700 font-medium text-sm"
-                  >
-                    Learn more about mental wellness →
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700">
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Overcome stigma with private support</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Combat loneliness 24/7</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Manage anxiety naturally</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>No cost barriers—completely free</span>
+                <div className="pt-8 border-t border-gray-100/50">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm text-gray-700 font-medium">
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Overcome stigma with private support</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Combat loneliness 24/7</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Manage anxiety naturally</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>No cost barriers—completely free</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="relative">
-                {/* Hero Visual - App Interface Preview */}
-                <div className="relative z-10 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                  <div className="bg-therapy-600 px-6 py-4 flex items-center space-x-3">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                    </div>
-                    <div className="text-white font-medium">MentalWellnessApps Dashboard</div>
-                  </div>
-                  <div className="p-6 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-gray-900">Good morning! 🌅</h3>
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">All Features Free</span>
-                    </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                      <p className="text-sm text-blue-900 font-medium mb-1">🎯 Today's Focus: Stress management and relaxation</p>
-                      <p className="text-sm text-blue-700">Based on your sleep score (6/10) and yesterday's stress level, here's your personalized plan...</p>
-                    </div>
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-4">
-                      <p className="text-sm text-purple-900 font-medium mb-1">💭 Daily Mental Wellness Quote</p>
-                      <p className="text-sm text-purple-700 italic">"Your mental health is a priority. Your happiness is essential. Your self-care is non-negotiable."</p>
-                      <p className="text-xs text-purple-600 mt-2">— Unknown</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-2xl mb-2">📈</div>
-                        <div className="text-sm font-medium text-gray-900">Mood Trend</div>
-                        <div className="text-xs text-green-600">↑ Improving</div>
-                      </div>
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-2xl mb-2">🔥</div>
-                        <div className="text-sm font-medium text-gray-900">Streak</div>
-                        <div className="text-xs text-gray-600">14 days</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-r from-therapy-400 to-blue-400 rounded-full opacity-20"></div>
-                <div className="absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20"></div>
+              {/* Right Column: Empty to allow image subject to shine */}
+              <div className="hidden lg:block relative h-full">
               </div>
             </div>
           </div>
         </section>
 
-        {/* Social Proof */}
-        <section className="bg-white py-16">
+        {/* Thrive Section with Social Proof */}
+        <section className="bg-wellness-900 py-16 lg:py-24 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <p className="text-gray-500 text-lg">Trusted by thousands worldwide</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-therapy-600">94%</div>
-                <div className="text-gray-600">Report improved mood awareness</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Left Column: Thrive Content */}
+              <div className="text-left">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
+                  Move beyond coping. <span className="italic font-serif text-[#00cba9]">Flourish.</span>
+                </h2>
+                <p className="text-lg md:text-xl text-wellness-100 leading-relaxed max-w-lg">
+                  Mental wellness made simple. Access supportive, private digital tools that are distinctively effective and always 100% free.
+                </p>
               </div>
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-therapy-600">24/7</div>
-                <div className="text-gray-600">Digital support availability</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-therapy-600">89%</div>
-                <div className="text-gray-600">Reduced crisis episodes</div>
+
+              {/* Right Column: Social Proof Stats */}
+              <div>
+                <p className="text-wellness-200 text-left mb-8 text-lg font-medium">Trusted by thousands worldwide</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                  <div className="space-y-2 text-left sm:text-center lg:text-left">
+                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">94%</div>
+                    <div className="text-wellness-200 font-medium text-sm lg:text-base">Report improved mood awareness</div>
+                  </div>
+                  <div className="space-y-2 text-left sm:text-center lg:text-left">
+                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">24/7</div>
+                    <div className="text-wellness-200 font-medium text-sm lg:text-base">Digital support availability</div>
+                  </div>
+                  <div className="space-y-2 text-left sm:text-center lg:text-left">
+                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">89%</div>
+                    <div className="text-wellness-200 font-medium text-sm lg:text-base">Reduced crisis episodes</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

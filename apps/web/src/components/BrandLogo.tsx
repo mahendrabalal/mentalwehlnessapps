@@ -43,7 +43,7 @@ export function BrandLogo({
   const titleId = `${reactId}-title`
 
   const palette = VARIANT_PALETTES[variant]
-  const viewBoxWidth = showWordmark ? 320 : 80
+  const viewBoxWidth = showWordmark ? 380 : 80
   const appliedClassName = ['w-full h-auto', className].filter(Boolean).join(' ')
 
   return (
@@ -131,12 +131,12 @@ export function BrandLogo({
       </g>
 
       {showWordmark && (
-        <g transform="translate(88 36)">
+        <g transform="translate(88 38)">
           <text
             fontFamily="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif"
-            fontSize="22"
-            fontWeight="700"
-            letterSpacing="0.02em"
+            fontSize="26"
+            fontWeight="800"
+            letterSpacing="0.01em"
           >
             <tspan fill={palette.wordmarkPrimary}>Mental</tspan>
             <tspan fill={`url(#${highlightId})`}>WellnessApps</tspan>
