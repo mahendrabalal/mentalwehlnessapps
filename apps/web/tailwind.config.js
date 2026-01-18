@@ -32,6 +32,11 @@ module.exports = {
           800: '#86198f',
           900: '#701a75',
         },
+        'accent': {
+          'teal': '#00cba9',
+          'magenta': '#bc32b8',
+          'magenta-hover': '#a92da5',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

@@ -146,8 +146,11 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  /* Reverting manually to previous state where text color was static and handled by child components */
   const navClasses = isMarketing
-    ? `fixed top-0 w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md ${isScrolled ? 'border-b border-gray-200' : ''
+    ? `fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
+      ? 'bg-white/90 backdrop-blur-md border-b border-gray-200'
+      : 'bg-transparent'
     }`
     : 'sticky top-0 z-40 bg-white border-b border-gray-200'
 
@@ -221,7 +224,7 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
 
         {/* Mobile Menu Panel */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100">
+          <div className="md:hidden border-t border-gray-100 bg-white absolute top-full left-0 w-full shadow-lg">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {user ? (
                 <AuthenticatedMobileNav

@@ -194,9 +194,10 @@ export default function Home() {
         <Navbar variant="marketing" />
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-white min-h-[600px] lg:min-h-[700px] flex items-center mt-16 lg:mt-20">
+        <section className="relative overflow-hidden bg-white min-h-[600px] lg:min-h-[700px] flex items-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/90 via-white/50 to-transparent z-10" />
             <Image
               src="/hero-bg.webp"
               alt="Mental wellness hero background"
@@ -215,10 +216,10 @@ export default function Home() {
               <div className="space-y-8 max-w-2xl">
                 <div className="space-y-4">
                   <h1 className="font-bold leading-tight tracking-tight">
-                    <span className="block text-3xl sm:text-4xl lg:text-5xl text-slate-800 font-serif italic mb-2">
+                    <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-900 font-serif italic mb-2">
                       Free Mental Wellness Tools & Support
                     </span>
-                    <span className="block text-2xl sm:text-3xl lg:text-3xl text-[#00cba9] font-extrabold">
+                    <span className="block text-2xl sm:text-3xl lg:text-3xl text-accent-teal font-extrabold">
                       Balanced Mental Wellness Retreat, Mindfulness Insight Technique, Exercises & Counseling
                     </span>
                   </h1>
@@ -231,20 +232,20 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
                       href="/auth/signup"
-                      className="inline-block bg-[#bc32b8] hover:bg-[#a92da5] text-white px-8 py-4 rounded-lg text-lg font-bold transition-all shadow-md text-center"
+                      className="inline-block bg-accent-magenta hover:bg-accent-magenta-hover text-white px-8 py-4 rounded-lg text-lg font-bold transition-all shadow-md text-center"
                     >
                       Get Started Free
                     </Link>
                     <Link
-                      href="#how-it-works"
-                      className="inline-flex items-center justify-center text-gray-700 hover:text-[#bc32b8] px-6 py-4 rounded-lg text-lg font-bold transition-colors"
+                      href="#features"
+                      className="inline-flex items-center justify-center text-gray-700 hover:text-accent-magenta px-6 py-4 rounded-lg text-lg font-bold transition-colors"
                     >
                       See How It Works
                     </Link>
                   </div>
 
                   <div className="text-gray-600 text-lg font-medium">
-                    <Link href="#learn-more" className="text-[#00cba9] hover:underline font-semibold flex items-center gap-2">
+                    <Link href="#mental-wellness" className="text-accent-teal hover:underline font-semibold flex items-center gap-2">
                       Learn more about mental wellness <span>→</span>
                     </Link>
                   </div>
@@ -253,25 +254,25 @@ export default function Home() {
                 <div className="pt-8 border-t border-gray-100/50">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm text-gray-700 font-medium">
                     <div className="flex items-center space-x-2">
-                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-accent-magenta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Overcome stigma with private support</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-accent-magenta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Combat loneliness 24/7</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-accent-magenta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>Manage anxiety naturally</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <svg className="w-5 h-5 text-[#bc32b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-accent-magenta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span>No cost barriers—completely free</span>
@@ -288,13 +289,13 @@ export default function Home() {
         </section>
 
         {/* Thrive Section with Social Proof */}
-        <section className="bg-wellness-900 py-16 lg:py-24 text-white">
+        <section id="mental-wellness" className="bg-wellness-900 py-12 lg:py-16 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               {/* Left Column: Thrive Content */}
               <div className="text-left">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
-                  Move beyond coping. <span className="italic font-serif text-[#00cba9]">Flourish.</span>
+                  Move beyond coping. <span className="italic font-serif text-accent-teal">Flourish.</span>
                 </h2>
                 <p className="text-lg md:text-xl text-wellness-100 leading-relaxed max-w-lg">
                   Mental wellness made simple. Access supportive, private digital tools that are distinctively effective and always 100% free.
@@ -306,15 +307,15 @@ export default function Home() {
                 <p className="text-wellness-200 text-left mb-8 text-lg font-medium">Trusted by thousands worldwide</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                   <div className="space-y-2 text-left sm:text-center lg:text-left">
-                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">94%</div>
+                    <div className="text-4xl lg:text-5xl font-bold text-accent-teal">94%</div>
                     <div className="text-wellness-200 font-medium text-sm lg:text-base">Report improved mood awareness</div>
                   </div>
                   <div className="space-y-2 text-left sm:text-center lg:text-left">
-                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">24/7</div>
+                    <div className="text-4xl lg:text-5xl font-bold text-accent-teal">24/7</div>
                     <div className="text-wellness-200 font-medium text-sm lg:text-base">Digital support availability</div>
                   </div>
                   <div className="space-y-2 text-left sm:text-center lg:text-left">
-                    <div className="text-4xl lg:text-5xl font-bold text-[#00cba9]">89%</div>
+                    <div className="text-4xl lg:text-5xl font-bold text-accent-teal">89%</div>
                     <div className="text-wellness-200 font-medium text-sm lg:text-base">Reduced crisis episodes</div>
                   </div>
                 </div>
