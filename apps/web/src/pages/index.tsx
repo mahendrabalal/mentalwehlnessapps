@@ -328,9 +328,11 @@ export default function Home() {
         <section id="features" className="bg-gray-50 py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Support for Your
-                <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+              <h2 className="font-bold leading-tight tracking-tight mb-6">
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-900 font-serif italic mb-2">
+                  Support for Your
+                </span>
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-accent-teal font-extrabold">
                   Real Struggles
                 </span>
               </h2>
@@ -342,39 +344,27 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {/* Combat Loneliness */}
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
                 <div className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-therapy-500 to-therapy-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                  <div className="flex items-center mb-6 space-x-4">
+                    <div className="w-16 h-16 bg-accent-magenta/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-accent-magenta/20 transition-colors">
+                      <svg className="w-8 h-8 text-accent-magenta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Combat Loneliness & Isolation</h3>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Combat Loneliness & Isolation (24/7 Digital Support)</h3>
                   <p className="text-gray-600 mb-6">Stay connected and calm with guided conversations and evidence-based loneliness-reduction tools. Access our online mental-health resources anytime, anywhere.</p>
 
-                  {/* Mock conversation */}
-                  <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                    <div className="flex justify-end">
-                      <div className="bg-therapy-600 text-white px-3 py-2 rounded-lg text-sm max-w-xs">
-                        I'm feeling anxious about work tomorrow
-                      </div>
-                    </div>
-                    <div className="flex justify-start">
-                      <div className="bg-white border px-3 py-2 rounded-lg text-sm max-w-xs">
-                        I can see you're experiencing anxiety, and I know from your recent GAD-7 assessment that this has been challenging. Let's try the 5-4-3-2-1 grounding technique...
-                      </div>
-                    </div>
-                  </div>
-
                   <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
-                    <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-accent-magenta" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>Available 24/7, completely free</span>
                   </div>
                   <Link
                     href="/support/combat-loneliness-isolation"
-                    className="mt-4 block text-center bg-therapy-50 hover:bg-therapy-100 text-therapy-700 px-4 py-3 rounded-lg font-semibold transition-colors"
+                    className="mt-4 block text-center bg-accent-magenta hover:bg-accent-magenta-hover text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
                   >
                     Loneliness Support →
                   </Link>
@@ -382,41 +372,27 @@ export default function Home() {
               </div>
 
               {/* Understand Burnout */}
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
                 <div className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+                  <div className="flex items-center mb-6 space-x-4">
+                    <div className="w-16 h-16 bg-accent-teal/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-accent-teal/20 transition-colors">
+                      <svg className="w-8 h-8 text-accent-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Understand Your Burnout Patterns</h3>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Understand Your Burnout Patterns (Burnout Self-Assessment)</h3>
                   <p className="text-gray-600 mb-6">Track stress, sleep & emotional energy to detect burnout early and prevent relapse. Our mental-wellness tools provide actionable insights for recovery.</p>
 
-                  {/* Mock analytics */}
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700">Burnout Risk Level</span>
-                      <span className="text-sm text-yellow-600 flex items-center">
-                        ⚠️ Medium
-                      </span>
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      "Your stress levels have increased 40% this week"
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      "Sleep quality down 2 points—may affect mood"
-                    </div>
-                  </div>
-
                   <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
-                    <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-accent-teal" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>Early warning system</span>
                   </div>
                   <Link
                     href="/tools/burnout-assessment"
-                    className="mt-4 block text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
+                    className="mt-4 block text-center bg-accent-teal hover:bg-[#00b395] text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
                   >
                     Burnout Assessment →
                   </Link>
@@ -424,39 +400,27 @@ export default function Home() {
               </div>
 
               {/* Manage Anxiety */}
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300">
                 <div className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
+                  <div className="flex items-center mb-6 space-x-4">
+                    <div className="w-16 h-16 bg-therapy-500/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-therapy-500/20 transition-colors">
+                      <svg className="w-8 h-8 text-therapy-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Manage Anxiety Naturally</h3>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Manage Anxiety Naturally (Free Anxiety Relief Tools)</h3>
                   <p className="text-gray-600 mb-6">Access grounding exercises, breathing techniques & journaling to manage anxiety anytime. Our free mental-health tools are clinically validated for immediate relief.</p>
 
-                  {/* Mock anxiety tools */}
-                  <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-lg p-4 space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl">😰➡️😌</span>
-                      <span className="text-sm font-medium text-gray-700">Quick Relief</span>
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      "Try the 5-4-3-2-1 grounding exercise"
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      "Box breathing: 4 counts in, hold 4, out 6"
-                    </div>
-                  </div>
-
                   <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
-                    <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-therapy-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     <span>Instant relief techniques</span>
                   </div>
                   <Link
                     href="/tools/anxiety-relief"
-                    className="mt-4 block text-center bg-orange-600 hover:bg-orange-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
+                    className="mt-4 block text-center bg-therapy-600 hover:bg-therapy-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors shadow-md"
                   >
                     Free Anxiety Tools →
                   </Link>
@@ -468,11 +432,16 @@ export default function Home() {
 
 
         {/* Trust & Safety Section */}
-        <section id="about" className="bg-gray-50 py-24">
+        <section id="about" className="bg-gray-50 py-12 lg:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Your Safety & Privacy Matter
+              <h2 className="font-bold leading-tight tracking-tight mb-6">
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-900 font-serif italic mb-2">
+                  Your Safety
+                </span>
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-accent-teal font-extrabold">
+                  & Privacy Matter
+                </span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 HIPAA-compliant, research-validated, and overseen by licensed professionals.
@@ -554,12 +523,14 @@ export default function Home() {
         </section>
 
         {/* FAQ Section - Progressive Disclosure */}
-        <section className="bg-gray-50 py-24">
+        <section className="bg-gray-50 py-12 lg:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                Frequently Asked
-                <span className="block bg-gradient-to-r from-therapy-600 to-blue-600 bg-clip-text text-transparent">
+              <h2 className="font-bold leading-tight tracking-tight mb-6">
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-900 font-serif italic mb-2">
+                  Frequently Asked
+                </span>
+                <span className="block text-3xl sm:text-4xl lg:text-5xl text-accent-teal font-extrabold">
                   Questions
                 </span>
               </h2>
@@ -573,7 +544,11 @@ export default function Home() {
               <CollapsibleSection
                 id="faq-free"
                 title="Is Mental Wellness Apps really free?"
-                icon="💰"
+                icon={
+                  <svg className="w-6 h-6 text-accent-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                }
                 summary="100% free, no subscriptions or credit card required"
                 defaultExpanded={true}
               >
@@ -588,7 +563,11 @@ export default function Home() {
               <CollapsibleSection
                 id="faq-evidence"
                 title="Are these tools evidence-based?"
-                icon="🔬"
+                icon={
+                  <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                }
                 summary="Grounded in CBT and mindfulness research, validated by professionals"
                 defaultExpanded={false}
               >
@@ -603,7 +582,11 @@ export default function Home() {
               <CollapsibleSection
                 id="faq-privacy"
                 title="Is my data private?"
-                icon="🔒"
+                icon={
+                  <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                }
                 summary="Encrypted, HIPAA-grade storage — never sold or shared"
                 defaultExpanded={false}
               >
@@ -618,7 +601,11 @@ export default function Home() {
               <CollapsibleSection
                 id="faq-worldwide"
                 title="Can I access it worldwide?"
-                icon="🌍"
+                icon={
+                  <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                }
                 summary="Available in most countries with localized crisis resources"
                 defaultExpanded={false}
               >
@@ -633,7 +620,11 @@ export default function Home() {
               <CollapsibleSection
                 id="faq-mental-wellness"
                 title="What is mental wellness?"
-                icon="🧠"
+                icon={
+                  <svg className="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                }
                 summary="A state of well-being with emotional resilience and healthy coping"
                 defaultExpanded={false}
               >

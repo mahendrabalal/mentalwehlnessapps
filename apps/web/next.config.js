@@ -34,6 +34,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'www.mentalwellnessapps.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,

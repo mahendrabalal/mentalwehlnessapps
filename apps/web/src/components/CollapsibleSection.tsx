@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 export interface CollapsibleSectionProps {
   id: string
   title: string
-  icon?: string
+  icon?: React.ReactNode
   summary?: string
   children: React.ReactNode
   defaultExpanded?: boolean
@@ -77,9 +77,8 @@ export function CollapsibleSection({
         {/* Chevron Icon */}
         <div className="flex-shrink-0">
           <svg
-            className={`w-5 h-5 text-gray-400 transition-transform ${
-              prefersReducedMotion ? '' : 'duration-200'
-            } ${isExpanded ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 text-gray-400 transition-transform ${prefersReducedMotion ? '' : 'duration-200'
+              } ${isExpanded ? 'rotate-180' : ''}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -155,9 +154,8 @@ export function CollapsibleSectionMini({
           <span className="font-medium text-gray-900 text-sm">{title}</span>
         </div>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${
-            prefersReducedMotion ? '' : 'duration-200'
-          } ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-gray-400 transition-transform ${prefersReducedMotion ? '' : 'duration-200'
+            } ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
