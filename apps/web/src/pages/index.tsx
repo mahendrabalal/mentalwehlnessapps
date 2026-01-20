@@ -10,9 +10,16 @@ import { HOMEPAGE_LAST_MODIFIED, HOMEPAGE_PUBLISHED } from '@/lib/seo-constants'
 import { InternationalCrisisSupport } from '@/components/InternationalCrisisSupport'
 import { BrandLogo } from '@/components/BrandLogo'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { fetchArticles } from '@/lib/cms/articleService'
+import { ArticleCard } from '@/components/blog/ArticleCard'
 import type { User } from '@supabase/supabase-js'
+import type { CmsArticle } from '@mental-wellness/shared'
 
-export default function Home() {
+interface HomeProps {
+  articles: CmsArticle[]
+}
+
+export default function Home({ articles }: HomeProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
@@ -297,9 +304,17 @@ export default function Home() {
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
                   Move beyond coping. <span className="italic font-serif text-accent-teal">Flourish.</span>
                 </h2>
-                <p className="text-lg md:text-xl text-wellness-100 leading-relaxed max-w-lg">
+                <p className="text-lg md:text-xl text-wellness-100 leading-relaxed max-w-lg mb-6">
                   Mental wellness made simple. Access supportive, private digital tools that are distinctively effective and always 100% free.
                 </p>
+                <div className="space-y-4 text-wellness-100/80 text-sm md:text-base">
+                  <p>
+                    Our platform provides comprehensive, evidence-based support designed for the modern world. We understand that mental health is a journey, not a destination. That's why we've built a suite of tools that adapt to your unique needs, whether you're managing daily stress or navigating a complex emotional landscape.
+                  </p>
+                  <p>
+                    By combining clinical expertise with intuitive technology, we offer a safe haven for reflection, growth, and healing. Our commitment to privacy and accessibility ensures that everyone, everywhere, can prioritize their mental well-being without barriers or stigma.
+                  </p>
+                </div>
               </div>
 
               {/* Right Column: Social Proof Stats */}
@@ -431,6 +446,80 @@ export default function Home() {
         </section>
 
 
+        {/* Blog Preview Section */}
+        {articles && articles.length > 0 && (
+          <section className="bg-white py-24 border-t border-gray-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <h2 className="font-bold leading-tight tracking-tight mb-6">
+                  <span className="block text-3xl sm:text-4xl lg:text-5xl text-gray-900 font-serif italic mb-2">
+                    Latest from
+                  </span>
+                  <span className="block text-3xl sm:text-4xl lg:text-5xl text-accent-teal font-extrabold">
+                    Our Blog
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Insights, expert advice, and research-backed strategies for your mental wellness journey.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {articles.map((article) => (
+                  <ArticleCard key={article._id} article={article} />
+                ))}
+              </div>
+
+              <div className="mt-12 text-center">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center text-accent-teal hover:text-accent-teal-hover font-bold text-lg"
+                >
+                  View All Articles <span className="ml-2">→</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Our Mission Section */}
+        <section className="bg-wellness-50 py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 font-serif italic">Our Commitment to You</h2>
+                <div className="space-y-4 text-gray-700 leading-relaxed text-lg">
+                  <p>
+                    At Mental Wellness Apps, we believe that high-quality mental health support should be a fundamental human right, not a luxury. In an era where stress, anxiety, and burnout are increasingly prevalent, the barriers to professional help—be they financial, geographical, or social—remain unacceptably high.
+                  </p>
+                  <p>
+                    Our mission is to bridge this gap through technology. We've developed a platform that is 100% free, forever, ensuring that nobody is turned away due to their inability to pay. Our tools are built on the foundations of Cognitive Behavioral Therapy (CBT), Mindfulness, and positive psychology, all while maintaining the highest standards of HIPAA-compliant data security.
+                  </p>
+                  <p>
+                    We are more than just an app; we are a dedicated collective of mental health professionals, technologists, and advocates working together to create a world where everyone has the tools they need to flourish. Your mental health matters, and we are here to support you every step of the way.
+                  </p>
+                </div>
+                <div className="pt-4">
+                  <Link
+                    href="/about"
+                    className="inline-block border-2 border-accent-teal text-accent-teal px-8 py-3 rounded-lg font-bold hover:bg-accent-teal hover:text-white transition-all"
+                  >
+                    Read Our Full Story
+                  </Link>
+                </div>
+              </div>
+              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/mission-support.png"
+                  alt="Our mission to support mental health"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Trust & Safety Section */}
         <section id="about" className="bg-gray-50 py-12 lg:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -553,8 +642,11 @@ export default function Home() {
                 defaultExpanded={true}
               >
                 <div className="bg-white rounded-lg p-6">
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    Yes. All tools on our platform are completely free—no subscriptions, hidden fees, or credit card information required. We are committed to making mental health support accessible to everyone, regardless of their financial situation.
+                  </p>
                   <p className="text-gray-700 leading-relaxed">
-                    Yes. All tools are completely free—no subscriptions or credit card required. We believe mental health support should be accessible to everyone, regardless of financial situation.
+                    Our free model is supported by a mix of grants, donations, and mission-aligned partnerships, allowing us to maintain a premium-quality experience for all users without charging for essential care tools. We believe that by removing the financial barrier, we can reach those who need support the most.
                   </p>
                 </div>
               </CollapsibleSection>
@@ -728,4 +820,24 @@ export default function Home() {
       </div>
     </>
   )
+}
+
+export async function getStaticProps() {
+  let articles: CmsArticle[] = []
+
+  try {
+    const allArticles = await fetchArticles()
+    // Take the latest 3 articles for the homepage
+    articles = allArticles.slice(0, 3)
+  } catch (error) {
+    console.error('Error fetching articles for homepage:', error)
+  }
+
+  return {
+    props: {
+      articles,
+    },
+    // Revalidate every hour
+    revalidate: 3600,
+  }
 }

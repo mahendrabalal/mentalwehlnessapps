@@ -10,6 +10,19 @@ interface BlogSidebarProps {
 export const BlogSidebar: React.FC<BlogSidebarProps> = ({ topics = [] }) => {
     return (
         <aside className="space-y-10">
+            {/* Amazon Featured Product */}
+            <div className="space-y-4">
+                <h4 className="text-gray-900 font-bold text-sm uppercase tracking-widest border-b border-gray-100 pb-2">
+                    Featured Support
+                </h4>
+                <AmazonProductCard
+                    imageSrc="https://m.media-amazon.com/images/I/71Ha3OShqSL._SL1500_.jpg"
+                    productUrl="https://amzn.to/3LrfApk"
+                    title="Mental Health Matters Hoodie - Premium Quality"
+                    price="$27.97"
+                />
+            </div>
+
             {/* Call to Action */}
             <div className="bg-[#2DD4BF] rounded-2xl p-8 text-white relative overflow-hidden group">
                 {/* Decorative background circle */}
@@ -29,22 +42,6 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ topics = [] }) => {
                         START MATCHING
                     </Link>
                 </div>
-            </div>
-
-            {/* Amazon Featured Product - Global Sidebar */}
-            <div>
-                <h4 className="text-gray-900 font-bold text-sm uppercase tracking-widest mb-6 border-b border-gray-100 pb-2">
-                    Wellness Tools
-                </h4>
-                <AmazonProductCard
-                    imageSrc="https://m.media-amazon.com/images/I/71Ha3OShqSL._SL1500_.jpg"
-                    productUrl="https://amzn.to/3LrfApk"
-                    title="Daily Affirmation Cards - Mental Wellness Journey"
-                    price="$19.99"
-                />
-                <p className="mt-2 text-[10px] text-gray-400 italic leading-tight">
-                    As an Amazon Associate, we earn from qualifying purchases.
-                </p>
             </div>
 
             {/* Topics / Categories */}
