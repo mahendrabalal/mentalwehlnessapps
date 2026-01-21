@@ -217,7 +217,7 @@ export default function Home({ articles }: HomeProps) {
             <div className="absolute inset-0 bg-white/90 sm:bg-white/80 lg:bg-transparent lg:bg-gradient-to-r lg:from-white/95 lg:via-white/60 lg:to-transparent"></div>
           </div>
 
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24 z-10 w-full">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-12 sm:py-20 lg:py-24 z-10 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
               {/* Left Column: Text & CTA */}
               <div className="space-y-8 max-w-2xl">

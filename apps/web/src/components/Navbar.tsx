@@ -25,6 +25,11 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
     href: '/blog',
     isActive: (pathname) => pathname.startsWith('/blog')
   },
+  {
+    label: 'Directory',
+    href: '/directory',
+    isActive: (pathname) => pathname === '/directory'
+  },
   { label: 'About', href: '/about' },
   { label: 'Sign In', href: '/auth/login' },
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
@@ -86,6 +91,11 @@ const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
     label: 'Resource Library',
     href: '/blog',
     isActive: (pathname) => pathname.startsWith('/blog')
+  },
+  {
+    label: 'Directory',
+    href: '/directory',
+    isActive: (pathname) => pathname === '/directory'
   },
   { label: 'Sign In', href: '/auth/login' },
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
@@ -447,6 +457,17 @@ function PublicNav({
             {/* View All Link */}
             <div className="border-t border-gray-200 mt-2 pt-2">
               <Link
+                href="/directory"
+                onClick={() => {
+                  setSupportDropdownOpen(false)
+                  onNavigate()
+                }}
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-xl">🌟</span>
+                <span className="text-sm text-gray-700 hover:text-gray-900">Mental Wellness Directory</span>
+              </Link>
+              <Link
                 href="/support"
                 onClick={() => {
                   setSupportDropdownOpen(false)
@@ -667,11 +688,19 @@ function PublicMobileNav({ items, closeMenu, user }: PublicMobileNavProps) {
               </div>
             </details>
 
-            {/* View All Link */}
+            {/* Directory & View All Links */}
+            <Link
+              href="/directory"
+              onClick={closeMenu}
+              className="flex items-center gap-2 px-6 py-2.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
+            >
+              <span>🌟</span>
+              <span>Mental Wellness Directory</span>
+            </Link>
             <Link
               href="/support"
               onClick={closeMenu}
-              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-therapy-600 hover:bg-gray-50 rounded-lg transition-colors border-t border-gray-200 mt-2 pt-3"
+              className="flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-therapy-600 hover:bg-gray-50 rounded-lg transition-colors"
             >
               <span>→</span>
               <span>View All Resources</span>
