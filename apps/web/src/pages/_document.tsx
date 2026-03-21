@@ -127,6 +127,13 @@ class MyDocument extends Document {
           <meta name="accessibility-mode" content="enabled" />
           <meta name="screen-reader-optimized" content="true" />
 
+          {/* Google AdSense Integration */}
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4205755972349086"
+            crossOrigin="anonymous"
+          ></script>
+
           {/* Google Analytics - Add when GA4 property is created */}
           {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
             <>
