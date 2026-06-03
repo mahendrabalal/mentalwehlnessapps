@@ -130,7 +130,7 @@ class MyDocument extends Document {
           {/* Google AdSense Integration */}
           <script
             async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4205755972349086"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8688786543603411"
             crossOrigin="anonymous"
           ></script>
 
