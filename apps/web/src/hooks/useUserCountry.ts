@@ -3,6 +3,23 @@ import { getSupportedCountries, isCountrySupported } from '@/lib/international-c
 
 const COUNTRY_STORAGE_KEY = 'user_country_preference'
 const AUTO_DETECT_STORAGE_KEY = 'country_auto_detected'
+const IP_LOOKUP_CACHE_DURATION_MS = 60 * 1000
+
+type DetectedCountry = { code: string; name: string }
+type IpCountryLookupCache = {
+  value: DetectedCountry | null
+  expiresAt: number
+}
+
+declare global {
+  interface Window {
+    __mentalWellnessIpCountryLookup?: Promise<DetectedCountry | null> | null
+    __mentalWellnessIpCountryCache?: IpCountryLookupCache | null
+  }
+}
+
+let pendingIpCountryLookup: Promise<DetectedCountry | null> | null = null
+let cachedIpCountryLookup: IpCountryLookupCache | null = null
 
 export interface UserCountryState {
   countryCode: string | null
@@ -48,6 +65,21 @@ export function useUserCountry() {
           error: null
         })
         return
+      }
+
+      const autoDetectedCountry = localStorage.getItem(AUTO_DETECT_STORAGE_KEY)
+      if (autoDetectedCountry) {
+        const parsed = JSON.parse(autoDetectedCountry)
+        if (parsed?.code && isCountrySupported(parsed.code)) {
+          setState({
+            countryCode: parsed.code,
+            countryName: parsed.name,
+            isLoading: false,
+            isAutoDetected: true,
+            error: null
+          })
+          return
+        }
       }
 
       // 2. Try browser timezone-based detection
@@ -157,6 +189,9 @@ function getCountryFromTimezone(): { code: string; name: string } | null {
 
       // Europe
       'Europe/London': { code: 'GB', name: 'United Kingdom' },
+      'Europe/Lisbon': { code: 'PT', name: 'Portugal' },
+      'Atlantic/Azores': { code: 'PT', name: 'Portugal' },
+      'Atlantic/Madeira': { code: 'PT', name: 'Portugal' },
       'Europe/Berlin': { code: 'DE', name: 'Germany' },
       'Europe/Paris': { code: 'FR', name: 'France' },
       'Europe/Madrid': { code: 'ES', name: 'Spain' },
@@ -194,7 +229,50 @@ function getCountryFromTimezone(): { code: string; name: string } | null {
  * Fallback: Detect country from IP address using free API
  * Using ipapi.co (free tier: 1,000 requests/day)
  */
-async function getCountryFromIP(): Promise<{ code: string; name: string } | null> {
+async function getCountryFromIP(): Promise<DetectedCountry | null> {
+  const cache = typeof window === 'undefined' ? cachedIpCountryLookup : window.__mentalWellnessIpCountryCache
+  if (cache && cache.expiresAt > Date.now()) {
+    return cache.value
+  }
+
+  const pendingLookup = typeof window === 'undefined' ? pendingIpCountryLookup : window.__mentalWellnessIpCountryLookup
+  if (pendingLookup) {
+    return pendingLookup
+  }
+
+  const nextLookup = fetchCountryFromIP()
+    .then((country) => {
+      const nextCache = {
+        value: country,
+        expiresAt: Date.now() + IP_LOOKUP_CACHE_DURATION_MS
+      }
+
+      if (typeof window === 'undefined') {
+        cachedIpCountryLookup = nextCache
+      } else {
+        window.__mentalWellnessIpCountryCache = nextCache
+      }
+
+      return country
+    })
+    .finally(() => {
+      if (typeof window === 'undefined') {
+        pendingIpCountryLookup = null
+      } else {
+        window.__mentalWellnessIpCountryLookup = null
+      }
+    })
+
+  if (typeof window === 'undefined') {
+    pendingIpCountryLookup = nextLookup
+  } else {
+    window.__mentalWellnessIpCountryLookup = nextLookup
+  }
+
+  return nextLookup
+}
+
+async function fetchCountryFromIP(): Promise<DetectedCountry | null> {
   try {
     const response = await fetch('/api/geolocation', {
       signal: AbortSignal.timeout(5000) // 5 second timeout

@@ -15,7 +15,6 @@ import { SEOHead } from '@/components/SEOHead'
 import { BlogHeader } from '@/components/blog/BlogHeader'
 import { BlogSidebar } from '@/components/blog/BlogSidebar'
 import { AuthorSection } from '@/components/blog/AuthorSection'
-import { AmazonProductCard } from '@/components/blog/AmazonProductCard'
 import {
   fetchArticleBySlug,
   fetchArticleSlugs,
@@ -179,35 +178,6 @@ export default function BlogArticlePage({
                 </div>
               </div>
             ) : null}
-
-            {/* Amazon Affiliate Integration - Specifically for the Hoodie Blog */}
-            {article.slug.current === 'mental-health-matters-hoodie-trend-thats-changing-how-we-heal' && (
-              <div className="mb-12">
-                <div className="bg-wellness-50 rounded-3xl p-8 border border-wellness-100">
-                  <div className="flex flex-col md:flex-row items-center gap-8">
-                    <div className="w-full md:w-1/2">
-                      <AmazonProductCard
-                        imageSrc="https://m.media-amazon.com/images/I/51LEhoIBG3L._AC_SY879_.jpg"
-                        productUrl="https://www.amazon.com/garbings-Mental-Matters-Sweatshirt-Pullover/dp/B0FQ2FT5NZ?crid=2QNAU144QDWD9&dib=eyJ2IjoiMSJ9.C-ISoOYqOC8C_1hC8SKzafCL-pw3NYSjC5rl22ElPIwboTlyv1aujcjT0BMbuq5OFUKzmx43VHsfePGJqwmzlT6N-S6uV0x0tIWi-AeCXAZ220VwfaQKywleOWd7aE9jZyv5v1rkvoClXUUhgJOWPd98mhSF7P2caMDPU3LVww6SPr7WY-XakRHnYHqIemreYpDW-d5RZFu6aldEnssPlZJtOxGB1Qfs0ah5k3qxFL9mU-C53i1BxkdmkaFrW72KO3JT2erx-TLhA4mf5kaJTxZ2om4JZHYJsPp3Huk3tXI.nvVKLY08phn4lp_AuEi6VzvKUGDlPI7Y5Fw1Hc5zs_s&dib_tag=se&keywords=mental%2Bhealth%2Bmatters%2Bhoodie&qid=1768870230&sprefix=mental%2Bhealth%2Bmatters%2Bhoodi%2Caps%2C231&sr=8-2&th=1&linkCode=sl1&tag=mahendrabalal-20&linkId=e262408fefcbca9db5e481ad916d6ad5&language=en_US&ref_=as_li_ss_tl&psc=1"
-                        title="Mental Health Matters Hoodie - Support Wellness"
-                        price="$27.97"
-                      />
-                    </div>
-                    <div className="w-full md:w-1/2 space-y-4">
-                      <h3 className="text-2xl font-bold text-gray-900 leading-tight">
-                        Wear Your Support: The Official "Mental Health Matters" Hoodie
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed font-medium">
-                        This isn't just a hoodie; it's a conversation starter and a symbol of your journey towards mental wellness. Made with ultra-soft cotton and premium fleece, it's designed for comfort and durability.
-                      </p>
-                      <p className="text-xs text-gray-400 italic">
-                        *As an Amazon Associate, we earn from qualifying purchases. This helps support our free mental health resources.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="prose prose-lg prose-wellness max-w-none">
               <PortableTextRenderer

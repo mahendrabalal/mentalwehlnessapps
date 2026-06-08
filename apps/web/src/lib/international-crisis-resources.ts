@@ -311,6 +311,46 @@ export const INTERNATIONAL_CRISIS_RESOURCES: Record<string, CountryCrisisResourc
     languages: ['es']
   },
 
+  PT: {
+    countryCode: 'PT',
+    countryName: 'Portugal',
+    emergencyNumber: '112',
+    crisisLines: [
+      {
+        name: 'Linha Nacional de Prevenção do Suicídio e Apoio Psicológico',
+        phone: '1411',
+        available: '24/7',
+        languages: ['pt'],
+        free: true,
+        description: 'Apoio em situações de risco com psicólogos e enfermeiros especialistas em saúde mental'
+      },
+      {
+        name: 'Linha Saúde 24',
+        phone: '808 24 24 24',
+        available: '24/7 for clinical support',
+        languages: ['pt'],
+        free: false,
+        description: 'Triagem, aconselhamento e encaminhamento em situações de doença'
+      },
+      {
+        name: 'SOS Voz Amiga',
+        phone: '213 544 545',
+        available: 'Daily 15:30-00:30',
+        languages: ['pt'],
+        free: false,
+        description: 'Apoio emocional e prevenção do suicídio'
+      }
+    ],
+    onlineResources: [
+      {
+        name: 'SOS Voz Amiga',
+        url: 'https://www.sosvozamiga.org',
+        description: 'Linhas de apoio emocional e prevenção ao suicídio'
+      }
+    ],
+    languages: ['pt']
+  },
+
   IT: {
     countryCode: 'IT',
     countryName: 'Italy',
