@@ -1,11 +1,15 @@
 import Head from 'next/head'
-import { organizationStructuredData, websiteStructuredData } from '@/lib/seo'
+import { useRouter } from 'next/router'
+import { organizationStructuredData, websiteStructuredData, SITE_URL } from '@/lib/seo'
 
 export function DefaultSEO() {
+  const router = useRouter()
   const structuredData = [websiteStructuredData(), organizationStructuredData()]
+  const canonicalUrl = `${SITE_URL}${router.asPath === '/' ? '' : router.asPath.split('?')[0]}`
 
   return (
     <Head>
+      <link rel="canonical" href={canonicalUrl} />
       {/* Fallback Meta Tags - Will be overridden by page-specific SEOHead component
           Next.js automatically deduplicates <Head> tags by key (name/property)
           These ensure meta tags are always present in server-rendered HTML */}

@@ -122,13 +122,12 @@ export default defineType({
                     name: "href",
                     type: "url",
                     title: "URL",
-                    validation: (rule) => rule.uri({ allowRelative: false }),
+                    validation: (rule) => rule.uri({ allowRelative: true }),
                   }),
                   defineField({
                     name: "label",
                     type: "string",
                     title: "Accessible Label",
-                    validation: (rule) => rule.required(),
                   }),
                   defineField({
                     name: "nofollow",
@@ -149,7 +148,6 @@ export default defineType({
               name: "alt",
               type: "string",
               title: "Alternative text",
-              validation: (rule) => rule.required(),
             }),
             defineField({
               name: "caption",
@@ -235,7 +233,11 @@ export default defineType({
           name: "alt",
           type: "string",
           title: "Alternative Text",
-          validation: (rule) => rule.required(),
+        }),
+        defineField({
+          name: "caption",
+          type: "string",
+          title: "Caption",
         }),
         defineField({
           name: "credit",

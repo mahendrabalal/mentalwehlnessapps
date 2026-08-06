@@ -30,6 +30,11 @@ const MARKETING_PUBLIC_NAV: PublicNavItem[] = [
     href: '/directory',
     isActive: (pathname) => pathname === '/directory'
   },
+  {
+    label: 'Glossary',
+    href: '/glossary',
+    isActive: (pathname) => pathname.startsWith('/glossary')
+  },
   { label: 'About', href: '/about' },
   { label: 'Sign In', href: '/auth/login' },
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }
@@ -96,6 +101,11 @@ const DEFAULT_PUBLIC_NAV: PublicNavItem[] = [
     label: 'Directory',
     href: '/directory',
     isActive: (pathname) => pathname === '/directory'
+  },
+  {
+    label: 'Glossary',
+    href: '/glossary',
+    isActive: (pathname) => pathname.startsWith('/glossary')
   },
   { label: 'Sign In', href: '/auth/login' },
   { label: 'Get Started Free', href: '/auth/signup', variant: 'cta' }

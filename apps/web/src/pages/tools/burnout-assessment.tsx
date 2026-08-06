@@ -214,6 +214,59 @@ export default function BurnoutAssessmentTool() {
             </div>
           </div>
 
+          {/* Comprehensive Educational Section (AdSense Content Depth) */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 prose prose-blue max-w-none">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Understanding the 5 Stages of Burnout</h2>
+            
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              Burnout doesn't happen overnight. It is a gradual process that unfolds over weeks, months, or even years of chronic workplace stress. According to occupational health experts, recognizing the early stages is critical to preventing full emotional and physical collapse. Our burnout self-assessment tool is designed to help you pinpoint exactly where you are in this cycle so you can take targeted action.
+            </p>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Stage 1: The Honeymoon Phase</h3>
+                <p className="text-gray-700">
+                  When you start a new job or take on a new project, you often experience high energy, creativity, and commitment. You might willingly work long hours and feel invincible. However, if healthy coping strategies and boundaries aren't established during this phase, it sets the stage for future exhaustion.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Stage 2: Onset of Stress</h3>
+                <p className="text-gray-700">
+                  The honeymoon phase fades, and you begin to realize some days are more difficult than others. You might notice common stress symptoms like irritability, lower productivity, changes in sleep quality, or a minor inability to focus. This is the body's first warning sign that the workload may be unsustainable.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Stage 3: Chronic Stress</h3>
+                <p className="text-gray-700">
+                  Stress becomes the baseline. You may experience chronic exhaustion, physical illness, anger, or feeling threatened and panicked by normal work tasks. At this stage, you might start withdrawing socially, procrastinating heavily, or resorting to escapist behaviors (like excessive drinking, eating, or scrolling).
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Stage 4: Burnout</h3>
+                <p className="text-gray-700">
+                  Entering actual burnout means symptoms become critical. It is increasingly difficult to cope with daily tasks. Symptoms include total behavioral changes, chronic headaches or stomach issues, a feeling of emptiness, total self-doubt, and social isolation. Intervention at this stage is absolutely crucial, often requiring medical or psychological support.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Stage 5: Habitual Burnout</h3>
+                <p className="text-gray-700">
+                  If left untreated, burnout becomes embedded in your life. This means the symptoms of burnout are so ongoing that you are likely to experience a significant ongoing mental, physical, or emotional problem (such as chronic depression, clinical anxiety, or chronic physical illness). Recovery from Stage 5 requires significant time off and professional rehabilitation.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-orange-50 border-l-4 border-orange-500 p-4 mt-8 rounded-r-lg">
+              <h4 className="text-lg font-semibold text-orange-900 mb-2">When to Seek Immediate Help</h4>
+              <p className="text-orange-800 m-0">
+                If you are experiencing severe physical symptoms, extreme depression, or thoughts of self-harm due to work-related stress, please contact a healthcare professional or crisis hotline immediately. Burnout is a serious occupational phenomenon recognized by the World Health Organization (WHO) and requires proper care.
+              </p>
+            </div>
+          </div>
+
           {/* Scientific References */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Evidence-Based Research</h2>

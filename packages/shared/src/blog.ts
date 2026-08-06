@@ -8,7 +8,7 @@ const cmsImageAssetSchema = z.object({
 export const cmsImageSchema = z.object({
   _type: z.literal('image'),
   asset: cmsImageAssetSchema,
-  alt: z.string().min(1),
+  alt: z.string().nullable().optional(),
   caption: z.string().nullable().optional(),
   credit: z.string().nullable().optional(),
 })

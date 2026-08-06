@@ -194,6 +194,57 @@ export default function AnxietyReliefTool() {
             </div>
           </div>
 
+          {/* Comprehensive Educational Section (AdSense Content Depth) */}
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 prose prose-blue max-w-none">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b pb-2">Understanding Anxiety & Immediate Relief Strategies</h2>
+            
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              Anxiety is a natural human response to stress or danger, often described as a feeling of fear, dread, and uneasiness. While it is a perfectly normal reaction that can help us stay alert in challenging situations, it becomes problematic when it is overwhelming, persistent, or interferes with daily life. According to the Anxiety and Depression Association of America (ADAA), anxiety disorders are the most common mental illness in the U.S., affecting over 40 million adults. Our free anxiety relief tools are designed to provide immediate, evidence-based interventions to help you regain control during acute moments of distress.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">What Happens in the Brain During a Panic Attack?</h3>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              When you experience intense anxiety or a panic attack, your brain's amygdala (the emotional processing center) signals a threat, triggering the "fight or flight" response. This causes your sympathetic nervous system to flood your body with adrenaline and cortisol. As a result, your heart rate accelerates, breathing becomes shallow, and muscles tense up. The grounding and breathing tools provided on this page work by activating the parasympathetic nervous system (the "rest and digest" system). By deliberately slowing your breathing or engaging your senses, you send physical safety signals back to your brain, effectively short-circuiting the panic loop.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">The Science Behind Grounding Techniques</h3>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              Grounding techniques, such as the 5-4-3-2-1 method, are therapeutic strategies used to detach from emotional pain, cravings, or anxiety. They work by forcing your prefrontal cortex (the logical part of your brain) to engage, which shifts focus away from the emotional distress of the amygdala. 
+              <br/><br/>
+              <strong>Why it works:</strong> Anxiety often pulls your mind into future-oriented worries ("What if this happens?") or past regrets. Grounding physically anchors you in the present moment. By focusing on sensory input—like the texture of an object, the temperature of the air, or a specific sound—you interrupt the brain's internal threat narrative. Consistent practice of these techniques can actually rewire your brain over time to better regulate intense emotions.
+            </p>
+
+            <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-6">Frequently Asked Questions (FAQ)</h3>
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-xl font-medium text-gray-900">How long does an anxiety attack usually last?</h4>
+                <p className="text-gray-700 mt-2">
+                  Most anxiety and panic attacks reach their peak within 10 minutes and typically resolve within 30 minutes. While it may feel like it will last forever, remembering that the intense physiological response is temporary can help reduce secondary fear.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-xl font-medium text-gray-900">How often should I practice these breathing exercises?</h4>
+                <p className="text-gray-700 mt-2">
+                  You don't have to wait until you are anxious to use these tools! Practicing deep, diaphragmatic breathing for just 5 minutes a day during calm periods builds "muscle memory." When a high-stress situation arises, your body will more easily slip into the relaxation response.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-xl font-medium text-gray-900">When should I seek professional help?</h4>
+                <p className="text-gray-700 mt-2">
+                  While self-guided tools are excellent for immediate relief, you should seek professional help if anxiety begins to interfere with your sleep, relationships, or ability to work, or if you begin avoiding certain places or situations due to fear of having an attack. Therapy approaches like Cognitive Behavioral Therapy (CBT) are highly effective.
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mt-8 rounded-r-lg">
+              <p className="text-sm text-blue-800 m-0">
+                <strong>Medical Disclaimer:</strong> The information and interactive tools provided on this page are for educational purposes only and do not substitute for professional medical advice, diagnosis, or psychiatric treatment.
+              </p>
+            </div>
+          </div>
+
           {/* Related Resources */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Learn More About Anxiety</h2>

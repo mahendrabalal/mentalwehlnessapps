@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "cognitive-dissonance",
+    "term": "Cognitive Dissonance",
+    "definition": "The mental discomfort experienced by someone holding two or more contradictory beliefs, ideas, or values. This discomfort is triggered by a situation in which a person's belief clashes with new information perceived, leading to an alteration in one of the attitudes, beliefs, or behaviors to reduce the discomfort and restore balance.",
+    "relatedKeywords": ["mental conflict", "belief inconsistency", "psychological stress"]
+  },
+  {
+    "slug": "imposter-syndrome",
+    "term": "Imposter Syndrome",
+    "definition": "A psychological occurrence in which an individual doubts their skills, talents, or accomplishments and has a persistent internalized fear of being exposed as a fraud. Despite external evidence of their competence, those experiencing this syndrome remain convinced that they are frauds and do not deserve all they have achieved.",
+    "relatedKeywords": ["self-doubt", "fraud syndrome", "workplace anxiety"]
+  },
+  {
+    "slug": "executive-dysfunction",
+    "term": "Executive Dysfunction",
+    "definition": "A term for the range of cognitive, emotional, and behavioral difficulties which often occur after injury to the frontal lobes of the brain. It can affect a person's ability to plan, organize, manage time, and focus attention, often seen in conditions like ADHD, depression, or severe burnout.",
+    "relatedKeywords": ["ADHD paralysis", "task initiation", "cognitive load"]
+  },
+  {
+    "slug": "somatic-symptom-disorder",
+    "term": "Somatic Symptom Disorder",
+    "definition": "A psychological disorder in which the symptoms take a somatic (bodily) form without apparent physical cause. A person with this disorder feels extreme, exaggerated anxiety about physical symptoms, which causes significant disruption to their daily life.",
+    "relatedKeywords": ["physical anxiety", "psychosomatic", "health anxiety"]
+  },
+  {
+    "slug": "emotional-regulation",
+    "term": "Emotional Regulation",
+    "definition": "The ability to exert control over one's own emotional state. It may involve behaviors such as rethinking a challenging situation to reduce anger or anxiety, hiding visible signs of sadness or fear, or focusing on reasons to feel happy or calm.",
+    "relatedKeywords": ["coping skills", "self-soothing", "emotional intelligence"]
+  },
+  {
+    "slug": "anhedonia",
+    "term": "Anhedonia",
+    "definition": "The inability to feel pleasure. It's a common symptom of depression as well as other mental health disorders. People with anhedonia lose interest in activities they used to enjoy and have a decreased ability to feel pleasure.",
+    "relatedKeywords": ["loss of interest", "depression symptom", "emotional numbness"]
+  },
+  {
+    "slug": "mindfulness",
+    "term": "Mindfulness",
+    "definition": "A mental state achieved by focusing one's awareness on the present moment, while calmly acknowledging and accepting one's feelings, thoughts, and bodily sensations, used as a therapeutic technique.",
+    "relatedKeywords": ["present moment", "meditation", "grounding"]
+  },
+  {
+    "slug": "gaslighting",
+    "term": "Gaslighting",
+    "definition": "A form of psychological manipulation in which a person or a group covertly sows seeds of doubt in a targeted individual or group, making them question their own memory, perception, or judgment.",
+    "relatedKeywords": ["emotional abuse", "manipulation", "toxic relationships"]
+  }
+]

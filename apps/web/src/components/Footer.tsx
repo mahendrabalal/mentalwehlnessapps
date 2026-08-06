@@ -68,6 +68,7 @@ export function Footer() {
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/#crisis-support" className="hover:text-white transition-colors">Crisis Support</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-colors">Resource Library</Link></li>
+              <li><Link href="/glossary" className="hover:text-white transition-colors">Mental Health Glossary</Link></li>
             </ul>
           </div>
 

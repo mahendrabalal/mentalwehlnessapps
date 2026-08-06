@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
+import Script from 'next/script'
 import { DefaultSEO } from '@/components/DefaultSEO'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -34,6 +35,11 @@ function AppContent({ Component, pageProps }: AppProps) {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Script
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8688786543603411"
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+      />
       <DefaultSEO />
       <AppContent Component={Component} pageProps={pageProps} />
     </>

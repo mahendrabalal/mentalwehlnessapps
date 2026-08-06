@@ -167,7 +167,7 @@ export default function BlogArticlePage({
             </header>
 
             {heroImageUrl ? (
-              <div className="mb-12">
+              <figure className="mb-12">
                 <div className="overflow-hidden rounded-3xl border border-gray-100 shadow-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -176,7 +176,16 @@ export default function BlogArticlePage({
                     className="aspect-[16/9] w-full object-cover bg-gray-50"
                   />
                 </div>
-              </div>
+                {(article.heroImage?.caption || article.heroImage?.credit) && (
+                  <figcaption className="mt-3 text-center text-sm text-gray-500">
+                    {article.heroImage.caption}
+                    {article.heroImage.caption && article.heroImage.credit ? ' ' : ''}
+                    {article.heroImage.credit && (
+                      <span className="italic">Image Credit: {article.heroImage.credit}</span>
+                    )}
+                  </figcaption>
+                )}
+              </figure>
             ) : null}
 
             <div className="prose prose-lg prose-wellness max-w-none">
